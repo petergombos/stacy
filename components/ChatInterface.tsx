@@ -2,21 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { chatResponseSchema, UpdatedChunk } from "@/schemas/chat-response";
+import { Content } from "@tiptap/react";
 import { experimental_useObject as useObject } from "ai/react";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { z } from "zod";
 
 interface ChatInterfaceProps {
-  onUpdate: (content: string) => void;
-  currentContent: string;
+  onUpdate: (updatedChunks: UpdatedChunk[]) => void;
+  currentContent: Content;
 }
-
-const responseSchema = z.object({
-  chatResponse: z.string(),
-  updatedBlogContent: z.string().optional(),
-  didUpdateBlogContent: z.boolean(),
-});
 
 export default function ChatInterface({
   onUpdate,
@@ -29,25 +24,25 @@ export default function ChatInterface({
 
   const { object, submit, isLoading } = useObject({
     api: "/api/chat",
-    schema: responseSchema,
+    schema: chatResponseSchema,
     onFinish: ({ object }) => {
-      if (object?.updatedBlogContent && object?.didUpdateBlogContent) {
-        onUpdate(object.updatedBlogContent);
-      }
       if (object?.chatResponse) {
         setMessages((prevMessages) => [
           ...prevMessages,
           { role: "assistant", content: object.chatResponse },
         ]);
       }
+      if (object?.updatedChunks && object?.didUpdateBlogContent) {
+        onUpdate(object.updatedChunks);
+      }
     },
   });
 
   useEffect(() => {
-    if (object?.updatedBlogContent && object?.didUpdateBlogContent) {
-      onUpdate(object.updatedBlogContent);
+    if (object?.updatedChunks && object?.didUpdateBlogContent) {
+      // onUpdate(object.updatedChunks as UpdatedChunk[]);
     }
-  }, [object?.updatedBlogContent, object?.didUpdateBlogContent, onUpdate]);
+  }, [object?.updatedChunks, object?.didUpdateBlogContent, onUpdate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -64,7 +59,7 @@ export default function ChatInterface({
       ...updatedMessages,
       {
         role: "system",
-        content: `Current post content: "${currentContent}"`,
+        content: `Current post content: "${JSON.stringify(currentContent)}"`,
       },
     ]);
     setInput("");
