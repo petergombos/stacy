@@ -62,9 +62,9 @@ export default function BlogEditorClient() {
         const node = findNode(doc, chunk.nodeID);
         const parent = findNodeParent(doc, chunk.nodeID);
 
-        if (node && chunk.content && parent) {
+        if (node && parent) {
           try {
-            const parsedContent = generateJSON(chunk.content, extensions);
+            const parsedContent = generateJSON(chunk.content || "", extensions);
             const index = parent.content?.findIndex(
               (child) => child.attrs?.id === chunk.nodeID
             );
@@ -90,7 +90,10 @@ export default function BlogEditorClient() {
                   parent.content?.splice(index, 0, ...parsedContent.content);
                   break;
                 case "delete":
+                  console.log("delete index", index);
+                  console.log("before delete", parent.content);
                   parent.content?.splice(index, 1);
+                  console.log("delete", parent.content);
                   break;
               }
             }
