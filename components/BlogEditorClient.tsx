@@ -1,7 +1,8 @@
 "use client";
 
 import { UpdatedChunk } from "@/schemas/chat-response";
-import { Content, JSONContent, useEditor } from "@tiptap/react";
+import { generateJSON } from "@tiptap/html";
+import { JSONContent, useEditor } from "@tiptap/react";
 import { useCallback, useState } from "react";
 import ChatInterface from "./ChatInterface";
 import TiptapEditor, { extensions } from "./TiptapEditor";
@@ -32,23 +33,14 @@ function findNodeParent(node: JSONContent, nodeID: string): JSONContent | null {
   return null;
 }
 
-function deleteNode(node: JSONContent, nodeID: string) {
-  const parent = findNodeParent(node, nodeID);
-  if (parent?.content) {
-    parent.content = parent.content.filter(
-      (child) => child.attrs?.id !== nodeID
-    );
-  }
-}
-
 export default function BlogEditorClient() {
-  const [editorJSON, seteditorJSON] = useState<Content>(null);
+  const [editorHTML, setEditorHTML] = useState<string>("");
 
   const editor = useEditor({
     extensions,
     content: "",
     onUpdate: ({ editor }) => {
-      seteditorJSON(editor.getJSON());
+      setEditorHTML(editor.getHTML());
     },
     editorProps: {
       attributes: {
@@ -68,64 +60,43 @@ export default function BlogEditorClient() {
           continue;
         }
         const node = findNode(doc, chunk.nodeID);
+        const parent = findNodeParent(doc, chunk.nodeID);
 
-        if (node) {
+        if (node && chunk.content && parent) {
           try {
-            const parsedContent = chunk.content;
+            const parsedContent = generateJSON(chunk.content, extensions);
+            const index = parent.content?.findIndex(
+              (child) => child.attrs?.id === chunk.nodeID
+            );
 
-            if (chunk.operation === "replace") {
-              node.content = parsedContent.content;
-              node.type = parsedContent.type;
-              node.attrs = parsedContent.attrs;
-              node.marks = parsedContent.marks;
-            }
-
-            // if (chunk.operation === "append") {
-            //   node.content = [...(node.content ?? []), parsedContent];
-            // }
-
-            // if (chunk.operation === "prepend") {
-            //   node.content = [parsedContent, ...(node.content ?? [])];
-            // }
-
-            if (chunk.operation === "delete") {
-              deleteNode(doc, chunk.nodeID);
-            }
-
-            if (chunk.operation === "insert_before") {
-              const parent = findNodeParent(doc, chunk.nodeID);
-              if (parent) {
-                const index = parent.content?.findIndex(
-                  (child) => child.attrs?.id === chunk.nodeID
-                );
-                if (index) {
-                  parent.content = [
-                    ...(parent.content?.slice(0, index) ?? []),
-                    parsedContent,
-                    ...(parent.content?.slice(index) ?? []),
-                  ];
-                }
+            if (index !== undefined && index !== -1) {
+              switch (chunk.operation) {
+                case "replace":
+                  if (parent.content) {
+                    // Remove the original node
+                    parent.content.splice(index, 1);
+                    // Insert all new content items at the same position
+                    parent.content.splice(index, 0, ...parsedContent.content);
+                  }
+                  break;
+                case "insert_after":
+                  parent.content?.splice(
+                    index + 1,
+                    0,
+                    ...parsedContent.content
+                  );
+                  break;
+                case "insert_before":
+                  parent.content?.splice(index, 0, ...parsedContent.content);
+                  break;
+                case "delete":
+                  parent.content?.splice(index, 1);
+                  break;
               }
             }
 
-            if (chunk.operation === "insert_after") {
-              const parent = findNodeParent(doc, chunk.nodeID);
-              if (parent) {
-                const index = parent.content?.findIndex(
-                  (child) => child.attrs?.id === chunk.nodeID
-                );
-                if (index) {
-                  parent.content = [
-                    ...(parent.content?.slice(0, index) ?? []),
-                    parsedContent,
-                    ...(parent.content?.slice(index) ?? []),
-                  ];
-                }
-              }
-            }
-
-            console.log(doc);
             editor.commands.setContent(doc);
+            setEditorHTML(editor.getHTML());
           } catch (e) {
             console.error(e);
           }
@@ -138,7 +109,7 @@ export default function BlogEditorClient() {
   return (
     <>
       <div className="w-1/3 border-r border-gray-200 dark:border-gray-700">
-        <ChatInterface onUpdate={handleAIUpdate} currentContent={editorJSON} />
+        <ChatInterface onUpdate={handleAIUpdate} currentContent={editorHTML} />
       </div>
       <div className="w-2/3 h-full">
         {editor ? <TiptapEditor editor={editor} /> : null}

@@ -3,14 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { chatResponseSchema, UpdatedChunk } from "@/schemas/chat-response";
-import { Content } from "@tiptap/react";
 import { experimental_useObject as useObject } from "ai/react";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface ChatInterfaceProps {
   onUpdate: (updatedChunks: UpdatedChunk[]) => void;
-  currentContent: Content;
+  currentContent: string;
 }
 
 export default function ChatInterface({
@@ -59,7 +58,7 @@ export default function ChatInterface({
       ...updatedMessages,
       {
         role: "system",
-        content: `Current post content: "${JSON.stringify(currentContent)}"`,
+        content: `Current post content: "${currentContent}"`,
       },
     ]);
     setInput("");

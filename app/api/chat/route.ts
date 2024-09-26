@@ -19,18 +19,16 @@ export async function POST(req: Request) {
       {
         role: "system",
         content: `You are a helpful assistant that can help with writing a blog post.
-        You will be given a blog post in tiptap JSON format and a message.
+        You will be given a blog post in HTML format and a message.
         You will need to respond to the message and update the blog post if necessary.
         When updating the blog post, return an array of updated chunks, each containing:
         - operation: The operation to be performed ("replace", "delete", "insert_before", "insert_after")
         - nodeID: The ID of the node to be operated on
-        - content: The new content in tiptap JSON format
+        - content: The new content for the node in HTML format
         Only return the updated chunks if the blog post was updated, otherwise just respond to the message.
-        Each chunk should only operate on a sibling level, do not go inside nodes to update content.
-        Do not to nest nodes, force the content to be flat. You can only nest nodes inside lists.
-        Possible nodes are: paragraph, heading, listItem, bulletList, orderedList.
+        Never add data-id attributes to the nodes.
         
-        The current blog JSON is:
+        The current blog HTML is:
         ${content}`,
       },
     ],
