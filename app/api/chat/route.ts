@@ -13,12 +13,13 @@ export async function POST(req: Request) {
   ) || { content: "" };
 
   const result = await streamObject({
-    model: openai("gpt-4-turbo"),
+    model: openai("gpt-4o-2024-08-06"),
     messages: [
       ...messages,
       {
         role: "system",
         content: `You are a helpful assistant that can help with writing a blog post.
+        You are an expert at writing blog posts and making sure the content is correct and SEO friendly.
         You will be given a blog post in HTML format and a message.
         You will need to respond to the message and update the blog post if necessary.
         When updating the blog post, return an array of updated chunks, each containing:
@@ -27,6 +28,7 @@ export async function POST(req: Request) {
         - content: The new content for the node in HTML format
         Only return the updated chunks if the blog post was updated, otherwise just respond to the message.
         Never add data-id attributes to the nodes.
+        You should only update the blog post if the user asks you to, if the user doesn't ask you to update the blog post, you should just respond to the message.
         
         The current blog HTML is:
         ${content}`,
