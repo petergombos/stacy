@@ -1,0 +1,7 @@
+.tiptap {
+  img {
+    &.ProseMirror-selectednode {
+      @apply ring-2 ring-ring ring-offset-4 ring-offset-background ring-blue-600;
+    }
+  }
+}

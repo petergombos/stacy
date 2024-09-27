@@ -1,6 +1,7 @@
 "use client";
 
 import BubbleMenuExtension from "@tiptap/extension-bubble-menu";
+import Dropcursor from "@tiptap/extension-dropcursor";
 import Image from "@tiptap/extension-image";
 import Underline from "@tiptap/extension-underline";
 import { UniqueID } from "@tiptap/extension-unique-id";
@@ -20,6 +21,9 @@ export const extensions = [
     types: ["paragraph", "heading", "listItem", "bulletList", "orderedList"],
   }),
   Image,
+  Dropcursor.configure({
+    width: 2,
+  }),
 ];
 
 export default function TiptapEditor({ editor }: TiptapEditorProps) {
