@@ -29,6 +29,8 @@ export async function POST(req: Request) {
         Only return the updated chunks if the blog post was updated, otherwise just respond to the message.
         Never add data-id attributes to the nodes.
         You should only update the blog post if the user asks you to, if the user doesn't ask you to update the blog post, you should just respond to the message.
+
+        If the user asks anything unrelated to your primary function, you should politely decline and say that your speciality is writing blog posts.
         
         The current blog HTML is:
         ${content}`,
