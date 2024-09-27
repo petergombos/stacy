@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { chatResponseSchema, UpdatedChunk } from "@/schemas/chat-response";
 import { experimental_useObject as useObject } from "ai/react";
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface ChatInterfaceProps {
   onUpdate: (updatedChunks: UpdatedChunk[]) => void;
@@ -64,9 +64,21 @@ export default function ChatInterface({
     setInput("");
   };
 
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [messages, object?.chatResponse]);
+
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div
+        ref={chatContainerRef}
+        className="flex-1 overflow-y-auto p-4 flex flex-col gap-4"
+      >
         {[
           ...messages,
           isLoading
@@ -81,23 +93,19 @@ export default function ChatInterface({
           .map((message, index) => (
             <div
               key={index}
-              className={`${
-                message?.role === "user" ? "text-right" : "text-left"
+              className={`inline-flex gap-3 p-2 rounded-lg whitespace-pre-wrap ${
+                message?.role === "user"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 dark:bg-gray-700"
+              } ${
+                message?.role === "user" ? "self-end ml-6" : "self-start mr-6"
               }`}
             >
-              <div
-                className={`inline-flex gap-3 p-2 rounded-lg ${
-                  message?.role === "user"
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 dark:bg-gray-700"
-                }`}
-              >
-                {message?.inProgress && !message?.content ? (
-                  <Loader2 className="animate-spin size-6 shrink-0" />
-                ) : (
-                  message?.content
-                )}
-              </div>
+              {message?.inProgress && !message?.content ? (
+                <Loader2 className="animate-spin size-6 shrink-0" />
+              ) : (
+                message?.content
+              )}
             </div>
           ))}
       </div>
