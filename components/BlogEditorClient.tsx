@@ -90,10 +90,7 @@ export default function BlogEditorClient() {
                   parent.content?.splice(index, 0, ...parsedContent.content);
                   break;
                 case "delete":
-                  console.log("delete index", index);
-                  console.log("before delete", parent.content);
                   parent.content?.splice(index, 1);
-                  console.log("delete", parent.content);
                   break;
               }
             }
