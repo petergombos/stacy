@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useAutoResize } from "@/hooks/auto-resize";
 import { chatResponseSchema, UpdatedChunk } from "@/schemas/chat-response";
 import { experimental_useObject as useObject } from "ai/react";
 import { Loader2 } from "lucide-react";
@@ -23,13 +24,18 @@ export default function ChatInterface({
     {
       role: "assistant",
       content: `Hey! I’m Stacy, ready to assist you in crafting high-quality, SEO-optimized blog posts.
+
 Together, we can work through every stage of the process:
 
 - Topic Ideas & Inspiration: Stuck on what to write? I can suggest topics based on your niche.
+
 - Organizing Your Post: I’ll help structure your content with a clear and effective outline.
+
 - Content Drafting: Whether you need help starting or refining, I’m here to make your post shine.
-SEO Strategy: We’ll ensure your post is optimized with keywords and best practices for ranking.
-Final Touches: From editing to formatting, I’ll ensure your post is polished and ready to publish.`,
+
+- SEO Strategy: We’ll ensure your post is optimized with keywords and best practices for ranking.
+
+- Final Touches: From editing to formatting, I’ll ensure your post is polished and ready to publish.`,
     },
   ]);
 
@@ -85,6 +91,9 @@ Final Touches: From editing to formatting, I’ll ensure your post is polished a
     }
   }, [messages, object?.chatResponse]);
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  useAutoResize(textareaRef, input);
+
   return (
     <div className="flex flex-col h-full">
       <div
@@ -135,8 +144,10 @@ Final Touches: From editing to formatting, I’ll ensure your post is polished a
           <Textarea
             value={input}
             onChange={handleInputChange}
-            className="flex-1"
-            placeholder="Type your message to the AI..."
+            className="flex-1 min-h-[2.5rem] max-h-[10rem] overflow-y-auto resize-none"
+            placeholder="Type your message to Stacy..."
+            ref={textareaRef}
+            rows={1}
           />
           <Button type="submit" disabled={isLoading}>
             Send message
