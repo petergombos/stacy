@@ -63,11 +63,6 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       action: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
       isActive: () => editor.isActive("heading", { level: 3 }),
     },
-    // {
-    //   icon: ImageIcon,
-    //   action: () => setShowImageSearch(true),
-    //   isActive: () => false,
-    // },
   ];
 
   const handleImageSelect = (imageUrl: string) => {

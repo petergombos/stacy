@@ -5,9 +5,15 @@ import Dropcursor from "@tiptap/extension-dropcursor";
 import Image from "@tiptap/extension-image";
 import Underline from "@tiptap/extension-underline";
 import { UniqueID } from "@tiptap/extension-unique-id";
-import { BubbleMenu, Editor, EditorContent } from "@tiptap/react";
+import {
+  BubbleMenu,
+  Editor,
+  EditorContent,
+  ReactNodeViewRenderer,
+} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import EditorToolbar from "./EditorToolbar";
+import ResizableImage from "./ResizableImage";
 
 interface TiptapEditorProps {
   editor: Editor;
@@ -18,9 +24,41 @@ export const extensions = [
   Underline,
   BubbleMenuExtension,
   UniqueID.configure({
-    types: ["paragraph", "heading", "listItem", "bulletList", "orderedList"],
+    types: [
+      "paragraph",
+      "heading",
+      "listItem",
+      "bulletList",
+      "orderedList",
+      "image",
+    ],
   }),
-  Image,
+  Image.extend({
+    addAttributes() {
+      return {
+        ...this.parent?.(),
+        width: {
+          default: "100%",
+          renderHTML: (attributes) => ({
+            width: attributes.width,
+          }),
+        },
+        height: {
+          default: "auto",
+          renderHTML: (attributes) => ({
+            height: attributes.height,
+          }),
+        },
+      };
+    },
+    addNodeView() {
+      return ReactNodeViewRenderer(ResizableImage, {
+        attrs: ({ node }) => ({
+          "data-id": node.attrs.id,
+        }),
+      });
+    },
+  }),
   Dropcursor.configure({
     width: 2,
   }),
