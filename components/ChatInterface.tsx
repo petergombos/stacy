@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { chatResponseSchema, UpdatedChunk } from "@/schemas/chat-response";
 import { experimental_useObject as useObject } from "ai/react";
 import { Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { Textarea } from "./ui/textarea";
 
 interface ChatInterfaceProps {
   onUpdate: (updatedChunks: UpdatedChunk[]) => void;
@@ -43,7 +43,7 @@ export default function ChatInterface({
     }
   }, [object?.updatedChunks, object?.didUpdateBlogContent, onUpdate]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
   };
 
@@ -112,16 +112,22 @@ export default function ChatInterface({
       <form
         onSubmit={handleSubmit}
         className="p-4 border-t border-gray-200 dark:border-gray-700"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && e.metaKey) {
+            e.preventDefault();
+            handleSubmit(e);
+          }
+        }}
       >
-        <div className="flex space-x-2">
-          <Input
+        <div className="grid w-full gap-2">
+          <Textarea
             value={input}
             onChange={handleInputChange}
             className="flex-1"
-            placeholder="Type your message..."
+            placeholder="Type your message to the AI..."
           />
           <Button type="submit" disabled={isLoading}>
-            Send
+            Send message
           </Button>
         </div>
       </form>
