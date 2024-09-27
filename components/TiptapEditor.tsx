@@ -1,6 +1,7 @@
 "use client";
 
 import BubbleMenuExtension from "@tiptap/extension-bubble-menu";
+import Image from "@tiptap/extension-image";
 import Underline from "@tiptap/extension-underline";
 import { UniqueID } from "@tiptap/extension-unique-id";
 import { BubbleMenu, Editor, EditorContent } from "@tiptap/react";
@@ -18,6 +19,7 @@ export const extensions = [
   UniqueID.configure({
     types: ["paragraph", "heading", "listItem", "bulletList", "orderedList"],
   }),
+  Image,
 ];
 
 export default function TiptapEditor({ editor }: TiptapEditorProps) {

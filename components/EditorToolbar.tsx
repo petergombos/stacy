@@ -11,6 +11,7 @@ import {
   ListOrdered,
   Underline,
 } from "lucide-react";
+import { UnsplashImageSearch } from "./UnsplashImageSearch";
 
 interface EditorToolbarProps {
   editor: Editor | null;
@@ -62,7 +63,16 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       action: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
       isActive: () => editor.isActive("heading", { level: 3 }),
     },
+    // {
+    //   icon: ImageIcon,
+    //   action: () => setShowImageSearch(true),
+    //   isActive: () => false,
+    // },
   ];
+
+  const handleImageSelect = (imageUrl: string) => {
+    editor.chain().focus().setImage({ src: imageUrl }).run();
+  };
 
   return (
     <div className="flex gap-2 p-2 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -79,6 +89,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           <tool.icon className="w-5 h-5" />
         </button>
       ))}
+      <UnsplashImageSearch onImageSelect={handleImageSelect} />
     </div>
   );
 }
