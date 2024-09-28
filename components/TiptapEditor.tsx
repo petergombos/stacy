@@ -1,7 +1,7 @@
 "use client";
 
-import CodeBlock from "@tiptap/extension-code-block";
 import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
 import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
@@ -37,6 +37,7 @@ export const extensions = [
       "horizontalRule",
       "codeBlock",
       "code",
+      "link",
     ],
   }),
   Image.configure({
@@ -69,7 +70,12 @@ export const extensions = [
   GlobalDragHandle.configure({
     dragHandleWidth: 28,
   }),
-  CodeBlock,
+  Link.configure({
+    openOnClick: false,
+    HTMLAttributes: {
+      class: "text-primary underline",
+    },
+  }),
 ];
 
 export default function TiptapEditor({ editor }: TiptapEditorProps) {

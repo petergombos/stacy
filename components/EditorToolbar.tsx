@@ -14,6 +14,7 @@ import {
   Heading2,
   Heading3,
   Italic,
+  Link as LinkIcon,
   List,
   ListOrdered,
   ListX,
@@ -24,6 +25,8 @@ import {
   Trash2,
   Underline,
 } from "lucide-react";
+import { useState } from "react";
+import { LinkDialog } from "./LinkDialog";
 import { UnsplashImageSearch } from "./UnsplashImageSearch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -32,6 +35,8 @@ interface EditorToolbarProps {
 }
 
 export default function EditorToolbar({ editor }: EditorToolbarProps) {
+  const [isLinkDialogOpen, setIsLinkDialogOpen] = useState(false);
+
   if (!editor) {
     return null;
   }
@@ -84,6 +89,12 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       action: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
       isActive: () => editor.isActive("heading", { level: 3 }),
       label: "Heading 3",
+    },
+    {
+      icon: LinkIcon,
+      action: () => setIsLinkDialogOpen(true),
+      isActive: () => editor.isActive("link"),
+      label: "Link",
     },
     {
       icon: Quote,
@@ -177,7 +188,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
 
   return (
     <div className="relative">
-      <div className="flex gap-2 p-2 bg-background dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex flex-wrap gap-2 p-2 bg-background dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         {tools.map((tool, index) => (
           <Tooltip key={index}>
             <TooltipTrigger asChild>
@@ -197,14 +208,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
             </TooltipContent>
           </Tooltip>
         ))}
-        <Tooltip>
-          <TooltipTrigger>
-            <UnsplashImageSearch onImageSelect={handleImageSelect} />
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Image</p>
-          </TooltipContent>
-        </Tooltip>
+        <UnsplashImageSearch onImageSelect={handleImageSelect} />
       </div>
       {editor.isActive("table") && (
         <div className="flex gap-2 p-2 bg-background dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 absolute -bottom-full w-full z-10">
@@ -225,6 +229,11 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
           ))}
         </div>
       )}
+      <LinkDialog
+        editor={editor}
+        isOpen={isLinkDialogOpen}
+        onClose={() => setIsLinkDialogOpen(false)}
+      />
     </div>
   );
 }

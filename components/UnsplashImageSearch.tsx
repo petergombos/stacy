@@ -16,6 +16,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 interface UnsplashImageSearchProps extends HTMLAttributes<HTMLButtonElement> {
   onImageSelect: (imageUrl: string) => void;
@@ -117,12 +118,19 @@ export function UnsplashImageSearch({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <button
-          className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-          {...rest}
-        >
-          <ImageIcon className="h-5 w-5" />
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+              {...rest}
+            >
+              <ImageIcon className="h-5 w-5" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Image</p>
+          </TooltipContent>
+        </Tooltip>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[640px]">
         <DialogHeader>
