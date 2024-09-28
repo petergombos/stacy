@@ -69,6 +69,15 @@
     cursor: ew-resize;
     cursor: col-resize;
   }
+
+  .is-empty::before {
+    /* color: var(--gray-4); */
+    @apply text-gray-400;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
 }
 
 .drag-handle {

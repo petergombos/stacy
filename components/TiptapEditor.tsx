@@ -1,7 +1,9 @@
 "use client";
 
+import Document from "@tiptap/extension-document";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
+import Placeholder from "@tiptap/extension-placeholder";
 import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
@@ -18,8 +20,15 @@ interface TiptapEditorProps {
   editor: Editor;
 }
 
+const CustomDocument = Document.extend({
+  content: "heading block*",
+});
+
 export const extensions = [
-  StarterKit,
+  CustomDocument,
+  StarterKit.configure({
+    document: false,
+  }),
   Underline,
   UniqueID.configure({
     types: [
@@ -74,6 +83,15 @@ export const extensions = [
     openOnClick: false,
     HTMLAttributes: {
       class: "text-primary underline",
+    },
+  }),
+  Placeholder.configure({
+    placeholder: ({ node }) => {
+      if (node.type.name === "heading") {
+        // Some default placeholder for the heading
+        return "Your heading here...";
+      }
+      return "";
     },
   }),
 ];
