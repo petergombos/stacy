@@ -45,7 +45,7 @@ export default function BlogEditorClient() {
     editorProps: {
       attributes: {
         class:
-          "prose lg:prose-lg dark:prose-invert outline-none w-full flex-1 p-10 max-w-[780px] mx-auto my-10 shadow-xl bg-background",
+          "prose xl:prose-lg dark:prose-invert outline-none w-full flex-1 p-10 max-w-[780px] mx-auto shadow rounded bg-background",
       },
     },
     immediatelyRender: false,
@@ -112,7 +112,7 @@ export default function BlogEditorClient() {
       <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 relative z-50 bg-background">
         <ChatInterface onUpdate={handleAIUpdate} currentContent={editorHTML} />
       </div>
-      <div className="w-2/3 h-full relative bg-gray-50">
+      <div className="w-2/3 h-full relative bg-gray-50 overflow-hidden">
         <div className="z-50 relative h-full">
           {editor ? <TiptapEditor editor={editor} /> : null}
         </div>

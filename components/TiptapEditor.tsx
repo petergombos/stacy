@@ -84,7 +84,7 @@ export default function TiptapEditor({ editor }: TiptapEditorProps) {
       <EditorToolbar editor={editor} />
       <EditorContent
         editor={editor}
-        className="overflow-y-scroll flex-1 w-full flex flex-col"
+        className="overflow-y-scroll flex-1 w-full flex flex-col px-10 py-8"
       />
     </div>
   );
