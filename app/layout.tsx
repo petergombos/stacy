@@ -1,3 +1,4 @@
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/styles/globals.css";
 import "@/styles/tiptap.css";
 import type { Metadata } from "next";
@@ -29,7 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>
   );

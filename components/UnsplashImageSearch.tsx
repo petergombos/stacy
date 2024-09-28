@@ -1,5 +1,11 @@
 import { Image as ImageIcon, Loader2 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  HTMLAttributes,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -11,7 +17,7 @@ import {
 } from "./ui/dialog";
 import { Input } from "./ui/input";
 
-interface UnsplashImageSearchProps {
+interface UnsplashImageSearchProps extends HTMLAttributes<HTMLButtonElement> {
   onImageSelect: (imageUrl: string) => void;
 }
 
@@ -23,6 +29,7 @@ interface UnsplashImage {
 
 export function UnsplashImageSearch({
   onImageSelect,
+  ...rest
 }: UnsplashImageSearchProps) {
   const [keyword, setKeyword] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -110,7 +117,10 @@ export function UnsplashImageSearch({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <button className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+        <button
+          className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+          {...rest}
+        >
           <ImageIcon className="h-5 w-5" />
         </button>
       </DialogTrigger>

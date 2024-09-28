@@ -44,7 +44,8 @@ export default function BlogEditorClient() {
     },
     editorProps: {
       attributes: {
-        class: "prose dark:prose-invert outline-none min-w-full flex-1 p-4",
+        class:
+          "prose lg:prose-lg dark:prose-invert outline-none w-full flex-1 p-10 max-w-[780px] mx-auto my-10 shadow-xl bg-background",
       },
     },
     immediatelyRender: false,
@@ -108,11 +109,20 @@ export default function BlogEditorClient() {
 
   return (
     <>
-      <div className="w-1/3 border-r border-gray-200 dark:border-gray-700">
+      <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 relative z-50 bg-background">
         <ChatInterface onUpdate={handleAIUpdate} currentContent={editorHTML} />
       </div>
-      <div className="w-2/3 h-full">
-        {editor ? <TiptapEditor editor={editor} /> : null}
+      <div className="w-2/3 h-full relative bg-gray-50">
+        <div className="z-50 relative h-full">
+          {editor ? <TiptapEditor editor={editor} /> : null}
+        </div>
+        <img
+          src="https://play.tailwindcss.com/img/beams.jpg"
+          alt="beams"
+          className="absolute top-48 left-1/2 -translate-x-2/3 -translate-y-1/2 max-w-none"
+          width="1308"
+        />
+        <div className="absolute inset-0 bg-[url(https://play.tailwindcss.com/img/grid.svg)] bg-top [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
       </div>
     </>
   );

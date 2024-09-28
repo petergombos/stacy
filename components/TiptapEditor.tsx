@@ -1,19 +1,18 @@
 "use client";
 
-import BubbleMenuExtension from "@tiptap/extension-bubble-menu";
-import Dropcursor from "@tiptap/extension-dropcursor";
+import CodeBlock from "@tiptap/extension-code-block";
 import Image from "@tiptap/extension-image";
+import Table from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
 import Underline from "@tiptap/extension-underline";
 import { UniqueID } from "@tiptap/extension-unique-id";
-import {
-  BubbleMenu,
-  Editor,
-  EditorContent,
-  ReactNodeViewRenderer,
-} from "@tiptap/react";
+import { Editor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import AutoJoiner from "tiptap-extension-auto-joiner";
+import GlobalDragHandle from "tiptap-extension-global-drag-handle";
 import EditorToolbar from "./EditorToolbar";
-import ResizableImage from "./ResizableImage";
 
 interface TiptapEditorProps {
   editor: Editor;
@@ -22,7 +21,6 @@ interface TiptapEditorProps {
 export const extensions = [
   StarterKit,
   Underline,
-  BubbleMenuExtension,
   UniqueID.configure({
     types: [
       "paragraph",
@@ -31,49 +29,52 @@ export const extensions = [
       "bulletList",
       "orderedList",
       "image",
+      "table",
+      "tableRow",
+      "tableCell",
+      "tableHeader",
+      "blockQuote",
+      "horizontalRule",
+      "codeBlock",
+      "code",
     ],
   }),
-  Image.extend({
-    addAttributes() {
-      return {
-        ...this.parent?.(),
-        width: {
-          default: "100%",
-          renderHTML: (attributes) => ({
-            width: attributes.width,
-          }),
-        },
-        height: {
-          default: "auto",
-          renderHTML: (attributes) => ({
-            height: attributes.height,
-          }),
-        },
-      };
-    },
-    addNodeView() {
-      return ReactNodeViewRenderer(ResizableImage, {
-        attrs: ({ node }) => ({
-          "data-id": node.attrs.id,
-        }),
-      });
+  Image.configure({
+    HTMLAttributes: {
+      class: "w-full h-auto",
     },
   }),
-  Dropcursor.configure({
-    width: 2,
+  Table.configure({
+    resizable: true,
+    HTMLAttributes: {
+      class: "not-prose",
+    },
   }),
+  TableRow.configure({
+    HTMLAttributes: {
+      class: "not-prose",
+    },
+  }),
+  TableCell.configure({
+    HTMLAttributes: {
+      class: "not-prose",
+    },
+  }),
+  TableHeader.configure({
+    HTMLAttributes: {
+      class: "not-prose",
+    },
+  }),
+  AutoJoiner,
+  GlobalDragHandle.configure({
+    dragHandleWidth: 28,
+  }),
+  CodeBlock,
 ];
 
 export default function TiptapEditor({ editor }: TiptapEditorProps) {
   return (
     <div className="h-full flex flex-col">
-      <BubbleMenu
-        className="bubble-menu"
-        tippyOptions={{ duration: 100 }}
-        editor={editor}
-      >
-        <EditorToolbar editor={editor} />
-      </BubbleMenu>
       <EditorToolbar editor={editor} />
       <EditorContent
         editor={editor}
