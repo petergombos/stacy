@@ -2,6 +2,8 @@ import BlogEditorClient from "@/components/BlogEditorClient";
 import { getArticle } from "@/lib/models/article";
 import { notFound } from "next/navigation";
 
+export const revalidate = 0;
+
 export default async function BlogEditorPage({
   params,
 }: {

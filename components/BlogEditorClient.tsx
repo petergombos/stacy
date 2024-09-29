@@ -6,6 +6,7 @@ import { UpdatedChunk } from "@/schemas/chat-response";
 import { generateJSON } from "@tiptap/html";
 import { JSONContent, useEditor } from "@tiptap/react";
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { useDebounce } from "use-debounce";
 import ChatInterface from "./ChatInterface";
 import TiptapEditor, { extensions } from "./TiptapEditor";
@@ -45,7 +46,6 @@ export default function BlogEditorClient({
   initialMessages: Message[];
   article: Article;
 }) {
-  console.log("initialContentHTML", initialContentHTML);
   const [editorHTML, setEditorHTML] = useState(initialContentHTML.html || "");
 
   const editor = useEditor({
@@ -111,10 +111,6 @@ export default function BlogEditorClient({
             editor.commands.setContent(doc);
             const html = editor.getHTML();
             setEditorHTML(html);
-            updateArticleHtmlAction({
-              articleHTMLId: initialContentHTML.id,
-              html: html || "",
-            });
           } catch (e) {
             console.error(e);
           }
@@ -125,18 +121,17 @@ export default function BlogEditorClient({
   );
 
   // create editor instance and other stuff
-  const [debouncedEditor] = useDebounce(editor?.state.doc.content, 10000);
+  const [debouncedEditor] = useDebounce(editorHTML, 5000);
 
   useEffect(() => {
-    if (debouncedEditor) {
-      console.log("saving");
-      const html = editor?.getHTML();
+    if (debouncedEditor && debouncedEditor !== initialContentHTML.html) {
       updateArticleHtmlAction({
         articleHTMLId: initialContentHTML.id,
-        html: html || "",
+        html: debouncedEditor,
       });
+      toast.success("Saved");
     }
-  }, [debouncedEditor, initialContentHTML.id, editor]);
+  }, [debouncedEditor, initialContentHTML.id, initialContentHTML.html]);
 
   return (
     <>
