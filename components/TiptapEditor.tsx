@@ -1,6 +1,5 @@
 "use client";
 
-import Document from "@tiptap/extension-document";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -20,14 +19,14 @@ interface TiptapEditorProps {
   editor: Editor;
 }
 
-const CustomDocument = Document.extend({
-  content: "heading block*",
-});
+// const CustomDocument = Document.extend({
+//   content: "heading block*",
+// });
 
 export const extensions = [
-  CustomDocument,
+  // CustomDocument,
   StarterKit.configure({
-    document: false,
+    // document: false,
   }),
   Underline,
   UniqueID.configure({
