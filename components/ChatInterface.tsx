@@ -1,7 +1,9 @@
 "use client";
 
+import { addMessageToArticleAction } from "@/app/dashboard/actions";
 import { Button } from "@/components/ui/button";
 import { useAutoResize } from "@/hooks/auto-resize";
+import { Message } from "@/lib/db/schema";
 import { chatResponseSchema, UpdatedChunk } from "@/schemas/chat-response";
 import { experimental_useObject as useObject } from "ai/react";
 import { Loader2 } from "lucide-react";
@@ -11,55 +13,40 @@ import { Textarea } from "./ui/textarea";
 interface ChatInterfaceProps {
   onUpdate: (updatedChunks: UpdatedChunk[]) => void;
   currentContent: string;
+  initialMessages: Message[];
+  articleId: string;
 }
 
 export default function ChatInterface({
   onUpdate,
   currentContent,
+  initialMessages,
+  articleId,
 }: ChatInterfaceProps) {
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<
-    { role: string; content: string; inProgress?: boolean }[]
-  >([
-    {
-      role: "assistant",
-      content: `Hey! I’m Stacy 🦸‍♀️, ready to assist you in crafting high-quality, SEO-optimized articles.
-
-Together, we can work through every stage of the process:
-
-💡 Topic Ideas & Inspiration: Stuck on what to write? I can suggest topics based on your niche.
-
-🗂️ Organizing Your Post: I’ll help structure your content with a clear and effective outline.
-
-✍️ Content Drafting: Whether you need help starting or refining, I’m here to make your post shine.
-
-🚀 SEO Strategy: We’ll ensure your post is optimized with keywords and best practices for ranking.
-
-🎨 Final Touches: From editing to formatting, I’ll ensure your post is polished and ready to publish.`,
-    },
-  ]);
+  const [messages, setMessages] =
+    useState<(Message & { inProgress?: boolean })[]>(initialMessages);
 
   const { object, submit, isLoading } = useObject({
     api: "/api/chat",
     schema: chatResponseSchema,
     onFinish: ({ object }) => {
       if (object?.chatResponse) {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { role: "assistant", content: object.chatResponse },
-        ]);
+        const responseMessage = {
+          role: "assistant",
+          content: object.chatResponse,
+          articleId,
+        } as const;
+        setMessages(
+          (prevMessages) => [...prevMessages, responseMessage] as Message[]
+        );
+        addMessageToArticleAction(responseMessage);
       }
       if (object?.updatedChunks && object?.didUpdateBlogContent) {
         onUpdate(object.updatedChunks);
       }
     },
   });
-
-  useEffect(() => {
-    if (object?.updatedChunks && object?.didUpdateBlogContent) {
-      // onUpdate(object.updatedChunks as UpdatedChunk[]);
-    }
-  }, [object?.updatedChunks, object?.didUpdateBlogContent, onUpdate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
@@ -69,16 +56,26 @@ Together, we can work through every stage of the process:
     e.preventDefault();
     if (!input.trim()) return;
 
-    const updatedMessages = [...messages, { role: "user", content: input }];
-
-    setMessages(updatedMessages);
-    submit([
-      ...updatedMessages,
+    const updatedMessages = [
+      ...messages,
       {
-        role: "system",
-        content: `Current post content: "${currentContent}"`,
+        role: "user",
+        content: input,
+        articleId,
       },
-    ]);
+    ];
+
+    setMessages(updatedMessages as Message[]);
+    submit({
+      articleId,
+      messages: [
+        ...updatedMessages,
+        {
+          role: "system",
+          content: `Current post content: "${currentContent}"`,
+        },
+      ],
+    });
     setInput("");
   };
 

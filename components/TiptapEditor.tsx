@@ -15,10 +15,6 @@ import AutoJoiner from "tiptap-extension-auto-joiner";
 import GlobalDragHandle from "tiptap-extension-global-drag-handle";
 import EditorToolbar from "./EditorToolbar";
 
-interface TiptapEditorProps {
-  editor: Editor;
-}
-
 // const CustomDocument = Document.extend({
 //   content: "heading block*",
 // });
@@ -95,7 +91,13 @@ export const extensions = [
   }),
 ];
 
-export default function TiptapEditor({ editor }: TiptapEditorProps) {
+interface TiptapEditorProps {
+  editor: Editor;
+  articleId: string;
+}
+
+export default function TiptapEditor({ editor, articleId }: TiptapEditorProps) {
+  console.log("TiptapEditor", { articleId });
   return (
     <div className="h-full flex flex-col">
       <EditorToolbar editor={editor} />

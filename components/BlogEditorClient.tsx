@@ -1,9 +1,12 @@
 "use client";
 
+import { updateArticleHtmlAction } from "@/app/dashboard/actions";
+import { Article, ArticleHTML, Message } from "@/lib/db/schema";
 import { UpdatedChunk } from "@/schemas/chat-response";
 import { generateJSON } from "@tiptap/html";
 import { JSONContent, useEditor } from "@tiptap/react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useDebounce } from "use-debounce";
 import ChatInterface from "./ChatInterface";
 import TiptapEditor, { extensions } from "./TiptapEditor";
 
@@ -33,12 +36,21 @@ function findNodeParent(node: JSONContent, nodeID: string): JSONContent | null {
   return null;
 }
 
-export default function BlogEditorClient() {
-  const [editorHTML, setEditorHTML] = useState<string>("");
+export default function BlogEditorClient({
+  initialContentHTML,
+  initialMessages = [],
+  article,
+}: {
+  initialContentHTML: ArticleHTML;
+  initialMessages: Message[];
+  article: Article;
+}) {
+  console.log("initialContentHTML", initialContentHTML);
+  const [editorHTML, setEditorHTML] = useState(initialContentHTML.html || "");
 
   const editor = useEditor({
     extensions,
-    content: "",
+    content: initialContentHTML.html,
     onUpdate: ({ editor }) => {
       setEditorHTML(editor.getHTML());
     },
@@ -97,7 +109,12 @@ export default function BlogEditorClient() {
             }
 
             editor.commands.setContent(doc);
-            setEditorHTML(editor.getHTML());
+            const html = editor.getHTML();
+            setEditorHTML(html);
+            updateArticleHtmlAction({
+              articleHTMLId: initialContentHTML.id,
+              html: html || "",
+            });
           } catch (e) {
             console.error(e);
           }
@@ -107,14 +124,35 @@ export default function BlogEditorClient() {
     [editor]
   );
 
+  // create editor instance and other stuff
+  const [debouncedEditor] = useDebounce(editor?.state.doc.content, 10000);
+
+  useEffect(() => {
+    if (debouncedEditor) {
+      console.log("saving");
+      const html = editor?.getHTML();
+      updateArticleHtmlAction({
+        articleHTMLId: initialContentHTML.id,
+        html: html || "",
+      });
+    }
+  }, [debouncedEditor, initialContentHTML.id, editor]);
+
   return (
     <>
       <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 relative z-50 bg-background">
-        <ChatInterface onUpdate={handleAIUpdate} currentContent={editorHTML} />
+        <ChatInterface
+          onUpdate={handleAIUpdate}
+          currentContent={editorHTML}
+          initialMessages={initialMessages}
+          articleId={article.id}
+        />
       </div>
       <div className="w-2/3 h-full relative bg-gray-50 overflow-hidden">
         <div className="z-50 relative h-full">
-          {editor ? <TiptapEditor editor={editor} /> : null}
+          {editor ? (
+            <TiptapEditor articleId={article.id} editor={editor} />
+          ) : null}
         </div>
         <img
           src="https://play.tailwindcss.com/img/beams.jpg"

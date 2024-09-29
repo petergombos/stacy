@@ -1,14 +1,7 @@
 import { z } from "zod";
 
 export const updatedChunkSchema = z.object({
-  operation: z.enum([
-    "replace",
-    // "append",
-    // "prepend",
-    "insert_before",
-    "insert_after",
-    "delete",
-  ]),
+  operation: z.enum(["replace", "insert_before", "insert_after", "delete"]),
   nodeID: z
     .string()
     .min(1)

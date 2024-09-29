@@ -1,3 +1,4 @@
+import { addMessageToArticle } from "@/lib/models/article";
 import { chatResponseSchema } from "@/schemas/chat-response";
 import { openai } from "@ai-sdk/openai";
 import { streamObject } from "ai";
@@ -6,11 +7,17 @@ import { streamObject } from "ai";
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  const messages = await req.json();
+  const { messages } = await req.json();
 
   const { content } = messages.find(
     (message: any) => message.role === "system"
   ) || { content: "" };
+
+  const latestUserMessage = messages
+    .filter((message: any) => message.role === "user")
+    .pop();
+
+  await addMessageToArticle(latestUserMessage);
 
   const result = await streamObject({
     model: openai("gpt-4o-2024-08-06"),
@@ -29,9 +36,10 @@ SEO Optimization: Enhance the article’s performance in search rankings by:
 Incorporating relevant keywords naturally into the text.
 Ensuring optimal readability, with concise headings, subheadings, and well-structured paragraphs.
 Optimizing meta tags, internal/external links, and alt attributes for images.
-Engagement and Depth: Elevate the content by:
+Engagement and Depth:
 
-VERY IMPORTANT:
+Elevate the content by:
+
 Providing unique insights, practical advice, or in-depth analysis that adds real value to the reader.
 Avoiding overused clichés or filler language. Every sentence should serve a clear purpose.
 Striking a conversational yet authoritative tone that keeps readers interested and builds trust.

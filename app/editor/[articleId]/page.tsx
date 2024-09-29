@@ -7,21 +7,21 @@ export default async function BlogEditorPage({
 }: {
   params: { articleId: string };
 }) {
-  const article = await getArticle(params.articleId, {
-    with: {
-      html: true,
-    },
-  });
+  const article = await getArticle(params.articleId);
 
-  console.log(article);
+  const latesContent = article?.html.at(-1);
 
-  if (!article) {
+  if (!article || !latesContent) {
     notFound();
   }
 
   return (
     <div className="flex h-screen">
-      <BlogEditorClient />
+      <BlogEditorClient
+        article={article}
+        initialContentHTML={latesContent}
+        initialMessages={article.messages}
+      />
     </div>
   );
 }

@@ -16,17 +16,11 @@ export const articles = sqliteTable("articles", {
   createdAt: integer("created_at", { mode: "timestamp_ms" }).default(
     sql`CURRENT_TIMESTAMP`
   ),
-
-  // Relations
-  html: text("html").references(() => articleHTML.id),
 });
 
-export const articleRelations = relations(articles, ({ one, many }) => ({
-  html: one(articleHTML, {
-    fields: [articles.html],
-    references: [articleHTML.id],
-  }),
+export const articleRelations = relations(articles, ({ many }) => ({
   messages: many(messages),
+  html: many(articleHTML),
 }));
 
 export type Article = typeof articles.$inferSelect;
@@ -35,13 +29,21 @@ export type NewArticle = typeof articles.$inferInsert;
 export const articleHTML = sqliteTable("article_html", {
   id: text("id").primaryKey(),
   html: text("html"),
-  version: integer("version").default(1),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
+
+  // Relations
+  // Add cascade delete
+  articleId: text("article_id").references(() => articles.id, {
+    onDelete: "cascade",
+  }),
 });
 
 export const articleHTMLRelations = relations(articleHTML, ({ one }) => ({
   article: one(articles, {
-    fields: [articleHTML.id],
-    references: [articles.html],
+    fields: [articleHTML.articleId],
+    references: [articles.id],
   }),
 }));
 
@@ -51,13 +53,15 @@ export type NewArticleHTML = typeof articleHTML.$inferInsert;
 export const messages = sqliteTable("messages", {
   id: text("id").primaryKey(),
   content: text("content"),
-  role: text("role", { enum: ["user", "assistant", "system"] }),
+  role: text("role", { enum: ["user", "assistant", "system"] }).default("user"),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).default(
     sql`CURRENT_TIMESTAMP`
   ),
 
   // Relations
-  articleId: text("article_id").references(() => articles.id),
+  articleId: text("article_id").references(() => articles.id, {
+    onDelete: "cascade",
+  }),
 });
 
 export const messageRelations = relations(messages, ({ one }) => ({
