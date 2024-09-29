@@ -19,18 +19,14 @@ export const articles = sqliteTable("articles", {
 
   // Relations
   html: text("html").references(() => articleHTML.id),
-  messages: text("messages").references(() => messages.id),
 });
 
-export const articleRelations = relations(articles, ({ one }) => ({
+export const articleRelations = relations(articles, ({ one, many }) => ({
   html: one(articleHTML, {
     fields: [articles.html],
     references: [articleHTML.id],
   }),
-  messages: one(messages, {
-    fields: [articles.messages],
-    references: [messages.id],
-  }),
+  messages: many(messages),
 }));
 
 export type Article = typeof articles.$inferSelect;
@@ -59,12 +55,15 @@ export const messages = sqliteTable("messages", {
   createdAt: integer("created_at", { mode: "timestamp_ms" }).default(
     sql`CURRENT_TIMESTAMP`
   ),
+
+  // Relations
+  articleId: text("article_id").references(() => articles.id),
 });
 
 export const messageRelations = relations(messages, ({ one }) => ({
   article: one(articles, {
-    fields: [messages.id],
-    references: [articles.messages],
+    fields: [messages.articleId],
+    references: [articles.id],
   }),
 }));
 
