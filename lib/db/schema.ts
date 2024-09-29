@@ -19,12 +19,17 @@ export const articles = sqliteTable("articles", {
 
   // Relations
   html: text("html").references(() => articleHTML.id),
+  messages: text("messages").references(() => messages.id),
 });
 
 export const articleRelations = relations(articles, ({ one }) => ({
   html: one(articleHTML, {
     fields: [articles.html],
     references: [articleHTML.id],
+  }),
+  messages: one(messages, {
+    fields: [articles.messages],
+    references: [messages.id],
   }),
 }));
 
@@ -46,3 +51,22 @@ export const articleHTMLRelations = relations(articleHTML, ({ one }) => ({
 
 export type ArticleHTML = typeof articleHTML.$inferSelect;
 export type NewArticleHTML = typeof articleHTML.$inferInsert;
+
+export const messages = sqliteTable("messages", {
+  id: text("id").primaryKey(),
+  content: text("content"),
+  role: text("role", { enum: ["user", "assistant", "system"] }),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
+});
+
+export const messageRelations = relations(messages, ({ one }) => ({
+  article: one(articles, {
+    fields: [messages.id],
+    references: [articles.messages],
+  }),
+}));
+
+export type Message = typeof messages.$inferSelect;
+export type NewMessage = typeof messages.$inferInsert;
