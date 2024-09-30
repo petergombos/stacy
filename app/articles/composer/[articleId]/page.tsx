@@ -1,4 +1,5 @@
 import BlogEditorClient from "@/components/BlogEditorClient";
+import { Header } from "@/components/Header";
 import { getArticle } from "@/lib/models/article";
 import { notFound } from "next/navigation";
 
@@ -18,12 +19,13 @@ export default async function BlogEditorPage({
   }
 
   return (
-    <div className="flex h-screen">
+    <>
+      <Header />
       <BlogEditorClient
         article={article}
         initialContentHTML={latesContent}
         initialMessages={article.messages}
       />
-    </div>
+    </>
   );
 }

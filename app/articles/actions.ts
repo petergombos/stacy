@@ -11,7 +11,7 @@ import { z } from "zod";
 
 export const createArticleAction = actionClient.action(async () => {
   const article = await createArticle();
-  redirect(`/editor/${article.id}`);
+  redirect(`/articles/composer/${article.id}`);
 });
 
 export const addMessageToArticleAction = actionClient

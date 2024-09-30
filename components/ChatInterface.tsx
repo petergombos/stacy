@@ -1,6 +1,6 @@
 "use client";
 
-import { addMessageToArticleAction } from "@/app/dashboard/actions";
+import { addMessageToArticleAction } from "@/app/articles/actions";
 import { Button } from "@/components/ui/button";
 import { useAutoResize } from "@/hooks/auto-resize";
 import { Message } from "@/lib/db/schema";

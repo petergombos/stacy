@@ -1,3 +1,5 @@
+import { Header } from "@/components/Header";
+
 export default function BlogEditorPage() {
-  return <div>Stacy</div>;
+  return <Header />;
 }

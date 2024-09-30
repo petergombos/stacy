@@ -1,6 +1,6 @@
 "use client";
 
-import { updateArticleHtmlAction } from "@/app/dashboard/actions";
+import { updateArticleHtmlAction } from "@/app/articles/actions";
 import { Article, ArticleHTML, Message } from "@/lib/db/schema";
 import { UpdatedChunk } from "@/schemas/chat-response";
 import { generateJSON } from "@tiptap/html";
@@ -134,8 +134,8 @@ export default function BlogEditorClient({
   }, [debouncedEditor, initialContentHTML.id, initialContentHTML.html]);
 
   return (
-    <>
-      <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 relative z-50 bg-background">
+    <div className="flex-1 flex h-[calc(100vh-24px)] md:h-[calc(100vh-64px)]">
+      <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 bg-background">
         <ChatInterface
           onUpdate={handleAIUpdate}
           currentContent={editorHTML}
@@ -143,20 +143,13 @@ export default function BlogEditorClient({
           articleId={article.id}
         />
       </div>
-      <div className="w-2/3 h-full relative bg-gray-50 overflow-hidden">
-        <div className="z-50 relative h-full">
+      <div className="w-2/3 max-h-fit bg-gray-50 overflow-hidden">
+        <div className="h-full">
           {editor ? (
             <TiptapEditor articleId={article.id} editor={editor} />
           ) : null}
         </div>
-        <img
-          src="https://play.tailwindcss.com/img/beams.jpg"
-          alt="beams"
-          className="absolute top-48 left-1/2 -translate-x-2/3 -translate-y-1/2 max-w-none"
-          width="1308"
-        />
-        <div className="absolute inset-0 bg-[url(https://play.tailwindcss.com/img/grid.svg)] bg-top [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
       </div>
-    </>
+    </div>
   );
 }
