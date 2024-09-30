@@ -14,14 +14,14 @@ export const articles = sqliteTable("articles", {
   image: text("image")
     .default("https://g-p7fbcgixbe6.vusercontent.net/placeholder.svg")
     .notNull(),
-  publishedAt: integer("published_at", { mode: "timestamp_ms" }),
-  updatedAt: integer("last_updated_at", { mode: "timestamp_ms" })
-    .default(sql`CURRENT_TIMESTAMP`)
+  publishedAt: integer("published_at"),
+  updatedAt: integer("last_updated_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull()
     .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
 
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
-    .default(sql`CURRENT_TIMESTAMP`)
+  createdAt: integer("created_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
 });
 
@@ -35,17 +35,16 @@ export type NewArticle = typeof articles.$inferInsert;
 
 export const articleHTML = sqliteTable("article_html", {
   id: text("id").primaryKey(),
-  html: text("html"),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
-    .default(sql`CURRENT_TIMESTAMP`)
+  html: text("html").notNull(),
+  createdAt: integer("created_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-    .default(sql`CURRENT_TIMESTAMP`)
+  updatedAt: integer("updated_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
 
   // Relations
-  // Add cascade delete
   articleId: text("article_id").references(() => articles.id, {
     onDelete: "cascade",
   }),
@@ -65,11 +64,11 @@ export const messages = sqliteTable("messages", {
   id: text("id").primaryKey(),
   content: text("content"),
   role: text("role", { enum: ["user", "assistant", "system"] }).default("user"),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
-    .default(sql`CURRENT_TIMESTAMP`)
+  createdAt: integer("created_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-    .default(sql`CURRENT_TIMESTAMP`)
+  updatedAt: integer("updated_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
 

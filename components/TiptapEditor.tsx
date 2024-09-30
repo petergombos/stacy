@@ -1,5 +1,6 @@
 "use client";
 
+import { Document } from "@tiptap/extension-document";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -15,14 +16,14 @@ import AutoJoiner from "tiptap-extension-auto-joiner";
 import GlobalDragHandle from "tiptap-extension-global-drag-handle";
 import EditorToolbar from "./EditorToolbar";
 
-// const CustomDocument = Document.extend({
-//   content: "heading block*",
-// });
+const CustomDocument = Document.extend({
+  content: "heading block+",
+});
 
 export const extensions = [
-  // CustomDocument,
+  CustomDocument,
   StarterKit.configure({
-    // document: false,
+    document: false,
   }),
   Underline,
   UniqueID.configure({
@@ -82,9 +83,8 @@ export const extensions = [
   }),
   Placeholder.configure({
     placeholder: ({ node }) => {
-      if (node.type.name === "heading") {
-        // Some default placeholder for the heading
-        return "Your heading here...";
+      if (node.type.name === "heading" && node.attrs.level === 1) {
+        return "Enter your title here...";
       }
       return "";
     },

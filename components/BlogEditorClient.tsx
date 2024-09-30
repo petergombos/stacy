@@ -46,7 +46,7 @@ export default function BlogEditorClient({
   initialMessages: Message[];
   article: Article;
 }) {
-  const [editorHTML, setEditorHTML] = useState(initialContentHTML.html || "");
+  const [editorHTML, setEditorHTML] = useState(initialContentHTML.html);
 
   const editor = useEditor({
     extensions,
@@ -107,8 +107,9 @@ export default function BlogEditorClient({
                   break;
               }
             }
-
-            editor.commands.setContent(doc);
+            if (doc.content) {
+              editor.commands.setContent(doc.content);
+            }
             const html = editor.getHTML();
             setEditorHTML(html);
           } catch (e) {
@@ -128,8 +129,13 @@ export default function BlogEditorClient({
       updateArticleHtmlAction({
         articleHTMLId: initialContentHTML.id,
         html: debouncedEditor,
+      }).then((response) => {
+        if (response?.serverError) {
+          toast.error(response.serverError);
+        } else {
+          toast.success("Saved");
+        }
       });
-      toast.success("Saved");
     }
   }, [debouncedEditor, initialContentHTML.id, initialContentHTML.html]);
 

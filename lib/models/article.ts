@@ -53,7 +53,7 @@ export const createArticle = async (article?: Omit<NewArticle, "id">) => {
     .returning();
   await Promise.all([
     // Add initial empty html
-    addHtmlToArticle(id, ""),
+    addHtmlToArticle(id, "<h1></h1>"),
     // Add initial welcome message
     addMessageToArticle({
       ...welcomeAssistantMessage,
