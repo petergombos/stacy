@@ -1,9 +1,8 @@
 "use client";
 
-import { Document } from "@tiptap/extension-document";
+import { articleFormSchema } from "@/schemas/article";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
-import Placeholder from "@tiptap/extension-placeholder";
 import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
@@ -12,18 +11,20 @@ import Underline from "@tiptap/extension-underline";
 import { UniqueID } from "@tiptap/extension-unique-id";
 import { Editor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { UseFormReturn } from "react-hook-form";
 import AutoJoiner from "tiptap-extension-auto-joiner";
 import GlobalDragHandle from "tiptap-extension-global-drag-handle";
+import { z } from "zod";
+import { ArticleMetadataFields } from "./ArticleMetadataFields";
 import EditorToolbar from "./EditorToolbar";
-
-const CustomDocument = Document.extend({
-  content: "heading block+",
-});
+import { FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+import { Input } from "./ui/input";
 
 export const extensions = [
-  CustomDocument,
   StarterKit.configure({
-    document: false,
+    heading: {
+      levels: [2, 3],
+    },
   }),
   Underline,
   UniqueID.configure({
@@ -73,7 +74,7 @@ export const extensions = [
   }),
   AutoJoiner,
   GlobalDragHandle.configure({
-    dragHandleWidth: 28,
+    dragHandleWidth: 20,
   }),
   Link.configure({
     openOnClick: false,
@@ -81,30 +82,42 @@ export const extensions = [
       class: "text-primary underline",
     },
   }),
-  Placeholder.configure({
-    placeholder: ({ node }) => {
-      if (node.type.name === "heading" && node.attrs.level === 1) {
-        return "Enter your title here...";
-      }
-      return "";
-    },
-  }),
 ];
 
-interface TiptapEditorProps {
+interface ArticleEditorProps {
   editor: Editor;
-  articleId: string;
+  form: UseFormReturn<z.infer<typeof articleFormSchema>>;
 }
 
-export default function TiptapEditor({ editor, articleId }: TiptapEditorProps) {
-  console.log("TiptapEditor", { articleId });
+export default function ArticleEditor({ editor, form }: ArticleEditorProps) {
   return (
-    <div className="h-full flex flex-col">
-      <EditorToolbar editor={editor} />
-      <EditorContent
-        editor={editor}
-        className="overflow-y-scroll flex-1 w-full flex flex-col px-10 py-8"
-      />
+    <div className="h-full flex flex-col gap-8 overflow-y-scroll">
+      <EditorToolbar form={form} editor={editor} />
+      <div className="max-w-[780px] mx-auto space-y-6 w-full px-6">
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  className="text-2xl font-semibold py-6 px-6 border-none shadow rounded"
+                  placeholder="The headline of your article"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div>
+          <EditorContent
+            editor={editor}
+            className="flex-1 w-full flex flex-col min-h-[60vh]"
+          />
+        </div>
+        <ArticleMetadataFields form={form} />
+      </div>
     </div>
   );
 }

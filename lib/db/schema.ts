@@ -11,9 +11,7 @@ export const articles = sqliteTable("articles", {
     .default("draft")
     .notNull(),
   authorName: text("author_name"),
-  image: text("image")
-    .default("https://g-p7fbcgixbe6.vusercontent.net/placeholder.svg")
-    .notNull(),
+  image: text("image").default("").notNull(),
   publishedAt: integer("published_at"),
   updatedAt: integer("last_updated_at")
     .default(sql`(CURRENT_TIMESTAMP)`)

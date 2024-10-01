@@ -1,5 +1,6 @@
 "use client";
 
+import { articleFormSchema } from "@/schemas/article";
 import { Editor } from "@tiptap/react";
 import {
   BetweenHorizonalEnd,
@@ -10,15 +11,17 @@ import {
   Code,
   FileJson2,
   Heading,
-  Heading1,
   Heading2,
   Heading3,
+  ImagePlus,
   Italic,
   Link as LinkIcon,
   List,
   ListOrdered,
   ListX,
+  Loader2,
   Quote,
+  Save,
   SeparatorHorizontal,
   TableCellsMerge,
   Table as TableIcon,
@@ -26,15 +29,20 @@ import {
   Underline,
 } from "lucide-react";
 import { useState } from "react";
+import { UseFormReturn } from "react-hook-form";
+import { z } from "zod";
 import { LinkDialog } from "./LinkDialog";
 import { UnsplashImageSearch } from "./UnsplashImageSearch";
+import { Button } from "./ui/button";
+import { DialogTrigger } from "./ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 interface EditorToolbarProps {
   editor: Editor | null;
+  form: UseFormReturn<z.infer<typeof articleFormSchema>>;
 }
 
-export default function EditorToolbar({ editor }: EditorToolbarProps) {
+export default function EditorToolbar({ editor, form }: EditorToolbarProps) {
   const [isLinkDialogOpen, setIsLinkDialogOpen] = useState(false);
 
   if (!editor) {
@@ -72,12 +80,12 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       isActive: () => editor.isActive("orderedList"),
       label: "Ordered List",
     },
-    {
-      icon: Heading1,
-      action: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
-      isActive: () => editor.isActive("heading", { level: 1 }),
-      label: "Heading 1",
-    },
+    // {
+    //   icon: Heading1,
+    //   action: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
+    //   isActive: () => editor.isActive("heading", { level: 1 }),
+    //   label: "Heading 1",
+    // },
     {
       icon: Heading2,
       action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
@@ -186,29 +194,55 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
     editor.chain().focus().setImage({ src: imageUrl }).run();
   };
 
+  const isSubmitting = form.formState.isSubmitting;
+
   return (
-    <div className="relative">
-      <div className="flex flex-wrap gap-2 p-2 bg-background dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        {tools.map((tool, index) => (
-          <Tooltip key={index}>
-            <TooltipTrigger asChild>
-              <button
-                onClick={tool.action}
-                className={`p-2 rounded ${
-                  tool.isActive()
-                    ? "bg-gray-200 dark:bg-gray-700"
-                    : "hover:bg-gray-200 dark:hover:bg-gray-700"
-                }`}
-              >
-                <tool.icon className="w-5 h-5" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{tool.label}</p>
-            </TooltipContent>
-          </Tooltip>
-        ))}
-        <UnsplashImageSearch onImageSelect={handleImageSelect} />
+    <div className="sticky top-0 z-20">
+      <div className="flex justify-between gap-5 p-2 bg-background dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex flex-wrap gap-2">
+          {tools.map((tool, index) => (
+            <Tooltip key={index}>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={tool.action}
+                  className={`p-2 rounded ${
+                    tool.isActive()
+                      ? "bg-gray-200 dark:bg-gray-700"
+                      : "hover:bg-gray-200 dark:hover:bg-gray-700"
+                  }`}
+                >
+                  <tool.icon className="w-5 h-5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{tool.label}</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
+          <UnsplashImageSearch onImageSelect={handleImageSelect}>
+            <DialogTrigger>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+                    <ImagePlus className="h-5 w-5" />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Image</p>
+                </TooltipContent>
+              </Tooltip>
+            </DialogTrigger>
+          </UnsplashImageSearch>
+        </div>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="w-4 h-4 mr-2" />
+          )}
+          Save
+        </Button>
       </div>
       {editor.isActive("table") && (
         <div className="flex gap-2 p-2 bg-background dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 absolute -bottom-full w-full z-10">

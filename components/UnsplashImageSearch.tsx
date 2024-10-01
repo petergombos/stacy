@@ -1,4 +1,6 @@
-import { Image as ImageIcon, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import {
@@ -10,10 +12,10 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 interface UnsplashImageSearchProps {
   onImageSelect: (imageUrl: string) => void;
+  children: React.ReactNode;
 }
 
 interface UnsplashImage {
@@ -24,6 +26,7 @@ interface UnsplashImage {
 
 export function UnsplashImageSearch({
   onImageSelect,
+  children,
 }: UnsplashImageSearchProps) {
   const [keyword, setKeyword] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -108,20 +111,18 @@ export function UnsplashImageSearch({
     }
   }, [searchTerm, searchImages]);
 
+  // Reset state when dialog closes
+  useEffect(() => {
+    if (!isOpen) {
+      setKeyword("");
+      setSearchTerm("");
+      setImages([]);
+    }
+  }, [isOpen]);
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
-              <ImageIcon className="h-5 w-5" />
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Image</p>
-          </TooltipContent>
-        </Tooltip>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[640px]">
         <DialogHeader>
           <DialogTitle>Find the perfect image from Unsplash</DialogTitle>
@@ -152,22 +153,39 @@ export function UnsplashImageSearch({
               )}
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-4 h-full max-h-[500px] overflow-y-auto">
+          <div
+            className={cn(
+              "grid grid-cols-2 gap-4 h-full max-h-[500px]",
+              {
+                "animate-pulse": isLoading,
+              },
+              images.length > 0 ? "overflow-y-auto" : "overflow-hidden"
+            )}
+          >
             {images.map((image, index) => (
-              <img
+              <Image
                 key={image.id}
                 src={image.urls.small}
                 alt={image.alt_description}
-                className="w-full h-44 object-cover cursor-pointer"
+                width={200}
+                height={200}
+                className="w-full h-44 object-cover cursor-pointer rounded-sm"
                 onClick={() => handleImageSelect(image.urls.regular)}
                 ref={index === images.length - 1 ? lastImageElementRef : null}
               />
             ))}
-            {isLoading && (
-              <div className="col-span-2 flex justify-center items-center">
-                <Loader2 className="h-6 w-6 animate-spin" />
-              </div>
-            )}
+            {
+              // Placeholders
+              (images.length === 0 || isLoading) &&
+                Array.from({ length: 12 }).map((_, index) => (
+                  <div
+                    key={`loading-${index}`}
+                    className={cn("w-full h-44 bg-gray-200 rounded-sm", {
+                      "animate-pulse": isLoading,
+                    })}
+                  />
+                ))
+            }
           </div>
         </div>
       </DialogContent>

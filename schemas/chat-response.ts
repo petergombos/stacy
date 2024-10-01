@@ -13,15 +13,36 @@ export const updatedChunkSchema = z.object({
 
 export type UpdatedChunk = z.infer<typeof updatedChunkSchema>;
 
+export const updatedMetadataSchema = z.object({
+  title: z.string().describe("The title of the article"),
+  description: z
+    .string()
+    .describe(
+      "A good meta description is short, unique to one particular page, and includes the most relevant points of the page"
+    ),
+  slug: z.string().describe("The slug is the url path of the page"),
+  keywords: z
+    .string()
+    .describe(
+      "Keywords are important for SEO, they help search engines understand the content of the page"
+    ),
+});
+
+export type UpdatedMetadata = z.infer<typeof updatedMetadataSchema>;
+
 export const chatResponseSchema = z.object({
-  didUpdateBlogContent: z
+  didUpdateArticleContent: z
     .boolean()
-    .describe("Whether the blog content was updated"),
+    .describe("Whether the article content was updated"),
   updatedChunks: z
     .array(updatedChunkSchema)
     .describe("An array of updated chunks")
     .optional(),
   chatResponse: z.string().describe("A response to the user's message"),
+  didUpdateArticleMetadata: z
+    .boolean()
+    .describe("Whether the article's metadata was updated"),
+  updatedArticleMetadata: updatedMetadataSchema.optional(),
 });
 
 export type ChatResponse = z.infer<typeof chatResponseSchema>;

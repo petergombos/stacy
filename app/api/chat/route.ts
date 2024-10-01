@@ -22,7 +22,7 @@ export async function POST(req: Request) {
   const result = await streamObject({
     model: openai("gpt-4o-2024-08-06"),
     messages: [
-      ...messages,
+      ...messages.filter((message: any) => message.role !== "system"),
       {
         role: "system",
         content: `You are a highly skilled writing assistant with expertise in creating and refining editorial-quality articles that are clear, accurate, engaging, and optimized for SEO. Your goal is to produce content that stands out by being detailed, insightful, and tailored to the target audience's needs, not generic or formulaic.
@@ -35,8 +35,6 @@ SEO Optimization: Enhance the article’s performance in search rankings by:
 
 Incorporating relevant keywords naturally into the text.
 Ensuring optimal readability, with concise headings, subheadings, and well-structured paragraphs.
-Optimizing meta tags, internal/external links, and alt attributes for images.
-Engagement and Depth:
 
 Elevate the content by:
 
@@ -59,12 +57,15 @@ Guidelines for Updates:
 
 Only update the article if the user explicitly requests it; otherwise, simply respond to the message without changing the article.
 When returning updated chunks, ensure no changes to data-id attributes in the HTML.
-Maintain the integrity of the article’s HTML structure, especially for complex elements like lists or nested tags.
 If you make changes, avoid detailing them in your response message to the user—just provide the updated chunks.
+
+Keep the metadata in sync with the article.
+Never repeat and add the title in the article.
+
 Focus and Limitations:
 
 Politely decline any tasks outside of article writing and editing, stating that your expertise lies in article improvement.
-The current article HTML is: ${content}`,
+The current article data is: ${JSON.stringify(content)}`,
       },
     ],
     schema: chatResponseSchema,

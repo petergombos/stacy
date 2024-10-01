@@ -1,13 +1,15 @@
 import { db } from "@/lib/db";
 import {
+  Article,
   articleHTML,
   articles,
   messages,
   NewArticle,
   NewMessage,
 } from "@/lib/db/schema";
+import { ArticleMetadata } from "@/schemas/article";
 import { welcomeAssistantMessage } from "@/static/messages";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
 
 export const getArticle = async (articleId: string) => {
@@ -33,13 +35,14 @@ interface GetArticleOptions {
 }
 
 export const getArticles = async (options: GetArticleOptions = {}) => {
-  const articles = await db.query.articles.findMany({
+  const items = await db.query.articles.findMany({
     with: {
       messages: options.with?.messages ? true : undefined,
       html: options.with?.html ? true : undefined,
     },
+    orderBy: desc(articles.createdAt),
   });
-  return articles;
+  return items;
 };
 
 export const createArticle = async (article?: Omit<NewArticle, "id">) => {
@@ -48,12 +51,15 @@ export const createArticle = async (article?: Omit<NewArticle, "id">) => {
     .insert(articles)
     .values({
       ...article,
+      image:
+        article?.image ||
+        "https://g-p7fbcgixbe6.vusercontent.net/placeholder.svg",
       id,
     })
     .returning();
   await Promise.all([
     // Add initial empty html
-    addHtmlToArticle(id, "<h1></h1>"),
+    addHtmlToArticle(id, ""),
     // Add initial welcome message
     addMessageToArticle({
       ...welcomeAssistantMessage,
@@ -104,4 +110,25 @@ export const updateArticleHtml = async (htmlId: string, html: string) => {
     .where(eq(articleHTML.id, htmlId))
     .returning();
   return updatedHtml;
+};
+
+export const updateArticle = async (article: Article) => {
+  const [updatedArticle] = await db
+    .update(articles)
+    .set(article)
+    .where(eq(articles.id, article.id))
+    .returning();
+  return updatedArticle;
+};
+
+export const updateArticleMetadata = async (
+  articleId: string,
+  article: ArticleMetadata
+) => {
+  const [updatedArticle] = await db
+    .update(articles)
+    .set(article)
+    .where(eq(articles.id, articleId))
+    .returning();
+  return updatedArticle;
 };

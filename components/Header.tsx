@@ -14,10 +14,7 @@ import Link from "next/link";
 export function Header({ className }: { className?: string }) {
   return (
     <header
-      className={cn(
-        "bg-gray-900 text-white shadow-md z-50 sticky top-0",
-        className
-      )}
+      className={cn("bg-gray-900 text-white shadow-md sticky top-0", className)}
     >
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">

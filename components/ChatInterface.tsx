@@ -4,14 +4,24 @@ import { addMessageToArticleAction } from "@/app/articles/actions";
 import { Button } from "@/components/ui/button";
 import { useAutoResize } from "@/hooks/auto-resize";
 import { Message } from "@/lib/db/schema";
-import { chatResponseSchema, UpdatedChunk } from "@/schemas/chat-response";
+import {
+  chatResponseSchema,
+  UpdatedChunk,
+  UpdatedMetadata,
+} from "@/schemas/chat-response";
 import { experimental_useObject as useObject } from "ai/react";
 import { Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Textarea } from "./ui/textarea";
 
 interface ChatInterfaceProps {
-  onUpdate: (updatedChunks: UpdatedChunk[]) => void;
+  onUpdate: ({
+    updatedChunks,
+    updatedArticleMetadata,
+  }: {
+    updatedChunks?: UpdatedChunk[];
+    updatedArticleMetadata?: UpdatedMetadata;
+  }) => void;
   currentContent: string;
   initialMessages: Message[];
   articleId: string;
@@ -42,8 +52,8 @@ export default function ChatInterface({
         );
         addMessageToArticleAction(responseMessage);
       }
-      if (object?.updatedChunks && object?.didUpdateBlogContent) {
-        onUpdate(object.updatedChunks);
+      if (object?.didUpdateArticleContent || object?.didUpdateArticleMetadata) {
+        onUpdate(object);
       }
     },
   });
@@ -72,7 +82,7 @@ export default function ChatInterface({
         ...updatedMessages,
         {
           role: "system",
-          content: `Current post content: "${currentContent}"`,
+          content: currentContent,
         },
       ],
     });
