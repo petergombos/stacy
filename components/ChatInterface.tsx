@@ -4,6 +4,7 @@ import { addMessageToArticleAction } from "@/app/articles/actions";
 import { Button } from "@/components/ui/button";
 import { useAutoResize } from "@/hooks/auto-resize";
 import { Message } from "@/lib/db/schema";
+import { ArticleForm } from "@/schemas/article";
 import {
   chatResponseSchema,
   UpdatedChunk,
@@ -22,14 +23,14 @@ interface ChatInterfaceProps {
     updatedChunks?: UpdatedChunk[];
     updatedArticleMetadata?: UpdatedMetadata;
   }) => void;
-  currentContent: string;
   initialMessages: Message[];
   articleId: string;
+  getContext: () => ArticleForm;
 }
 
 export default function ChatInterface({
   onUpdate,
-  currentContent,
+  getContext,
   initialMessages,
   articleId,
 }: ChatInterfaceProps) {
@@ -82,7 +83,7 @@ export default function ChatInterface({
         ...updatedMessages,
         {
           role: "system",
-          content: currentContent,
+          content: JSON.stringify(getContext()),
         },
       ],
     });

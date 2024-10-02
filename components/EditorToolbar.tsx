@@ -1,6 +1,6 @@
 "use client";
 
-import { articleFormSchema } from "@/schemas/article";
+import { ArticleForm } from "@/schemas/article";
 import { Editor } from "@tiptap/react";
 import {
   BetweenHorizonalEnd,
@@ -30,7 +30,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { z } from "zod";
 import { LinkDialog } from "./LinkDialog";
 import { UnsplashImageSearch } from "./UnsplashImageSearch";
 import { Button } from "./ui/button";
@@ -39,7 +38,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 interface EditorToolbarProps {
   editor: Editor | null;
-  form: UseFormReturn<z.infer<typeof articleFormSchema>>;
+  form: UseFormReturn<ArticleForm>;
 }
 
 export default function EditorToolbar({ editor, form }: EditorToolbarProps) {

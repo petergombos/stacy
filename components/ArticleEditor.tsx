@@ -1,6 +1,6 @@
 "use client";
 
-import { articleFormSchema } from "@/schemas/article";
+import { ArticleForm } from "@/schemas/article";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Table from "@tiptap/extension-table";
@@ -14,7 +14,6 @@ import StarterKit from "@tiptap/starter-kit";
 import { UseFormReturn } from "react-hook-form";
 import AutoJoiner from "tiptap-extension-auto-joiner";
 import GlobalDragHandle from "tiptap-extension-global-drag-handle";
-import { z } from "zod";
 import { ArticleMetadataFields } from "./ArticleMetadataFields";
 import EditorToolbar from "./EditorToolbar";
 import { FormControl, FormField, FormItem, FormMessage } from "./ui/form";
@@ -86,7 +85,7 @@ export const extensions = [
 
 interface ArticleEditorProps {
   editor: Editor;
-  form: UseFormReturn<z.infer<typeof articleFormSchema>>;
+  form: UseFormReturn<ArticleForm>;
 }
 
 export default function ArticleEditor({ editor, form }: ArticleEditorProps) {

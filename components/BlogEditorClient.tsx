@@ -66,8 +66,6 @@ export default function BlogEditorClient({
     },
   });
 
-  const currentHTMLContent = form.watch("html");
-
   const onSubmit = async (data: z.infer<typeof articleFormSchema>) => {
     const metadataPromise = updateArticleMetadataAction({
       articleId: article.id,
@@ -202,7 +200,7 @@ export default function BlogEditorClient({
       <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 bg-background">
         <ChatInterface
           onUpdate={handleAIUpdate}
-          currentContent={currentHTMLContent}
+          getContext={() => form.getValues()}
           initialMessages={initialMessages}
           articleId={article.id}
         />

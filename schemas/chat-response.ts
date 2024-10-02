@@ -17,6 +17,7 @@ export const updatedMetadataSchema = z.object({
   title: z.string().describe("The title of the article"),
   description: z
     .string()
+    .min(100)
     .describe(
       "A good meta description is short, unique to one particular page, and includes the most relevant points of the page"
     ),
@@ -31,6 +32,11 @@ export const updatedMetadataSchema = z.object({
 export type UpdatedMetadata = z.infer<typeof updatedMetadataSchema>;
 
 export const chatResponseSchema = z.object({
+  chatResponse: z.string().describe("A response to the user's message."),
+  didUpdateArticleMetadata: z
+    .boolean()
+    .describe("Whether the article's metadata was updated"),
+  updatedArticleMetadata: updatedMetadataSchema.optional(),
   didUpdateArticleContent: z
     .boolean()
     .describe("Whether the article content was updated"),
@@ -38,11 +44,6 @@ export const chatResponseSchema = z.object({
     .array(updatedChunkSchema)
     .describe("An array of updated chunks")
     .optional(),
-  chatResponse: z.string().describe("A response to the user's message"),
-  didUpdateArticleMetadata: z
-    .boolean()
-    .describe("Whether the article's metadata was updated"),
-  updatedArticleMetadata: updatedMetadataSchema.optional(),
 });
 
 export type ChatResponse = z.infer<typeof chatResponseSchema>;

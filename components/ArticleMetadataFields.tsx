@@ -8,18 +8,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { articleFormSchema } from "@/schemas/article";
+import { ArticleForm } from "@/schemas/article";
 import { ImagePlusIcon } from "lucide-react";
 import Image from "next/image";
 import { UseFormReturn } from "react-hook-form";
-import * as z from "zod";
 import { UnsplashImageSearch } from "./UnsplashImageSearch";
 import { CardTitle } from "./ui/card";
 
 export function ArticleMetadataFields({
   form,
 }: {
-  form: UseFormReturn<z.infer<typeof articleFormSchema>>;
+  form: UseFormReturn<ArticleForm>;
 }) {
   return (
     <div className="p-6 max-w-[780px] mx-auto shadow rounded bg-background space-y-6 w-full">
