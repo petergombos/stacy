@@ -14,8 +14,8 @@ import StarterKit from "@tiptap/starter-kit";
 import { UseFormReturn } from "react-hook-form";
 import AutoJoiner from "tiptap-extension-auto-joiner";
 import GlobalDragHandle from "tiptap-extension-global-drag-handle";
-import { ArticleMetadataFields } from "./ArticleMetadataFields";
-import EditorToolbar from "./EditorToolbar";
+import { ArticleMetadataFields } from "./article-metadata-fields";
+import EditorToolbar from "./editor-toolbar";
 import { FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 

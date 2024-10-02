@@ -30,11 +30,11 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { LinkDialog } from "./LinkDialog";
-import { UnsplashImageSearch } from "./UnsplashImageSearch";
+import { LinkDialog } from "./link-dialog";
 import { Button } from "./ui/button";
 import { DialogTrigger } from "./ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { UnsplashImageSearch } from "./unsplash-image-search";
 
 interface EditorToolbarProps {
   editor: Editor | null;

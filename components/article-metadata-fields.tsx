@@ -12,8 +12,8 @@ import { ArticleForm } from "@/schemas/article";
 import { ImagePlusIcon } from "lucide-react";
 import Image from "next/image";
 import { UseFormReturn } from "react-hook-form";
-import { UnsplashImageSearch } from "./UnsplashImageSearch";
 import { CardTitle } from "./ui/card";
+import { UnsplashImageSearch } from "./unsplash-image-search";
 
 export function ArticleMetadataFields({
   form,

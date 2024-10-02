@@ -14,8 +14,8 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import ArticleEditor, { extensions } from "./ArticleEditor";
-import ChatInterface from "./ChatInterface";
+import ArticleEditor, { extensions } from "./article-editor";
+import ChatInterface from "./chat-interface";
 import { Form } from "./ui/form";
 
 function findNode(node: JSONContent, nodeID: string): JSONContent | null {

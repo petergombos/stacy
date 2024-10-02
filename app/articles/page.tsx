@@ -1,6 +1,6 @@
-import { ArticleCard } from "@/components/ArticleCard";
-import CreateArticleButton from "@/components/CreateArticleButton";
-import { Header } from "@/components/Header";
+import { ArticleCard } from "@/components/article-card";
+import CreateArticleButton from "@/components/create-article-button";
+import { Header } from "@/components/header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getArticles } from "@/lib/models/article";
 

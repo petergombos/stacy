@@ -1,5 +1,5 @@
-import BlogEditorClient from "@/components/BlogEditorClient";
-import { Header } from "@/components/Header";
+import BlogEditorClient from "@/components/blog-editor-client";
+import { Header } from "@/components/header";
 import { getArticle } from "@/lib/models/article";
 import { notFound } from "next/navigation";
 
