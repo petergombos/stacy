@@ -14,18 +14,18 @@ export default async function ArticlesPage() {
       <Header />
       <main className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4 sm:mb-0">
-              Your Articles
-            </h1>
-            <CreateArticleButton />
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+            Your Articles
+          </h1>
           <Tabs defaultValue="all" className="w-full">
-            <TabsList className="mb-4">
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="published">Published</TabsTrigger>
-              <TabsTrigger value="drafts">Drafts</TabsTrigger>
-            </TabsList>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+              <TabsList>
+                <TabsTrigger value="all">All</TabsTrigger>
+                <TabsTrigger value="published">Published</TabsTrigger>
+                <TabsTrigger value="drafts">Drafts</TabsTrigger>
+              </TabsList>
+              <CreateArticleButton />
+            </div>
             <TabsContent value="all">
               <div className="space-y-6">
                 {articles.map((article) => (

@@ -4,15 +4,12 @@ import { createArticleAction } from "@/app/articles/actions";
 import { PlusCircle } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
-import { Button } from "./ui/button";
+import { Button, ButtonProps } from "./ui/button";
 
 export default function CreateArticleButton({
-  className,
   children,
-}: {
-  className?: string;
-  children?: React.ReactNode;
-}) {
+  ...rest
+}: ButtonProps) {
   const { execute, isPending } = useAction(createArticleAction, {
     onError: () => {
       toast.error("Could not create article");
@@ -24,11 +21,13 @@ export default function CreateArticleButton({
 
   return (
     <Button
-      className={className}
+      size="sm"
       onClick={() => execute()}
       disabled={isPending}
+      className="h-8 gap-1"
+      {...rest}
     >
-      <PlusCircle className="w-5 h-5 mr-2" />
+      <PlusCircle className="h-3.5 w-3.5" />
       {children || "Create Article"}
     </Button>
   );
