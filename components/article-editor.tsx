@@ -1,9 +1,11 @@
 "use client";
 
+import { useAutoResize } from "@/hooks/auto-resize";
 import { Article } from "@/lib/db/schema";
 import { ArticleForm } from "@/schemas/article";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
+import Placeholder from "@tiptap/extension-placeholder";
 import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
@@ -12,13 +14,14 @@ import Underline from "@tiptap/extension-underline";
 import { UniqueID } from "@tiptap/extension-unique-id";
 import { Editor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useRef } from "react";
 import { UseFormReturn } from "react-hook-form";
 import AutoJoiner from "tiptap-extension-auto-joiner";
 import GlobalDragHandle from "tiptap-extension-global-drag-handle";
 import { ArticleMetadataFields } from "./article-metadata-fields";
 import EditorToolbar from "./editor-toolbar";
 import { FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 
 export const extensions = [
   StarterKit.configure({
@@ -82,6 +85,15 @@ export const extensions = [
       class: "text-primary underline",
     },
   }),
+  Placeholder.configure({
+    placeholder: ({ editor }) => {
+      //Only show placeholder when editor is empty
+      if (editor.isEmpty) {
+        return "The content of your article";
+      }
+      return "";
+    },
+  }),
 ];
 
 interface ArticleEditorProps {
@@ -95,6 +107,8 @@ export default function ArticleEditor({
   form,
   article,
 }: ArticleEditorProps) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  useAutoResize(textareaRef);
   return (
     <div className="h-full flex flex-col gap-8 overflow-y-scroll">
       <EditorToolbar form={form} editor={editor} article={article} />
@@ -105,10 +119,12 @@ export default function ArticleEditor({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input
-                  className="text-2xl font-semibold py-6 px-6 border-none shadow rounded"
+                <Textarea
+                  className="text-2xl font-semibold py-4 px-6 border-none shadow rounded resize-none min-h-0"
                   placeholder="The headline of your article"
                   {...field}
+                  ref={textareaRef}
+                  rows={1}
                 />
               </FormControl>
               <FormMessage />
@@ -118,7 +134,7 @@ export default function ArticleEditor({
         <div>
           <EditorContent
             editor={editor}
-            className="flex-1 w-full flex flex-col min-h-[60vh]"
+            className="flex-1 w-full flex flex-col min-h-[50vh]"
           />
         </div>
         <ArticleMetadataFields form={form} />

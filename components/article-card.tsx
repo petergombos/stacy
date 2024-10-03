@@ -17,8 +17,9 @@ export function ArticleCard({ article }: { article: Article }) {
             className="h-48 w-full object-cover md:h-full md:w-64"
           />
         </div>
-        <div className="p-8 flex flex-col justify-between w-full">
-          <CardContent className="p-0">
+
+        <CardContent className="p-8 flex flex-col justify-between w-full">
+          <div>
             <div className="flex flex-col md:flex-row md:items-start justify-between mb-2">
               <h2 className="text-2xl font-semibold">
                 {article.title || "Untitled"}
@@ -36,47 +37,47 @@ export function ArticleCard({ article }: { article: Article }) {
             <p className="text-gray-600 mb-4">
               {article.description || "No description"}
             </p>
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between">
-              <div className="space-y-2 flex flex-col">
-                <div className="flex items-center text-sm text-gray-500">
-                  <User className="w-4 h-4 mr-1" />
-                  {article.authorName || "Unknown Author"}
-                </div>
-                <div className="flex items-center text-sm text-gray-500">
-                  <CalendarIcon className="w-4 h-4 mr-1" />
-                  {article.status === "published"
-                    ? `Published: ${new Date(
-                        article.publishedAt!
-                      ).toLocaleDateString()}`
-                    : `Created: ${new Date(
-                        article.createdAt
-                      ).toLocaleDateString()}`}
-                </div>
+          </div>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between">
+            <div className="space-y-2 flex flex-col">
+              <div className="flex items-center text-sm text-gray-500">
+                <User className="w-4 h-4 mr-1" />
+                {article.authorName || "Unknown Author"}
               </div>
-              <div className="flex mt-4 md:mt-0 space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 md:flex-none"
-                >
-                  <Eye className="w-4 h-4 mr-1" />
-                  View
-                </Button>
-                <Link
-                  className={buttonVariants({
-                    variant: "outline",
-                    size: "sm",
-                    className: "flex-1 md:flex-none",
-                  })}
-                  href={`/articles/composer/${article.id}`}
-                >
-                  <Edit className="w-4 h-4 mr-1" />
-                  Edit
-                </Link>
+              <div className="flex items-center text-sm text-gray-500">
+                <CalendarIcon className="w-4 h-4 mr-1" />
+                {article.status === "published"
+                  ? `Published: ${new Date(
+                      article.publishedAt!
+                    ).toLocaleDateString()}`
+                  : `Created: ${new Date(
+                      article.createdAt
+                    ).toLocaleDateString()}`}
               </div>
             </div>
-          </CardContent>
-        </div>
+            <div className="flex mt-4 md:mt-0 space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 md:flex-none"
+              >
+                <Eye className="w-4 h-4 mr-1" />
+                View
+              </Button>
+              <Link
+                className={buttonVariants({
+                  variant: "outline",
+                  size: "sm",
+                  className: "flex-1 md:flex-none",
+                })}
+                href={`/articles/composer/${article.id}`}
+              >
+                <Edit className="w-4 h-4 mr-1" />
+                Edit
+              </Link>
+            </div>
+          </div>
+        </CardContent>
       </div>
     </Card>
   );

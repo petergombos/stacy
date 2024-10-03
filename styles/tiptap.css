@@ -72,7 +72,7 @@
 
   .is-empty::before {
     /* color: var(--gray-4); */
-    @apply text-gray-400;
+    @apply text-muted-foreground;
     content: attr(data-placeholder);
     float: left;
     height: 0;

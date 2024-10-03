@@ -100,7 +100,7 @@ export default function ChatInterface({
   }, [messages, object?.chatResponse]);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  useAutoResize(textareaRef, input);
+  useAutoResize(textareaRef);
 
   return (
     <div className="flex flex-col h-full">
