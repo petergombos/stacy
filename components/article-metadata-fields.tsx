@@ -12,8 +12,8 @@ import { ArticleForm } from "@/schemas/article";
 import { ImagePlusIcon } from "lucide-react";
 import Image from "next/image";
 import { UseFormReturn } from "react-hook-form";
+import { ImageSelect } from "./image-select";
 import { CardTitle } from "./ui/card";
-import { UnsplashImageSearch } from "./unsplash-image-search";
 
 export function ArticleMetadataFields({
   form,
@@ -30,9 +30,7 @@ export function ArticleMetadataFields({
           <FormItem>
             <FormLabel>Featured Image</FormLabel>
             <FormControl>
-              <UnsplashImageSearch
-                onImageSelect={(url) => form.setValue("image", url)}
-              >
+              <ImageSelect onImageSelect={(url) => form.setValue("image", url)}>
                 <button className="relative rounded-md overflow-hidden w-full block">
                   <Image
                     src={field.value}
@@ -47,7 +45,7 @@ export function ArticleMetadataFields({
                     </div>
                   </div>
                 </button>
-              </UnsplashImageSearch>
+              </ImageSelect>
             </FormControl>
             <FormDescription>
               Select or enter a URL for the article&apos;s featured image.

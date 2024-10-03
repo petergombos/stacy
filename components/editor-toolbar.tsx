@@ -36,11 +36,11 @@ import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
+import { ImageSelect } from "./image-select";
 import { LinkDialog } from "./link-dialog";
 import { Button } from "./ui/button";
 import { DialogTrigger } from "./ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { UnsplashImageSearch } from "./unsplash-image-search";
 
 interface EditorToolbarProps {
   editor: Editor | null;
@@ -241,7 +241,7 @@ export default function EditorToolbar({
               </TooltipContent>
             </Tooltip>
           ))}
-          <UnsplashImageSearch onImageSelect={handleImageSelect}>
+          <ImageSelect onImageSelect={handleImageSelect}>
             <DialogTrigger>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -254,7 +254,7 @@ export default function EditorToolbar({
                 </TooltipContent>
               </Tooltip>
             </DialogTrigger>
-          </UnsplashImageSearch>
+          </ImageSelect>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">

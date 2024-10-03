@@ -58,6 +58,16 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      keyframes: {
+        scale: {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.2)" },
+        },
+      },
+      animation: {
+        scale: "scale 0.5s ease-in-out",
+        pulse: "pulse 1s ease-in-out infinite",
+      },
     },
   },
   plugins: [typography, animate],

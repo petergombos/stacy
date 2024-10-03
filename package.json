@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.62",
+    "@aws-sdk/client-s3": "^3.663.0",
+    "@aws-sdk/s3-request-presigner": "^3.663.0",
     "@hookform/resolvers": "^3.9.0",
     "@libsql/client": "^0.14.0",
     "@radix-ui/react-avatar": "^1.1.0",
