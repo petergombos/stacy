@@ -1,5 +1,6 @@
 "use client";
 
+import { Article } from "@/lib/db/schema";
 import { ArticleForm } from "@/schemas/article";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -86,12 +87,17 @@ export const extensions = [
 interface ArticleEditorProps {
   editor: Editor;
   form: UseFormReturn<ArticleForm>;
+  article: Article;
 }
 
-export default function ArticleEditor({ editor, form }: ArticleEditorProps) {
+export default function ArticleEditor({
+  editor,
+  form,
+  article,
+}: ArticleEditorProps) {
   return (
     <div className="h-full flex flex-col gap-8 overflow-y-scroll">
-      <EditorToolbar form={form} editor={editor} />
+      <EditorToolbar form={form} editor={editor} article={article} />
       <div className="max-w-[780px] mx-auto space-y-6 w-full px-6">
         <FormField
           control={form.control}

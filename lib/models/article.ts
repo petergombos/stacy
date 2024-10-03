@@ -132,3 +132,19 @@ export const updateArticleMetadata = async (
     .returning();
   return updatedArticle;
 };
+
+export const updateArticleStatus = async (
+  articleId: string,
+  status: "draft" | "published"
+) => {
+  const [updatedArticle] = await db
+    .update(articles)
+    .set({
+      status,
+      publishedAt: status === "published" ? new Date().getTime() : null,
+    })
+    .where(eq(articles.id, articleId))
+    .returning();
+
+  return updatedArticle;
+};

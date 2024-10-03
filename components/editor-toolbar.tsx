@@ -1,5 +1,7 @@
 "use client";
 
+import { updateArticleStatusAction } from "@/app/articles/actions";
+import { Article } from "@/lib/db/schema";
 import { ArticleForm } from "@/schemas/article";
 import { Editor } from "@tiptap/react";
 import {
@@ -9,6 +11,8 @@ import {
   BetweenVerticalStart,
   Bold,
   Code,
+  Eye,
+  EyeOff,
   FileJson2,
   Heading,
   Heading2,
@@ -28,8 +32,10 @@ import {
   Trash2,
   Underline,
 } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
+import { toast } from "sonner";
 import { LinkDialog } from "./link-dialog";
 import { Button } from "./ui/button";
 import { DialogTrigger } from "./ui/dialog";
@@ -39,10 +45,32 @@ import { UnsplashImageSearch } from "./unsplash-image-search";
 interface EditorToolbarProps {
   editor: Editor | null;
   form: UseFormReturn<ArticleForm>;
+  article: Article;
 }
 
-export default function EditorToolbar({ editor, form }: EditorToolbarProps) {
+export default function EditorToolbar({
+  editor,
+  form,
+  article,
+}: EditorToolbarProps) {
   const [isLinkDialogOpen, setIsLinkDialogOpen] = useState(false);
+  const { execute: executeUpdateStatus, input } = useAction(
+    updateArticleStatusAction,
+    {
+      onError: () => {
+        toast.error("Error updating article status");
+      },
+      onSuccess: ({ data }) => {
+        toast.success(
+          data?.status === "published"
+            ? "Article published"
+            : "Article unpublished"
+        );
+      },
+    }
+  );
+
+  const currentStatus = input?.status ?? article.status;
 
   if (!editor) {
     return null;
@@ -79,12 +107,6 @@ export default function EditorToolbar({ editor, form }: EditorToolbarProps) {
       isActive: () => editor.isActive("orderedList"),
       label: "Ordered List",
     },
-    // {
-    //   icon: Heading1,
-    //   action: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
-    //   isActive: () => editor.isActive("heading", { level: 1 }),
-    //   label: "Heading 1",
-    // },
     {
       icon: Heading2,
       action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
@@ -234,14 +256,38 @@ export default function EditorToolbar({ editor, form }: EditorToolbarProps) {
             </DialogTrigger>
           </UnsplashImageSearch>
         </div>
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? (
-            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-          ) : (
-            <Save className="w-4 h-4 mr-2" />
-          )}
-          Save
-        </Button>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              type="button"
+              onClick={() => {
+                executeUpdateStatus({
+                  status: currentStatus === "published" ? "draft" : "published",
+                  articleId: article.id,
+                });
+              }}
+              variant={
+                currentStatus === "published" ? "destructive" : "secondary"
+              }
+            >
+              {currentStatus === "published" ? (
+                <EyeOff className="w-4 h-4 mr-2" />
+              ) : (
+                <Eye className="w-4 h-4 mr-2" />
+              )}
+              {currentStatus === "published" ? "Unpublish" : "Publish"}
+            </Button>
+          </div>
+          <Button size="sm" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            ) : (
+              <Save className="w-4 h-4 mr-2" />
+            )}
+            Save
+          </Button>
+        </div>
       </div>
       {editor.isActive("table") && (
         <div className="flex gap-2 p-2 bg-background dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 absolute -bottom-full w-full z-10">

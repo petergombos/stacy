@@ -36,7 +36,7 @@ export function ArticleCard({ article }: { article: Article }) {
             <p className="text-gray-600 mb-4">
               {article.description || "No description"}
             </p>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between">
               <div className="space-y-2 flex flex-col">
                 <div className="flex items-center text-sm text-gray-500">
                   <User className="w-4 h-4 mr-1" />
@@ -71,7 +71,7 @@ export function ArticleCard({ article }: { article: Article }) {
                   href={`/articles/composer/${article.id}`}
                 >
                   <Edit className="w-4 h-4 mr-1" />
-                  {article.status === "published" ? "Edit" : "Continue Writing"}
+                  Edit
                 </Link>
               </div>
             </div>

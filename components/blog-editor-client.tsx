@@ -208,7 +208,9 @@ export default function BlogEditorClient({
       <div className="w-2/3 max-h-fit bg-gray-50 overflow-hidden">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="h-full">
-            {editor ? <ArticleEditor editor={editor} form={form} /> : null}
+            {editor ? (
+              <ArticleEditor article={article} editor={editor} form={form} />
+            ) : null}
           </form>
         </Form>
       </div>
