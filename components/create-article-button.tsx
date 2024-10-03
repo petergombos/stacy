@@ -25,6 +25,7 @@ export default function CreateArticleButton({
       onClick={() => execute()}
       disabled={isPending}
       className="h-8 gap-1"
+      variant="outline"
       {...rest}
     >
       <PlusCircle className="h-3.5 w-3.5" />

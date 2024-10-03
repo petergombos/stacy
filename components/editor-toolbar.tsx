@@ -268,7 +268,7 @@ export default function EditorToolbar({
                 });
               }}
               variant={
-                currentStatus === "published" ? "destructive" : "secondary"
+                currentStatus === "published" ? "destructive" : "outline"
               }
             >
               {currentStatus === "published" ? (
