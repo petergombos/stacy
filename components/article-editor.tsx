@@ -14,7 +14,7 @@ import Underline from "@tiptap/extension-underline";
 import { UniqueID } from "@tiptap/extension-unique-id";
 import { Editor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { UseFormReturn } from "react-hook-form";
 import AutoJoiner from "tiptap-extension-auto-joiner";
 import GlobalDragHandle from "tiptap-extension-global-drag-handle";
@@ -109,6 +109,15 @@ export default function ArticleEditor({
 }: ArticleEditorProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   useAutoResize(textareaRef);
+
+  const title = form.watch("title");
+  useEffect(() => {
+    // Do not allow line breaks in the title
+    if (title.includes("\n")) {
+      form.setValue("title", title.replace("\n", ""));
+    }
+  }, [title, form]);
+
   return (
     <div className="h-full flex flex-col gap-8 overflow-y-scroll">
       <EditorToolbar form={form} editor={editor} article={article} />
