@@ -4,6 +4,7 @@ import {
   updateArticleHtmlAction,
   updateArticleMetadataAction,
 } from "@/app/articles/actions";
+import { Form } from "@/components/ui/form";
 import { Article, ArticleHTML, Message } from "@/lib/db/schema";
 import { articleFormSchema } from "@/schemas/article";
 import { UpdatedChunk, UpdatedMetadata } from "@/schemas/chat-response";
@@ -16,7 +17,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 import ArticleEditor, { extensions } from "./article-editor";
 import ChatInterface from "./chat-interface";
-import { Form } from "./ui/form";
 
 function findNode(node: JSONContent, nodeID: string): JSONContent | null {
   if (node.attrs?.id === nodeID || node.type === nodeID) {

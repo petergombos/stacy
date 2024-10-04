@@ -1,3 +1,4 @@
+import { CardTitle } from "@/components/ui/card";
 import {
   FormControl,
   FormDescription,
@@ -13,7 +14,6 @@ import { ImagePlusIcon } from "lucide-react";
 import Image from "next/image";
 import { UseFormReturn } from "react-hook-form";
 import { ImageSelect } from "./image-select";
-import { CardTitle } from "./ui/card";
 
 export function ArticleMetadataFields({
   form,

@@ -1,6 +1,13 @@
 "use client";
 
 import { updateArticleStatusAction } from "@/app/articles/actions";
+import { Button } from "@/components/ui/button";
+import { DialogTrigger } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Article } from "@/lib/db/schema";
 import { ArticleForm } from "@/schemas/article";
 import { Editor } from "@tiptap/react";
@@ -38,9 +45,6 @@ import { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import { ImageSelect } from "./image-select";
 import { LinkDialog } from "./link-dialog";
-import { Button } from "./ui/button";
-import { DialogTrigger } from "./ui/dialog";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 interface EditorToolbarProps {
   editor: Editor | null;

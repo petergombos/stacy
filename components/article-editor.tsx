@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
 import { useAutoResize } from "@/hooks/auto-resize";
 import { Article } from "@/lib/db/schema";
 import { ArticleForm } from "@/schemas/article";
@@ -20,8 +27,6 @@ import AutoJoiner from "tiptap-extension-auto-joiner";
 import GlobalDragHandle from "tiptap-extension-global-drag-handle";
 import { ArticleMetadataFields } from "./article-metadata-fields";
 import EditorToolbar from "./editor-toolbar";
-import { FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { Textarea } from "./ui/textarea";
 
 export const extensions = [
   StarterKit.configure({

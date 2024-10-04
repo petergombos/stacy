@@ -1,10 +1,10 @@
 "use client";
 
 import { createArticleAction } from "@/app/articles/actions";
+import { Button, ButtonProps } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
-import { Button, ButtonProps } from "./ui/button";
 
 export default function CreateArticleButton({
   children,
