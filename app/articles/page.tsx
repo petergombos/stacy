@@ -1,8 +1,8 @@
-import { ArticleCard } from "~/components/article-card";
-import CreateArticleButton from "~/components/create-article-button";
-import { Header } from "~/components/header";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { getArticles } from "~/lib/models/article";
+import { ArticleCard } from "@/components/article-card";
+import CreateArticleButton from "@/components/create-article-button";
+import { Header } from "@/components/header";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getArticles } from "@/lib/models/article";
 
 export const revalidate = 0;
 

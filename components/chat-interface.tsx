@@ -1,20 +1,20 @@
 "use client";
 
-import { experimental_useObject as useObject } from "ai/react";
-import { Loader2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import { addMessageToArticleAction } from "~/app/articles/actions";
-import { Button } from "~/components/ui/button";
-import { Textarea } from "~/components/ui/textarea";
-import { useAutoResize } from "~/hooks/auto-resize";
-import { Message } from "~/lib/db/schema";
-import { ArticleForm } from "~/schemas/article";
+import { addMessageToArticleAction } from "@/app/articles/actions";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { useAutoResize } from "@/hooks/auto-resize";
+import { Message } from "@/lib/db/schema";
+import { ArticleForm } from "@/schemas/article";
 import {
   chatResponseSchema,
   UpdatedChunk,
   UpdatedMetadata,
-} from "~/schemas/chat-response";
+} from "@/schemas/chat-response";
+import { experimental_useObject as useObject } from "ai/react";
+import { Loader2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 interface ChatInterfaceProps {
   onUpdate: ({

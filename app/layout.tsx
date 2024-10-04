@@ -1,9 +1,9 @@
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/styles/globals.css";
 import "@/styles/tiptap.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Toaster } from "~/components/ui/sonner";
-import { TooltipProvider } from "~/components/ui/tooltip";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

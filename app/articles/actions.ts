@@ -1,17 +1,17 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { z } from "zod";
 import {
   addMessageToArticle,
   createArticle,
   updateArticleHtml,
   updateArticleMetadata,
   updateArticleStatus,
-} from "~/lib/models/article";
-import { actionClient } from "~/lib/safe-action";
-import { articleMetadataSchema } from "~/schemas/article";
+} from "@/lib/models/article";
+import { actionClient } from "@/lib/safe-action";
+import { articleMetadataSchema } from "@/schemas/article";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { z } from "zod";
 
 export const createArticleAction = actionClient.action(async () => {
   const article = await createArticle();

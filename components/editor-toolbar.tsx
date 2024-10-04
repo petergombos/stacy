@@ -1,5 +1,15 @@
 "use client";
 
+import { updateArticleStatusAction } from "@/app/articles/actions";
+import { Button } from "@/components/ui/button";
+import { DialogTrigger } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Article } from "@/lib/db/schema";
+import { ArticleForm } from "@/schemas/article";
 import { Editor } from "@tiptap/react";
 import {
   BetweenHorizonalEnd,
@@ -33,16 +43,6 @@ import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
-import { updateArticleStatusAction } from "~/app/articles/actions";
-import { Button } from "~/components/ui/button";
-import { DialogTrigger } from "~/components/ui/dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { Article } from "~/lib/db/schema";
-import { ArticleForm } from "~/schemas/article";
 import { ImageSelect } from "./image-select";
 import { LinkDialog } from "./link-dialog";
 

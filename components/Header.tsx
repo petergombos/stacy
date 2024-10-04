@@ -1,15 +1,15 @@
-import { FileText, LogOut, Menu, Settings, User, Zap } from "lucide-react";
-import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Button } from "~/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
-import { cn } from "~/lib/utils";
+} from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { FileText, LogOut, Menu, Settings, User, Zap } from "lucide-react";
+import Link from "next/link";
 
 export function Header({ className }: { className?: string }) {
   return (

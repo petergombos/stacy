@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  updateArticleHtmlAction,
+  updateArticleMetadataAction,
+} from "@/app/articles/actions";
+import { Form } from "@/components/ui/form";
+import { Article, ArticleHTML, Message } from "@/lib/db/schema";
+import { articleFormSchema } from "@/schemas/article";
+import { UpdatedChunk, UpdatedMetadata } from "@/schemas/chat-response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { generateJSON } from "@tiptap/html";
 import { JSONContent, useEditor } from "@tiptap/react";
@@ -7,14 +15,6 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import {
-  updateArticleHtmlAction,
-  updateArticleMetadataAction,
-} from "~/app/articles/actions";
-import { Form } from "~/components/ui/form";
-import { Article, ArticleHTML, Message } from "~/lib/db/schema";
-import { articleFormSchema } from "~/schemas/article";
-import { UpdatedChunk, UpdatedMetadata } from "~/schemas/chat-response";
 import ArticleEditor, { extensions } from "./article-editor";
 import ChatInterface from "./chat-interface";
 

@@ -1,7 +1,4 @@
-import { ImagePlusIcon } from "lucide-react";
-import Image from "next/image";
-import { UseFormReturn } from "react-hook-form";
-import { CardTitle } from "~/components/ui/card";
+import { CardTitle } from "@/components/ui/card";
 import {
   FormControl,
   FormDescription,
@@ -9,10 +6,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { Textarea } from "~/components/ui/textarea";
-import { ArticleForm } from "~/schemas/article";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ArticleForm } from "@/schemas/article";
+import { ImagePlusIcon } from "lucide-react";
+import Image from "next/image";
+import { UseFormReturn } from "react-hook-form";
 import { ImageSelect } from "./image-select";
 
 export function ArticleMetadataFields({
