@@ -1,4 +1,4 @@
-import { getArticleBySlug, getArticles } from "@/lib/models/article";
+import { getArticleBySlug } from "@/lib/models/article";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -15,12 +15,8 @@ export async function generateMetadata({
   };
 }
 
-export async function generateStaticParams() {
-  const articles = await getArticles();
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
-}
+export const revalidate = 60;
+export const dynamic = "force-static";
 
 export default async function Article({
   params,
