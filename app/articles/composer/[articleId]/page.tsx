@@ -1,7 +1,7 @@
-import BlogEditorClient from "@/components/blog-editor-client";
-import { Header } from "@/components/header";
-import { getArticle } from "@/lib/models/article";
 import { notFound } from "next/navigation";
+import BlogEditorClient from "~/components/blog-editor-client";
+import { Header } from "~/components/header";
+import { getArticle } from "~/lib/models/article";
 
 export const revalidate = 0;
 

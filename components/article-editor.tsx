@@ -1,15 +1,5 @@
 "use client";
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { useAutoResize } from "@/hooks/auto-resize";
-import { Article } from "@/lib/db/schema";
-import { ArticleForm } from "@/schemas/article";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -25,6 +15,16 @@ import { useEffect, useRef } from "react";
 import { UseFormReturn } from "react-hook-form";
 import AutoJoiner from "tiptap-extension-auto-joiner";
 import GlobalDragHandle from "tiptap-extension-global-drag-handle";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "~/components/ui/form";
+import { Textarea } from "~/components/ui/textarea";
+import { useAutoResize } from "~/hooks/auto-resize";
+import { Article } from "~/lib/db/schema";
+import { ArticleForm } from "~/schemas/article";
 import { ArticleMetadataFields } from "./article-metadata-fields";
 import EditorToolbar from "./editor-toolbar";
 

@@ -1,5 +1,9 @@
-import { getSignedUrlAction } from "@/app/actions/s3-upload";
-import { Button } from "@/components/ui/button";
+import { Check, Loader2, Upload } from "lucide-react";
+import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { getSignedUrlAction } from "~/app/actions/s3-upload";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,14 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
-import { Check, Loader2, Upload } from "lucide-react";
-import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
+} from "~/components/ui/dialog";
+import { Input } from "~/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { cn } from "~/lib/utils";
 import { CircularProgress } from "./circular-progress";
 
 interface ImageSelectProps {

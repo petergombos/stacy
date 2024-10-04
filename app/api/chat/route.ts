@@ -1,7 +1,7 @@
-import { addMessageToArticle } from "@/lib/models/article";
-import { chatResponseSchema } from "@/schemas/chat-response";
 import { openai } from "@ai-sdk/openai";
 import { streamObject } from "ai";
+import { addMessageToArticle } from "~/lib/models/article";
+import { chatResponseSchema } from "~/schemas/chat-response";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;

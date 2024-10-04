@@ -1,6 +1,6 @@
-import { getArticleBySlug, getArticles } from "@/lib/models/article";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { getArticleBySlug, getArticles } from "~/lib/models/article";
 
 export async function generateMetadata({
   params,

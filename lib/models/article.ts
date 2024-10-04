@@ -1,4 +1,6 @@
-import { db } from "@/lib/db";
+import { desc, eq } from "drizzle-orm";
+import { generateIdFromEntropySize } from "lucia";
+import { db } from "~/lib/db";
 import {
   Article,
   articleHTML,
@@ -6,11 +8,9 @@ import {
   messages,
   NewArticle,
   NewMessage,
-} from "@/lib/db/schema";
-import { ArticleMetadata } from "@/schemas/article";
-import { welcomeAssistantMessage } from "@/static/messages";
-import { desc, eq } from "drizzle-orm";
-import { generateIdFromEntropySize } from "lucia";
+} from "~/lib/db/schema";
+import { ArticleMetadata } from "~/schemas/article";
+import { welcomeAssistantMessage } from "~/static/messages";
 
 export const getArticle = async (articleId: string) => {
   const article = await db.query.articles.findFirst({
