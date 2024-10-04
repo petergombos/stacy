@@ -1,9 +1,10 @@
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Article } from "@/lib/db/schema";
 import { CalendarIcon, Edit, Eye, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+
 export function ArticleCard({ article }: { article: Article }) {
   return (
     <Card className="overflow-hidden transition-shadow duration-300 hover:shadow-lg">
@@ -55,15 +56,21 @@ export function ArticleCard({ article }: { article: Article }) {
                     ).toLocaleDateString()}`}
               </div>
             </div>
-            <div className="flex mt-4 md:mt-0 space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex-1 md:flex-none"
-              >
-                <Eye className="w-4 h-4 mr-1" />
-                View
-              </Button>
+            <div className="flex mt-4 md:mt-0 gap-2">
+              {article.slug && article.publishedAt && (
+                <Link
+                  href={`/${article.slug}`}
+                  className={buttonVariants({
+                    variant: "outline",
+                    size: "sm",
+                    className: "flex-1 md:flex-none",
+                  })}
+                  target="_blank"
+                >
+                  <Eye className="w-4 h-4 mr-1" />
+                  View
+                </Link>
+              )}
               <Link
                 className={buttonVariants({
                   variant: "outline",

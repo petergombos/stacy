@@ -148,3 +148,18 @@ export const updateArticleStatus = async (
 
   return updatedArticle;
 };
+
+export const getArticleBySlug = async (slug: string) => {
+  const article = await db.query.articles.findFirst({
+    where: eq(articles.slug, slug),
+    with: {
+      html: true,
+    },
+  });
+
+  if (!article) {
+    return null;
+  }
+
+  return article;
+};

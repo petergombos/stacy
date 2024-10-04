@@ -123,8 +123,10 @@ export default function ChatInterface({
           .map((message, index) => (
             <div
               key={index}
-              className={`inline-flex gap-3 p-2 rounded-lg bg-background text-foreground border ${
-                message?.role === "user" ? "bg-muted text-foreground" : ""
+              className={`inline-flex gap-3 p-2 rounded-lg bg-background border ${
+                message?.role === "user"
+                  ? "bg-blue-600 text-background"
+                  : "text-foreground"
               } ${
                 message?.role === "user" ? "self-end ml-3" : "self-start mr-3"
               }`}
@@ -132,7 +134,7 @@ export default function ChatInterface({
               {message?.inProgress && !message?.content ? (
                 <Loader2 className="animate-spin size-6 shrink-0" />
               ) : (
-                <ReactMarkdown className="prose prose-sm dark:prose-invert prose-ol:pl-3 prose-ul:pl-3 prose-li:pl-0 max-w-none">
+                <ReactMarkdown className="prose text-inherit prose-sm dark:prose-invert prose-ol:pl-3 prose-ul:pl-3 prose-li:pl-0 max-w-none">
                   {message?.content || ""}
                 </ReactMarkdown>
               )}
