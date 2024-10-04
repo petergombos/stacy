@@ -1,4 +1,4 @@
-import { getArticleBySlug } from "@/lib/models/article";
+import { getArticleBySlug, getArticles } from "@/lib/models/article";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -13,6 +13,13 @@ export async function generateMetadata({
     description: article?.description,
     keywords: article?.keywords,
   };
+}
+
+export async function generateStaticParams() {
+  const articles = await getArticles();
+  return articles.map((article) => ({
+    slug: article.slug,
+  }));
 }
 
 export default async function Article({
