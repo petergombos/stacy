@@ -1,4 +1,4 @@
-import { getArticleBySlug, getArticles } from "@/lib/models/article";
+import { getArticleBySlug } from "@/lib/models/article";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -22,14 +22,14 @@ export const revalidate = 60;
 // We'll prerender only the params from `generateStaticParams` at build time.
 // If a request comes in for a path that hasn't been generated,
 // Next.js will server-render the page on-demand.
-export const dynamicParams = true; // or false, to 404 on unknown paths
+// export const dynamicParams = true; // or false, to 404 on unknown paths
 
-export async function generateStaticParams() {
-  const articles = await getArticles();
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
-}
+// export async function generateStaticParams() {
+//   const articles = await getArticles();
+//   return articles.map((article) => ({
+//     slug: article.slug,
+//   }));
+// }
 
 export default async function Article({
   params,
