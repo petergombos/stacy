@@ -14,10 +14,11 @@ export const updatedChunkSchema = z.object({
 export type UpdatedChunk = z.infer<typeof updatedChunkSchema>;
 
 export const updatedMetadataSchema = z.object({
-  title: z.string().describe("The title of the article"),
+  title: z.string().min(1).max(100).describe("The title of the article"),
   description: z
     .string()
     .min(100)
+    .max(500)
     .describe(
       "A good meta description is short, unique to one particular page, and includes the most relevant points of the page"
     ),

@@ -13,6 +13,7 @@ import {
 import { experimental_useObject as useObject } from "ai/react";
 import { Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { Textarea } from "./ui/textarea";
 
 interface ChatInterfaceProps {
@@ -103,7 +104,7 @@ export default function ChatInterface({
   useAutoResize(textareaRef);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-background/95">
       <div
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto p-4 flex flex-col gap-4"
@@ -122,25 +123,25 @@ export default function ChatInterface({
           .map((message, index) => (
             <div
               key={index}
-              className={`inline-flex gap-3 p-2 rounded-lg whitespace-pre-wrap ${
-                message?.role === "user"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 dark:bg-gray-700"
+              className={`inline-flex gap-3 p-2 rounded-lg bg-background text-foreground border ${
+                message?.role === "user" ? "bg-muted text-foreground" : ""
               } ${
-                message?.role === "user" ? "self-end ml-6" : "self-start mr-6"
+                message?.role === "user" ? "self-end ml-3" : "self-start mr-3"
               }`}
             >
               {message?.inProgress && !message?.content ? (
                 <Loader2 className="animate-spin size-6 shrink-0" />
               ) : (
-                message?.content
+                <ReactMarkdown className="prose prose-sm dark:prose-invert prose-ol:pl-3 prose-ul:pl-3 prose-li:pl-0 max-w-none">
+                  {message?.content || ""}
+                </ReactMarkdown>
               )}
             </div>
           ))}
       </div>
       <form
         onSubmit={handleSubmit}
-        className="p-4 border-t border-gray-200 dark:border-gray-700"
+        className="p-4 border-t"
         onKeyDown={(e) => {
           if (e.key === "Enter" && e.metaKey) {
             e.preventDefault();

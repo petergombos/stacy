@@ -289,9 +289,9 @@ export function ImageSelect({ onImageSelect, children }: ImageSelectProps) {
             <div className="flex flex-col items-center gap-4 py-4">
               <div
                 className={cn(
-                  "w-full h-64 border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer relative",
-                  dragActive ? "border-primary" : "border-gray-300",
-                  file ? "bg-gray-100" : "bg-white"
+                  "w-full h-64 border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer relative group",
+                  dragActive ? "border-primary/80" : "border-primary/50",
+                  file && "border-none"
                 )}
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
@@ -324,7 +324,7 @@ export function ImageSelect({ onImageSelect, children }: ImageSelectProps) {
                           theme="light"
                         >
                           {uploadStatus === "success" ? (
-                            <Check className="w-12 h-12 text-background animate-scale" />
+                            <Check className="w-12 h-12 text-background dark:text-foreground animate-scale" />
                           ) : (
                             `${Math.round(uploadProgress)}%`
                           )}
@@ -334,8 +334,8 @@ export function ImageSelect({ onImageSelect, children }: ImageSelectProps) {
                   </>
                 ) : (
                   <>
-                    <Upload className="w-12 h-12 text-gray-400" />
-                    <p className="mt-2 text-sm text-gray-500">
+                    <Upload className="w-12 h-12 text-muted-foreground group-hover:text-foreground" />
+                    <p className="mt-2 text-sm text-muted-foreground group-hover:text-foreground">
                       Drag and drop an image, or click to select
                     </p>
                   </>

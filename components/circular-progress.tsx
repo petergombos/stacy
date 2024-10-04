@@ -29,12 +29,12 @@ export function CircularProgress({
 
   const themeClasses = {
     light: {
-      background: "text-muted-foreground",
-      progress: "text-background",
+      background: "text-muted-foreground dark:text-background",
+      progress: "text-background dark:text-foreground",
     },
     dark: {
-      background: "text-muted-foreground",
-      progress: "text-foreground",
+      background: "text-muted-foreground dark:text-foreground",
+      progress: "text-foreground dark:text-foreground",
     },
   };
 

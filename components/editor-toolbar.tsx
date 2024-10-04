@@ -219,7 +219,7 @@ export default function EditorToolbar({
 
   return (
     <div className="sticky top-0 z-20">
-      <div className="flex justify-between gap-5 p-2 bg-background dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex justify-between gap-5 p-2 bg-background dark:bg-gray-800 border-b">
         <div className="flex flex-wrap gap-2">
           {tools.map((tool, index) => (
             <Tooltip key={index}>
@@ -290,7 +290,7 @@ export default function EditorToolbar({
         </div>
       </div>
       {editor.isActive("table") && (
-        <div className="flex gap-2 p-2 bg-background dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 absolute -bottom-full w-full z-10">
+        <div className="flex gap-2 p-2 bg-background dark:bg-gray-800 border-b absolute -bottom-full w-full z-10">
           {tableTools.map((tool, index) => (
             <Tooltip key={index}>
               <TooltipTrigger asChild>
