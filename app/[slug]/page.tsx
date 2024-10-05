@@ -1,6 +1,6 @@
 import { ArticleHtmlContent } from "@/components/article-html-content";
+import { Hero } from "@/components/themes/minimal/hero";
 import { getArticleBySlug, getArticles } from "@/lib/models/article";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({
@@ -46,20 +46,8 @@ export default async function Article({
 
   return (
     <>
-      <div className="relative aspect-video flex items-center justify-center p-10">
-        <Image
-          src={article.image}
-          alt={article.title ?? "Featured Image"}
-          width={1800}
-          height={1800}
-          className="inset-0 absolute object-cover w-full h-full"
-        />
-        <div className="absolute inset-0 bg-black/50" />
-        <h1 className="text-white text-7xl text-center  text-balance font-bold relative z-10">
-          {article.title}
-        </h1>
-      </div>
-      <div className="container prose xl:prose-lg mx-auto max-w-screen-md">
+      <Hero article={article} />
+      <div className="container prose xl:prose-lg mx-auto max-w-screen-md p-5 sm:p-10 [&>img]:-mx-5 [&>img]:sm:-mx-10 [&>img]:w-[calc(100%+2.5rem)] [&>img]:sm:w-[calc(100%+5rem)] [&>img]:max-w-none">
         <ArticleHtmlContent content={content.html} />
       </div>
     </>
