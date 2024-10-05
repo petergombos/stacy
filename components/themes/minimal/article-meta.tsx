@@ -2,7 +2,7 @@
 
 import { Article } from "@/lib/db/schema";
 import { calculateReadTime, cn, formatDate } from "@/lib/utils";
-import { BookOpen, Clock, User } from "lucide-react";
+import { BookOpen, CalendarDays, UserRoundPen } from "lucide-react";
 import { HTMLAttributes } from "react";
 
 interface ArticleMetaProps extends HTMLAttributes<HTMLDivElement> {
@@ -48,7 +48,7 @@ export function ArticleMeta({
       <div className="flex justify-start items-center gap-5 flex-wrap">
         {article.publishedAt && (
           <div className="flex items-center">
-            <Clock className="w-5 h-5 mr-2 text-muted-foreground" />
+            <CalendarDays className="w-5 h-5 mr-2 text-muted-foreground" />
             <time
               className="text-sm text-muted-foreground"
               dateTime={formatDate(article.publishedAt)}
@@ -57,20 +57,20 @@ export function ArticleMeta({
             </time>
           </div>
         )}
-        {article.authorName && (
-          <div className="flex items-center">
-            <User className="w-5 h-5 mr-2 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">
-              {article.authorName}
-            </span>
-          </div>
-        )}
         <div className="flex items-center">
           <BookOpen className="w-5 h-5 mr-2 text-muted-foreground" />
           <span className="text-sm text-muted-foreground">
             {readTime} min read
           </span>
         </div>
+        {article.authorName && (
+          <div className="flex items-center">
+            <UserRoundPen className="w-5 h-5 mr-2 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">
+              {article.authorName}
+            </span>
+          </div>
+        )}
       </div>
       <div className="flex items-center gap-3">
         <button
