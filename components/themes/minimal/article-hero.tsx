@@ -46,7 +46,7 @@ export function ArticleHero({ article }: HeroProps) {
           objectFit="cover"
           priority
         />
-        <div className="absolute inset-0 bg-black/60 multiply" />
+        <div className="absolute inset-0 bg-black/60" />
       </motion.div>
       <motion.div
         className="prose prose-sm md:prose-lg xl:prose-2xl p-6 sm:p-10 relative z-10"
@@ -62,11 +62,11 @@ export function ArticleHero({ article }: HeroProps) {
         title={`Current theme: ${theme}. Click to change.`}
       >
         {theme === "dark" ? (
-          <Moon className="w-6 h-6 text-slate-800" />
+          <Moon className="w-6 h-6 text-white" />
         ) : theme === "light" ? (
-          <Sun className="w-6 h-6 text-slate-800" />
+          <Sun className="w-6 h-6 text-white" />
         ) : (
-          <Monitor className="w-6 h-6 text-slate-800" />
+          <Monitor className="w-6 h-6 text-white" />
         )}
       </motion.button>
     </motion.div>
