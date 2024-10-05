@@ -13,3 +13,10 @@ export function formatDate(dateString: string | number): string {
     day: "numeric",
   });
 }
+
+export function calculateReadTime(content: string): number {
+  const wordsPerMinute = 200; // Average reading speed
+  const wordCount = content.trim().split(/\s+/).length;
+  const readTime = Math.ceil(wordCount / wordsPerMinute);
+  return readTime;
+}

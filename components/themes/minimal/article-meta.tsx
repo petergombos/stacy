@@ -1,14 +1,21 @@
 "use client";
 
 import { Article } from "@/lib/db/schema";
-import { formatDate } from "@/lib/utils";
-import { Clock, User } from "lucide-react";
+import { calculateReadTime, cn, formatDate } from "@/lib/utils";
+import { BookOpen, Clock, User } from "lucide-react";
+import { HTMLAttributes } from "react";
 
-interface ArticleMetaProps {
+interface ArticleMetaProps extends HTMLAttributes<HTMLDivElement> {
   article: Article;
+  articleHTML: string;
 }
 
-export function ArticleMeta({ article }: ArticleMetaProps) {
+export function ArticleMeta({
+  article,
+  articleHTML,
+  className,
+  ...rest
+}: ArticleMetaProps) {
   const currentUrl = typeof window !== "undefined" ? window.location.href : "";
 
   const shareOnX = () => {
@@ -27,15 +34,18 @@ export function ArticleMeta({ article }: ArticleMetaProps) {
       "_blank"
     );
   };
+
+  const readTime = calculateReadTime(articleHTML);
+
   return (
-    <div className="flex justify-between items-center flex-wrap pb-6 sm:pb-10 border-b gap-4">
-      <div className="flex justify-start items-center gap-4">
-        <div className="flex items-center">
-          <User className="w-5 h-5 mr-2 text-muted-foreground" />
-          <span className="text-sm text-muted-foreground">
-            {article.authorName || "Unknown author"}
-          </span>
-        </div>
+    <div
+      className={cn(
+        "flex justify-between items-center flex-wrap pb-6 sm:pb-10 border-b gap-4",
+        className
+      )}
+      {...rest}
+    >
+      <div className="flex justify-start items-center gap-5 flex-wrap">
         {article.publishedAt && (
           <div className="flex items-center">
             <Clock className="w-5 h-5 mr-2 text-muted-foreground" />
@@ -47,8 +57,22 @@ export function ArticleMeta({ article }: ArticleMetaProps) {
             </time>
           </div>
         )}
+        {article.authorName && (
+          <div className="flex items-center">
+            <User className="w-5 h-5 mr-2 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">
+              {article.authorName}
+            </span>
+          </div>
+        )}
+        <div className="flex items-center">
+          <BookOpen className="w-5 h-5 mr-2 text-muted-foreground" />
+          <span className="text-sm text-muted-foreground">
+            {readTime} min read
+          </span>
+        </div>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-3">
         <button
           onClick={shareOnX}
           className="text-muted-foreground hover:text-foreground transition-colors duration-200"

@@ -50,7 +50,7 @@ export default async function Article({
     <>
       <ArticleHero article={article} />
       <ArticleContainer>
-        <ArticleMeta article={article} />
+        <ArticleMeta article={article} articleHTML={content.html} />
         <ArticleHtmlContent content={content.html} />
       </ArticleContainer>
     </>
