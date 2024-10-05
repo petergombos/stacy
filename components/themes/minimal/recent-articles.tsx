@@ -9,7 +9,7 @@ interface RecentArticlesProps {
 export function RecentArticles({ articles }: RecentArticlesProps) {
   return (
     <div className="bg-muted-foreground/5">
-      <section className="container max-w-screen-lg mx-auto p-5 sm:p-10">
+      <section className="container max-w-screen-lg mx-auto px-5 sm:px-10 py-8 sm:py-16">
         <h2 className="text-2xl font-bold mb-6">Recent Articles</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {articles.map((article) => (

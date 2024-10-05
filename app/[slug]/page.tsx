@@ -2,6 +2,7 @@ import { ArticleHtmlContent } from "@/components/article-html-content";
 import { ArticleContainer } from "@/components/themes/minimal/article-container";
 import { ArticleHero } from "@/components/themes/minimal/article-hero";
 import { ArticleMeta } from "@/components/themes/minimal/article-meta";
+import { Footer } from "@/components/themes/minimal/footer";
 import { RecentArticles } from "@/components/themes/minimal/recent-articles";
 import {
   getArticleBySlug,
@@ -61,6 +62,7 @@ export default async function Article({
         <ArticleHtmlContent content={content.html} />
       </ArticleContainer>
       <RecentArticles articles={recentArticles} />
+      <Footer />
     </>
   );
 }
