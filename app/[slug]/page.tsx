@@ -48,7 +48,7 @@ export default async function Article({
   return (
     <>
       <ArticleHero article={article} />
-      <div className="container prose xl:prose-lg mx-auto max-w-screen-md p-5 sm:p-10 [&>img]:-mx-5 [&>img]:sm:-mx-10 [&>img]:w-[calc(100%+2.5rem)] [&>img]:sm:w-[calc(100%+5rem)] [&>img]:max-w-none">
+      <div className="container prose xl:prose-lg dark:prose-invert mx-auto max-w-screen-md p-5 sm:p-10 [&>img]:-mx-5 [&>img]:sm:-mx-10 [&>img]:w-[calc(100%+2.5rem)] [&>img]:sm:w-[calc(100%+5rem)] [&>img]:max-w-none">
         <ArticleMeta article={article} />
         <ArticleHtmlContent content={content.html} />
       </div>
