@@ -45,6 +45,7 @@ export function ArticleHero({ article }: HeroProps) {
 
   return (
     <motion.div
+      id="article-hero"
       ref={ref}
       className="relative aspect-video flex items-center justify-center overflow-hidden w-full h-[60vh] sm:h-[70vh]"
     >
@@ -53,8 +54,8 @@ export function ArticleHero({ article }: HeroProps) {
           src={article.image}
           alt={article.title ?? "Featured Image"}
           layout="fill"
-          objectFit="cover"
           priority
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-black/60 multiply" />
       </motion.div>

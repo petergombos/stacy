@@ -1,4 +1,5 @@
 import { ArticleHtmlContent } from "@/components/article-html-content";
+import { ScrollIndicator } from "@/components/scroll-indicator";
 import { ArticleContainer } from "@/components/themes/minimal/article-container";
 import { ArticleHero } from "@/components/themes/minimal/article-hero";
 import { ArticleMeta } from "@/components/themes/minimal/article-meta";
@@ -48,6 +49,7 @@ export default async function Article({
 
   return (
     <>
+      <ScrollIndicator />
       <ArticleHero article={article} />
       <ArticleContainer>
         <ArticleMeta article={article} articleHTML={content.html} />
