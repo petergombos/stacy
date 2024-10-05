@@ -1,6 +1,6 @@
 "use client";
 
-import { createArticleAction } from "@/app/articles/actions";
+import { createArticleAction } from "@/app/(admin)/articles/actions";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";

@@ -1,4 +1,4 @@
-import { getSignedUrlAction } from "@/app/actions/s3-upload";
+import { getSignedUrlAction } from "@/app/(admin)/actions/s3-upload";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

@@ -1,7 +1,4 @@
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/styles/globals.css";
-import "@/styles/tiptap.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
@@ -32,8 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <TooltipProvider>{children}</TooltipProvider>
-        <Toaster />
+        {children}
       </body>
     </html>
   );

@@ -3,7 +3,7 @@
 import {
   updateArticleHtmlAction,
   updateArticleMetadataAction,
-} from "@/app/articles/actions";
+} from "@/app/(admin)/articles/actions";
 import { Form } from "@/components/ui/form";
 import { Article, ArticleHTML, Message } from "@/lib/db/schema";
 import { articleFormSchema } from "@/schemas/article";
