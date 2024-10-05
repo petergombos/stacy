@@ -1,5 +1,6 @@
 import { ArticleHtmlContent } from "@/components/article-html-content";
-import { Hero } from "@/components/themes/minimal/hero";
+import { ArticleHero } from "@/components/themes/minimal/article-hero";
+import { ArticleMeta } from "@/components/themes/minimal/article-meta";
 import { getArticleBySlug, getArticles } from "@/lib/models/article";
 import { notFound } from "next/navigation";
 
@@ -46,8 +47,9 @@ export default async function Article({
 
   return (
     <>
-      <Hero article={article} />
+      <ArticleHero article={article} />
       <div className="container prose xl:prose-lg mx-auto max-w-screen-md p-5 sm:p-10 [&>img]:-mx-5 [&>img]:sm:-mx-10 [&>img]:w-[calc(100%+2.5rem)] [&>img]:sm:w-[calc(100%+5rem)] [&>img]:max-w-none">
+        <ArticleMeta article={article} />
         <ArticleHtmlContent content={content.html} />
       </div>
     </>

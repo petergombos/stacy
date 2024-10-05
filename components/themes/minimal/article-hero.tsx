@@ -9,7 +9,7 @@ interface HeroProps {
   article: Article;
 }
 
-export function Hero({ article }: HeroProps) {
+export function ArticleHero({ article }: HeroProps) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -22,7 +22,7 @@ export function Hero({ article }: HeroProps) {
   return (
     <motion.div
       ref={ref}
-      className="relative aspect-video flex items-center justify-center overflow-hidden w-full h-[50vh] sm:h-[70vh]"
+      className="relative aspect-video flex items-center justify-center overflow-hidden w-full h-[60vh] sm:h-[70vh]"
     >
       <motion.div style={{ y, opacity }} className="absolute inset-0">
         <Image
@@ -35,7 +35,7 @@ export function Hero({ article }: HeroProps) {
         <div className="absolute inset-0 bg-black/60 multiply" />
       </motion.div>
       <motion.div
-        className="prose lg:prose-2xl p-10 relative z-10"
+        className="prose prose-sm md:prose-lg xl:prose-2xl p-6 sm:p-10 relative z-10"
         style={{ opacity }}
       >
         <h1 className="text-white text-center text-balance">{article.title}</h1>
