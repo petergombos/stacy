@@ -2,6 +2,8 @@
 
 import { Article } from "@/lib/db/schema";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Monitor, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useRef } from "react";
 
@@ -18,6 +20,18 @@ export function ArticleHero({ article }: HeroProps) {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+
+  const { theme, setTheme } = useTheme();
+
+  const cycleTheme = () => {
+    if (theme === "light") {
+      setTheme("dark");
+    } else if (theme === "dark") {
+      setTheme("system");
+    } else {
+      setTheme("light");
+    }
+  };
 
   return (
     <motion.div
@@ -40,6 +54,21 @@ export function ArticleHero({ article }: HeroProps) {
       >
         <h1 className="text-white text-center text-balance">{article.title}</h1>
       </motion.div>
+      <motion.button
+        className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/10 backdrop-blur-sm transition-colors duration-200 hover:bg-white/20"
+        onClick={cycleTheme}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        title={`Current theme: ${theme}. Click to change.`}
+      >
+        {theme === "dark" ? (
+          <Moon className="w-6 h-6 text-slate-800" />
+        ) : theme === "light" ? (
+          <Sun className="w-6 h-6 text-slate-800" />
+        ) : (
+          <Monitor className="w-6 h-6 text-slate-800" />
+        )}
+      </motion.button>
     </motion.div>
   );
 }
