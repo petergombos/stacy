@@ -9,7 +9,7 @@ import {
 } from "@/lib/db/schema";
 import { ArticleMetadata } from "@/schemas/article";
 import { welcomeAssistantMessage } from "@/static/messages";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, ne } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
 
 export const getArticle = async (articleId: string) => {
@@ -162,4 +162,17 @@ export const getArticleBySlug = async (slug: string) => {
   }
 
   return article;
+};
+
+export const getRecentArticles = async (
+  currentArticleId: string,
+  limit = 4
+) => {
+  const recentArticles = await db.query.articles.findMany({
+    where: (article) => ne(article.id, currentArticleId),
+    orderBy: desc(articles.publishedAt),
+    limit: limit,
+  });
+
+  return recentArticles;
 };

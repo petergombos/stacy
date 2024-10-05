@@ -1,9 +1,13 @@
 import { ArticleHtmlContent } from "@/components/article-html-content";
-import { ScrollIndicator } from "@/components/scroll-indicator";
 import { ArticleContainer } from "@/components/themes/minimal/article-container";
 import { ArticleHero } from "@/components/themes/minimal/article-hero";
 import { ArticleMeta } from "@/components/themes/minimal/article-meta";
-import { getArticleBySlug, getArticles } from "@/lib/models/article";
+import { RecentArticles } from "@/components/themes/minimal/recent-articles";
+import {
+  getArticleBySlug,
+  getArticles,
+  getRecentArticles,
+} from "@/lib/models/article";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({
@@ -47,14 +51,16 @@ export default async function Article({
     notFound();
   }
 
+  const recentArticles = await getRecentArticles(article.id);
+
   return (
     <>
-      <ScrollIndicator />
       <ArticleHero article={article} />
       <ArticleContainer>
         <ArticleMeta article={article} articleHTML={content.html} />
         <ArticleHtmlContent content={content.html} />
       </ArticleContainer>
+      <RecentArticles articles={recentArticles} />
     </>
   );
 }
