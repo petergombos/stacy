@@ -1,3 +1,4 @@
+import { ArticleHtmlContent } from "@/components/article-html-content";
 import { getArticleBySlug, getArticles } from "@/lib/models/article";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -37,8 +38,9 @@ export default async function Article({
   params: { slug: string };
 }) {
   const article = await getArticleBySlug(params.slug);
+  const content = article?.html.at(-1);
 
-  if (!article || !article.publishedAt) {
+  if (!article || !article.publishedAt || !content?.html) {
     notFound();
   }
 
@@ -58,7 +60,7 @@ export default async function Article({
         </h1>
       </div>
       <div className="container prose xl:prose-lg mx-auto max-w-screen-md">
-        <article dangerouslySetInnerHTML={{ __html: article.html[0].html }} />
+        <ArticleHtmlContent content={content.html} />
       </div>
     </>
   );
