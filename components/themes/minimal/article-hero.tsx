@@ -1,11 +1,16 @@
 "use client";
 
 import { Article } from "@/lib/db/schema";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface HeroProps {
   article: Article;
@@ -22,6 +27,11 @@ export function ArticleHero({ article }: HeroProps) {
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const cycleTheme = () => {
     if (theme === "light") {
@@ -46,7 +56,7 @@ export function ArticleHero({ article }: HeroProps) {
           objectFit="cover"
           priority
         />
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-black/60 multiply" />
       </motion.div>
       <motion.div
         className="prose prose-sm md:prose-lg xl:prose-2xl p-6 sm:p-10 relative z-10"
@@ -54,21 +64,33 @@ export function ArticleHero({ article }: HeroProps) {
       >
         <h1 className="text-white text-center text-balance">{article.title}</h1>
       </motion.div>
-      <motion.button
-        className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/10 backdrop-blur-sm transition-colors duration-200 hover:bg-white/20"
-        onClick={cycleTheme}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        title={`Current theme: ${theme}. Click to change.`}
-      >
-        {theme === "dark" ? (
-          <Moon className="w-6 h-6 text-white" />
-        ) : theme === "light" ? (
-          <Sun className="w-6 h-6 text-white" />
-        ) : (
-          <Monitor className="w-6 h-6 text-white" />
+      <AnimatePresence>
+        {mounted && (
+          <motion.button
+            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/10 backdrop-blur-sm transition-colors duration-200 hover:bg-white/20"
+            onClick={cycleTheme}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+            title={
+              mounted
+                ? `Current theme: ${theme}. Click to change.`
+                : "Theme toggle"
+            }
+          >
+            {theme === "dark" ? (
+              <Moon className="w-6 h-6 text-gray-300" />
+            ) : theme === "light" ? (
+              <Sun className="w-6 h-6 text-gray-300" />
+            ) : (
+              <Monitor className="w-6 h-6 text-gray-300" />
+            )}
+          </motion.button>
         )}
-      </motion.button>
+      </AnimatePresence>
     </motion.div>
   );
 }
