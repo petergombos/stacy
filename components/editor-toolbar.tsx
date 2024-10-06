@@ -223,7 +223,7 @@ export default function EditorToolbar({
 
   return (
     <div className="sticky top-0 z-20">
-      <div className="flex justify-between gap-5 p-2 bg-background dark:bg-gray-800 border-b">
+      <div className="flex justify-between gap-5 p-2 bg-neutral-100 dark:bg-neutral-800 border-b">
         <div className="flex flex-wrap gap-2">
           {tools.map((tool, index) => (
             <Tooltip key={index}>
@@ -233,8 +233,8 @@ export default function EditorToolbar({
                   onClick={tool.action}
                   className={`p-2 rounded ${
                     tool.isActive()
-                      ? "bg-gray-200 dark:bg-gray-700"
-                      : "hover:bg-gray-200 dark:hover:bg-gray-700"
+                      ? "bg-neutral-200 dark:bg-neutral-700"
+                      : "hover:bg-neutral-200 dark:hover:bg-neutral-700"
                   }`}
                 >
                   <tool.icon className="w-5 h-5" />
@@ -249,7 +249,7 @@ export default function EditorToolbar({
             <DialogTrigger>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <div className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+                  <div className="p-2 rounded hover:bg-neutral-200 dark:hover:bg-neutral-700">
                     <ImagePlus className="h-5 w-5" />
                   </div>
                 </TooltipTrigger>
@@ -294,13 +294,13 @@ export default function EditorToolbar({
         </div>
       </div>
       {editor.isActive("table") && (
-        <div className="flex gap-2 p-2 bg-background dark:bg-gray-800 border-b absolute -bottom-full w-full z-10">
+        <div className="flex gap-2 p-2 bg-background dark:bg-neutral-800 border-b absolute -bottom-full w-full z-10">
           {tableTools.map((tool, index) => (
             <Tooltip key={index}>
               <TooltipTrigger asChild>
                 <button
                   onClick={tool.action}
-                  className={`p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700`}
+                  className={`p-2 rounded hover:bg-neutral-200 dark:hover:bg-neutral-700`}
                 >
                   <tool.icon className={`w-5 h-5 ${tool.className}`} />
                 </button>

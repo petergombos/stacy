@@ -113,7 +113,7 @@ export default function BlogEditorClient({
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert outline-none w-full flex-1 p-6 max-w-[780px] mx-auto shadow rounded bg-background",
+          "prose dark:prose-invert outline-none w-full flex-1 [&>*]:max-w-[780px] [&>*]:mx-auto",
       },
     },
     immediatelyRender: false,
@@ -196,7 +196,7 @@ export default function BlogEditorClient({
   );
 
   return (
-    <div className="flex-1 flex h-[calc(100vh-24px)] md:h-[calc(100vh-64px)] bg-foreground">
+    <div className="flex-1 flex h-[calc(100vh-24px)] md:h-[calc(100vh-64px)]">
       <div className="w-1/3 border-r">
         <ChatInterface
           onUpdate={handleAIUpdate}
@@ -205,7 +205,7 @@ export default function BlogEditorClient({
           articleId={article.id}
         />
       </div>
-      <div className="w-2/3 max-h-fit bg-background/95 overflow-hidden">
+      <div className="w-2/3 max-h-fit overflow-hidden">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="h-full">
             {editor ? (

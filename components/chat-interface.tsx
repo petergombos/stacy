@@ -123,10 +123,10 @@ export default function ChatInterface({
           .map((message, index) => (
             <div
               key={index}
-              className={`inline-flex gap-3 p-2 rounded-lg bg-background border ${
+              className={`inline-flex gap-3 p-2 rounded-lg bg-background ${
                 message?.role === "user"
-                  ? "bg-blue-600 text-background"
-                  : "text-foreground"
+                  ? "bg-neutral-700 dark:text-foreground dark:bg-neutral-900 text-background"
+                  : "border text-foreground"
               } ${
                 message?.role === "user" ? "self-end ml-3" : "self-start mr-3"
               }`}

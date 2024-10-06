@@ -14,7 +14,10 @@ import Link from "next/link";
 export function Header({ className }: { className?: string }) {
   return (
     <header
-      className={cn("bg-gray-900 text-white shadow-md sticky top-0", className)}
+      className={cn(
+        "bg-neutral-900 text-white shadow-md sticky top-0",
+        className
+      )}
     >
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
@@ -29,14 +32,14 @@ export function Header({ className }: { className?: string }) {
             <nav className="hidden md:flex space-x-8">
               {/* <Link
                 href="/articles"
-                className="text-base font-medium hover:text-gray-300 flex items-center"
+                className="text-base font-medium hover:text-neutral-300 flex items-center"
               >
                 <FileText className="w-5 h-5 mr-1" />
                 Articles
               </Link>
               <Link
                 href="/settings"
-                className="text-base font-medium hover:text-gray-300 flex items-center"
+                className="text-base font-medium hover:text-neutral-300 flex items-center"
               >
                 <Settings className="w-5 h-5 mr-1" />
                 Settings
@@ -83,14 +86,14 @@ export function Header({ className }: { className?: string }) {
                 <nav className="flex flex-col space-y-4">
                   <Link
                     href="/projects"
-                    className="text-base font-medium hover:text-gray-300 flex items-center"
+                    className="text-base font-medium hover:text-neutral-300 flex items-center"
                   >
                     <FileText className="w-5 h-5 mr-1" />
                     Projects
                   </Link>
                   {/* <Link
                     href="/settings"
-                    className="text-base font-medium hover:text-gray-300 flex items-center"
+                    className="text-base font-medium hover:text-neutral-300 flex items-center"
                   >
                     <Settings className="w-5 h-5 mr-1" />
                     Settings

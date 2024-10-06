@@ -124,9 +124,9 @@ export default function ArticleEditor({
   }, [title, form]);
 
   return (
-    <div className="h-full flex flex-col gap-8 overflow-y-scroll">
+    <div className="h-full flex flex-col overflow-y-scroll">
       <EditorToolbar form={form} editor={editor} article={article} />
-      <div className="max-w-[780px] mx-auto space-y-6 w-full px-6">
+      <div className="max-w-[780px] mx-auto space-y-6 w-full px-6 py-8">
         <FormField
           control={form.control}
           name="title"
@@ -134,7 +134,7 @@ export default function ArticleEditor({
             <FormItem>
               <FormControl>
                 <Textarea
-                  className="text-2xl font-semibold py-4 px-6 border-none shadow rounded resize-none min-h-0"
+                  className="text-2xl font-semibold p-0 border-none resize-none min-h-0 focus-visible:ring-0"
                   placeholder="The headline of your article"
                   {...field}
                   ref={textareaRef}

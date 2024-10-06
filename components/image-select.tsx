@@ -277,7 +277,7 @@ export function ImageSelect({ onImageSelect, children }: ImageSelectProps) {
                       <div
                         key={`loading-${index}`}
                         className={cn(
-                          "w-full h-44 bg-gray-200 rounded-sm animate-pulse"
+                          "w-full h-44 bg-neutral-200 rounded-sm animate-pulse"
                         )}
                       />
                     ))

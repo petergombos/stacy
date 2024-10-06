@@ -14,8 +14,8 @@
 
     td,
     th {
-      /* border: 1px solid var(--gray-3); */
-      @apply border border-gray-300;
+      /* border: 1px solid var(--neutral-3); */
+      @apply border border-neutral-300;
       box-sizing: border-box;
       min-width: 1em;
       padding: 6px 8px;
@@ -28,8 +28,8 @@
     }
 
     th {
-      /* background-color: var(--gray-1); */
-      @apply bg-gray-100;
+      /* background-color: var(--neutral-1); */
+      @apply bg-neutral-100;
       font-weight: bold;
       text-align: left;
     }
@@ -39,8 +39,8 @@
       z-index: 3;
     }
     .selectedCell:after {
-      /* background: var(--gray-2); */
-      @apply bg-gray-200;
+      /* background: var(--neutral-2); */
+      @apply bg-neutral-200;
       content: "";
       left: 0; right: 0; top: 0; bottom: 0;
       pointer-events: none;
@@ -71,7 +71,7 @@
   }
 
   .is-empty::before {
-    /* color: var(--gray-4); */
+    /* color: var(--neutral-4); */
     @apply text-muted-foreground;
     content: attr(data-placeholder);
     float: left;

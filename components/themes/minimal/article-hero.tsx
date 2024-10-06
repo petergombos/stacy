@@ -83,11 +83,11 @@ export function ArticleHero({ article }: HeroProps) {
             }
           >
             {theme === "dark" ? (
-              <Moon className="w-6 h-6 text-gray-300" />
+              <Moon className="w-6 h-6 text-neutral-300" />
             ) : theme === "light" ? (
-              <Sun className="w-6 h-6 text-gray-300" />
+              <Sun className="w-6 h-6 text-neutral-300" />
             ) : (
-              <Monitor className="w-6 h-6 text-gray-300" />
+              <Monitor className="w-6 h-6 text-neutral-300" />
             )}
           </motion.button>
         )}

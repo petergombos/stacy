@@ -21,7 +21,7 @@ export function ArticleMetadataFields({
   form: UseFormReturn<ArticleForm>;
 }) {
   return (
-    <div className="p-6 max-w-[780px] mx-auto shadow rounded bg-background space-y-6 w-full">
+    <div className="p-6 max-w-[780px] mx-auto rounded bg-muted dark:bg-neutral-900 space-y-6 w-full border">
       <CardTitle>Metadata</CardTitle>
       <FormField
         control={form.control}
