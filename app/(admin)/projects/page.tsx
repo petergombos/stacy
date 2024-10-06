@@ -1,11 +1,11 @@
 import { Header } from "@/components/header";
 import { ProjectList } from "@/components/project-list";
-import { getProjects } from "@/lib/models/project";
+import { getProjectsWithArticleCount } from "@/lib/models/project";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const projects = await getProjects();
+  const projects = await getProjectsWithArticleCount();
 
   return (
     <>

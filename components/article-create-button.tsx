@@ -28,16 +28,14 @@ export function ArticleCreateButton({
 
   return (
     <Button
-      size="sm"
       onClick={() => execute({ projectId })}
       disabled={isPending}
-      className="h-8 gap-1"
-      variant="outline"
+      className="gap-1"
       {...rest}
     >
       {children || (
         <>
-          <PlusCircle className="h-3.5 w-3.5" />
+          <PlusCircle className="size-4" />
           Create Article
         </>
       )}

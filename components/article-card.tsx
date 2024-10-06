@@ -21,7 +21,7 @@ export function ArticleCard({ article }: { article: Article }) {
 
         <CardContent className="p-8 flex flex-col justify-between w-full">
           <div>
-            <div className="flex flex-col md:flex-row md:items-start justify-between mb-2">
+            <div className="flex flex-col md:flex-row md:items-start justify-between mb-2 gap-3">
               <h2 className="text-2xl font-semibold">
                 {article.title || "Untitled"}
               </h2>
