@@ -1,5 +1,6 @@
-import { Header } from "@/components/header";
+import { redirect } from "next/navigation";
 
 export default function BlogEditorPage() {
-  return <Header />;
+  redirect("/projects");
+  return null;
 }

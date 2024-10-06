@@ -1,4 +1,4 @@
-import { addMessageToArticle } from "@/lib/models/article";
+import { addMessageToArticle, getArticle } from "@/lib/models/article";
 import { chatResponseSchema } from "@/schemas/chat-response";
 import { openai } from "@ai-sdk/openai";
 import { streamObject } from "ai";
@@ -16,6 +16,12 @@ export async function POST(req: Request) {
   const latestUserMessage = messages
     .filter((message: any) => message.role === "user")
     .pop();
+
+  const article = await getArticle(latestUserMessage.articleId);
+
+  if (!article) {
+    return new Response("Article not found", { status: 404 });
+  }
 
   await addMessageToArticle(latestUserMessage);
 
@@ -106,7 +112,13 @@ Once the article is ready, you should suggest a few tweets/FB posts that could b
 
 If the user asks anything unrelated to your primary function, you should politely decline and say that your speciality is writing articles.
 
-The context is:
+Project context is:
+Name: ${article.project?.name}
+Description: ${article.project?.shortDescription}
+Niche: ${article.project?.niche}
+Project more info: ${article.project?.fullContext}
+
+The post context is:
 ${content}
 `,
       },

@@ -61,7 +61,7 @@ export default async function Article({
         <ArticleMeta article={article} articleHTML={content.html} />
         <ArticleHtmlContent content={content.html} />
       </ArticleContainer>
-      <RecentArticles articles={recentArticles} />
+      {!!recentArticles.length && <RecentArticles articles={recentArticles} />}
       <Footer />
     </>
   );

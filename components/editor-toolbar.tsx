@@ -1,6 +1,6 @@
 "use client";
 
-import { updateArticleStatusAction } from "@/app/(admin)/articles/actions";
+import { updateArticleStatusAction } from "@/app/(admin)/actions/article";
 import { Button } from "@/components/ui/button";
 import { DialogTrigger } from "@/components/ui/dialog";
 import {

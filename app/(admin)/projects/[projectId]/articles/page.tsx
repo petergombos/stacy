@@ -1,12 +1,18 @@
 import { ArticleCard } from "@/components/article-card";
-import CreateArticleButton from "@/components/create-article-button";
+import { ArticleCreateButton } from "@/components/article-create-button";
 import { Header } from "@/components/header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getArticles } from "@/lib/models/article";
 
 export const revalidate = 0;
 
-export default async function ArticlesPage() {
+export default async function ArticlesPage({
+  params,
+}: {
+  params: {
+    projectId: string;
+  };
+}) {
   const articles = await getArticles();
 
   return (
@@ -24,7 +30,7 @@ export default async function ArticlesPage() {
                 <TabsTrigger value="published">Published</TabsTrigger>
                 <TabsTrigger value="drafts">Drafts</TabsTrigger>
               </TabsList>
-              <CreateArticleButton />
+              <ArticleCreateButton projectId={params.projectId} />
             </div>
             <TabsContent value="all">
               <div className="space-y-6">

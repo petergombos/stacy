@@ -77,7 +77,7 @@ export function ArticleCard({ article }: { article: Article }) {
                   size: "sm",
                   className: "flex-1 md:flex-none",
                 })}
-                href={`/articles/composer/${article.id}`}
+                href={`/projects/${article.projectId}/articles/composer/${article.id}`}
               >
                 <Edit className="w-4 h-4 mr-1" />
                 Edit

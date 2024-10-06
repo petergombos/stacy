@@ -27,7 +27,7 @@ export function Header({ className }: { className?: string }) {
           </Link>
           <div className="flex items-center space-x-4">
             <nav className="hidden md:flex space-x-8">
-              <Link
+              {/* <Link
                 href="/articles"
                 className="text-base font-medium hover:text-gray-300 flex items-center"
               >
@@ -40,7 +40,7 @@ export function Header({ className }: { className?: string }) {
               >
                 <Settings className="w-5 h-5 mr-1" />
                 Settings
-              </Link>
+              </Link> */}
             </nav>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -82,19 +82,19 @@ export function Header({ className }: { className?: string }) {
               <SheetContent side="right">
                 <nav className="flex flex-col space-y-4">
                   <Link
-                    href="/articles"
+                    href="/projects"
                     className="text-base font-medium hover:text-gray-300 flex items-center"
                   >
                     <FileText className="w-5 h-5 mr-1" />
-                    Articles
+                    Projects
                   </Link>
-                  <Link
+                  {/* <Link
                     href="/settings"
                     className="text-base font-medium hover:text-gray-300 flex items-center"
                   >
                     <Settings className="w-5 h-5 mr-1" />
                     Settings
-                  </Link>
+                  </Link> */}
                 </nav>
               </SheetContent>
             </Sheet>

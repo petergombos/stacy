@@ -1,8 +1,31 @@
 import { relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const articles = sqliteTable("articles", {
+export const projects = sqliteTable("projects", {
+  name: text("name").notNull(),
+  niche: text("niche").notNull(),
+  shortDescription: text("short_description").notNull(),
+  fullContext: text("full_context").notNull(),
+
+  // Meta
   id: text("id").primaryKey(),
+  createdAt: integer("created_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
+  updatedAt: integer("updated_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
+});
+
+export const projectRelations = relations(projects, ({ many }) => ({
+  articles: many(articles),
+}));
+
+export type Project = typeof projects.$inferSelect;
+export type NewProject = typeof projects.$inferInsert;
+
+export const articles = sqliteTable("articles", {
   title: text("title"),
   description: text("description"),
   slug: text("slug").unique(),
@@ -13,27 +36,40 @@ export const articles = sqliteTable("articles", {
   authorName: text("author_name"),
   image: text("image").default("").notNull(),
   publishedAt: integer("published_at"),
-  updatedAt: integer("last_updated_at")
+
+  // Meta
+  id: text("id").primaryKey(),
+  updatedAt: integer("updated_at")
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull()
     .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
-
   createdAt: integer("created_at")
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
+
+  // Relations
+  projectId: text("project_id").references(() => projects.id, {
+    onDelete: "cascade",
+  }),
 });
 
-export const articleRelations = relations(articles, ({ many }) => ({
+export const articleRelations = relations(articles, ({ many, one }) => ({
   messages: many(messages),
   html: many(articleHTML),
+  project: one(projects, {
+    fields: [articles.projectId],
+    references: [projects.id],
+  }),
 }));
 
 export type Article = typeof articles.$inferSelect;
 export type NewArticle = typeof articles.$inferInsert;
 
 export const articleHTML = sqliteTable("article_html", {
+  html: text("html").notNull().default(""),
+
+  // Meta
   id: text("id").primaryKey(),
-  html: text("html").notNull(),
   createdAt: integer("created_at")
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
@@ -59,9 +95,11 @@ export type ArticleHTML = typeof articleHTML.$inferSelect;
 export type NewArticleHTML = typeof articleHTML.$inferInsert;
 
 export const messages = sqliteTable("messages", {
-  id: text("id").primaryKey(),
   content: text("content"),
   role: text("role", { enum: ["user", "assistant", "system"] }).default("user"),
+
+  // Meta
+  id: text("id").primaryKey(),
   createdAt: integer("created_at")
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),

@@ -1,6 +1,6 @@
 "use client";
 
-import { addMessageToArticleAction } from "@/app/(admin)/articles/actions";
+import { addMessageToArticleAction } from "@/app/(admin)/actions/article";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAutoResize } from "@/hooks/auto-resize";

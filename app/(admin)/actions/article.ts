@@ -13,11 +13,17 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-export const createArticleAction = actionClient.action(async () => {
-  const article = await createArticle();
-  revalidatePath("/");
-  redirect(`/articles/composer/${article.id}`);
-});
+export const createArticleAction = actionClient
+  .schema(
+    z.object({
+      projectId: z.string().min(1),
+    })
+  )
+  .action(async ({ parsedInput: { projectId } }) => {
+    const article = await createArticle({ projectId });
+    revalidatePath("/");
+    redirect(`/projects/${projectId}/articles/composer/${article.id}`);
+  });
 
 export const addMessageToArticleAction = actionClient
   .schema(
