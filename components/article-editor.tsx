@@ -134,7 +134,7 @@ export default function ArticleEditor({
             <FormItem>
               <FormControl>
                 <Textarea
-                  className="text-2xl font-semibold p-0 border-none resize-none min-h-0 focus-visible:ring-0"
+                  className="text-3xl font-bold p-0 border-none resize-none min-h-0 focus-visible:ring-0"
                   placeholder="The headline of your article"
                   {...field}
                   ref={textareaRef}
