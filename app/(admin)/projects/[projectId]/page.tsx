@@ -23,13 +23,12 @@ export default async function ProjectPage({
   if (!project) {
     notFound();
   }
-
   const articles = await getArticlesByProject(params.projectId);
 
   return (
     <>
       <Header />
-      <main className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="max-w-4xl mx-auto lg:px-8 px-4 py-6">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -43,12 +42,12 @@ export default async function ProjectPage({
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="px-4 py-6 sm:px-0">
+        <div>
           <h1 className="text-3xl font-bold text-foreground mb-6">
             {project.name}
           </h1>
           <Tabs defaultValue="all" className="w-full">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+            <div className="flex flex-col-reverse sm:flex-row gap-3 justify-between items-start sm:items-center mb-4">
               <TabsList>
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="published">Published</TabsTrigger>

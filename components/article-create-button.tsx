@@ -30,7 +30,7 @@ export function ArticleCreateButton({
     <Button
       onClick={() => execute({ projectId })}
       disabled={isPending}
-      className="gap-1"
+      className="gap-1 w-full sm:w-auto"
       {...rest}
     >
       {children || (

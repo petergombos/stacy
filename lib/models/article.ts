@@ -178,7 +178,6 @@ export const getRecentArticles = async (
   return recentArticles;
 };
 
-// Add this function to the existing file
 export const getArticlesByProject = async (projectId: string) => {
   const items = await db.query.articles.findMany({
     where: eq(articles.projectId, projectId),
