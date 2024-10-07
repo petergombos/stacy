@@ -1,13 +1,18 @@
 "use client";
 
 import {
+  addMessageToArticleAction,
   updateArticleHtmlAction,
   updateArticleMetadataAction,
 } from "@/app/(admin)/actions/article";
 import { Form } from "@/components/ui/form";
 import { Article, ArticleHTML, Message } from "@/lib/db/schema";
 import { articleFormSchema } from "@/schemas/article";
-import { UpdatedChunk, UpdatedMetadata } from "@/schemas/chat-response";
+import {
+  chatArticleResponseSchema,
+  UpdatedChunk,
+  UpdatedMetadata,
+} from "@/schemas/chat-response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { generateJSON } from "@tiptap/html";
 import { JSONContent, useEditor } from "@tiptap/react";
@@ -199,10 +204,26 @@ export default function BlogEditorClient({
     <div className="flex-1 flex h-[calc(100vh-24px)] md:h-[calc(100vh-64px)]">
       <div className="w-1/3 border-r">
         <ChatInterface
-          onUpdate={handleAIUpdate}
           getContext={() => form.getValues()}
           initialMessages={initialMessages}
-          articleId={article.id}
+          onFinish={({ object }) => {
+            if (object?.chatResponse) {
+              const responseMessage = {
+                role: "assistant",
+                content: object.chatResponse,
+                articleId: article.id,
+              } as const;
+              addMessageToArticleAction(responseMessage);
+            }
+            if (
+              object?.didUpdateArticleContent ||
+              object?.didUpdateArticleMetadata
+            ) {
+              handleAIUpdate(object);
+            }
+          }}
+          schema={chatArticleResponseSchema}
+          endpoint={`/api/chat/article/${article.id}`}
         />
       </div>
       <div className="w-2/3 max-h-fit overflow-hidden">

@@ -1,13 +1,21 @@
 import { addMessageToArticle, getArticle } from "@/lib/models/article";
-import { chatResponseSchema } from "@/schemas/chat-response";
+import { chatArticleResponseSchema } from "@/schemas/chat-response";
 import { openai } from "@ai-sdk/openai";
 import { streamObject } from "ai";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
-export async function POST(req: Request) {
-  const { messages } = await req.json();
+export async function POST(
+  req: Request,
+  { params }: { params: { articleId: string } }
+) {
+  const { messages: baseMessages } = await req.json();
+
+  const messages = baseMessages.map((m: any) => ({
+    ...m,
+    articleId: params.articleId,
+  }));
 
   const { content } = messages.find(
     (message: any) => message.role === "system"
@@ -123,7 +131,7 @@ ${content}
 `,
       },
     ],
-    schema: chatResponseSchema,
+    schema: chatArticleResponseSchema,
   });
 
   return result.toTextStreamResponse();

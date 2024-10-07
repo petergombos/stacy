@@ -95,8 +95,10 @@ export type ArticleHTML = typeof articleHTML.$inferSelect;
 export type NewArticleHTML = typeof articleHTML.$inferInsert;
 
 export const messages = sqliteTable("messages", {
-  content: text("content"),
-  role: text("role", { enum: ["user", "assistant", "system"] }).default("user"),
+  content: text("content").default("").notNull(),
+  role: text("role", { enum: ["user", "assistant", "system"] })
+    .default("user")
+    .notNull(),
 
   // Meta
   id: text("id").primaryKey(),

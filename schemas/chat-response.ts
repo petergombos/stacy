@@ -1,3 +1,4 @@
+import { projectCreationFormSchema } from "@/components/project-create-dialog";
 import { z } from "zod";
 
 export const updatedChunkSchema = z.object({
@@ -32,7 +33,7 @@ export const updatedMetadataSchema = z.object({
 
 export type UpdatedMetadata = z.infer<typeof updatedMetadataSchema>;
 
-export const chatResponseSchema = z.object({
+export const chatArticleResponseSchema = z.object({
   chatResponse: z.string().describe("A response to the user's message."),
   didUpdateArticleMetadata: z
     .boolean()
@@ -47,4 +48,13 @@ export const chatResponseSchema = z.object({
     .optional(),
 });
 
-export type ChatResponse = z.infer<typeof chatResponseSchema>;
+export type ChatArticleResponse = z.infer<typeof chatArticleResponseSchema>;
+
+export const chatProjectCreationResponseSchema = z.object({
+  chatResponse: z.string().describe("A response to the user's message."),
+  project: projectCreationFormSchema,
+});
+
+export type ChatProjectCreationResponse = z.infer<
+  typeof chatProjectCreationResponseSchema
+>;

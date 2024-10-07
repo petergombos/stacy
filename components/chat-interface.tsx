@@ -1,62 +1,67 @@
 "use client";
 
-import { addMessageToArticleAction } from "@/app/(admin)/actions/article";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAutoResize } from "@/hooks/auto-resize";
-import { Message } from "@/lib/db/schema";
-import { ArticleForm } from "@/schemas/article";
-import {
-  chatResponseSchema,
-  UpdatedChunk,
-  UpdatedMetadata,
-} from "@/schemas/chat-response";
 import { experimental_useObject as useObject } from "ai/react";
 import { Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { z } from "zod";
 
-interface ChatInterfaceProps {
-  onUpdate: ({
-    updatedChunks,
-    updatedArticleMetadata,
+type ChatMessage = {
+  role: "user" | "assistant" | "system";
+  content: string;
+  inProgress?: boolean;
+};
+
+interface ChatInterfaceProps<
+  T extends {
+    chatResponse: string;
+  }
+> {
+  endpoint: string;
+  onFinish: ({
+    object,
+    error,
   }: {
-    updatedChunks?: UpdatedChunk[];
-    updatedArticleMetadata?: UpdatedMetadata;
+    object: T | undefined;
+    error: Error | undefined;
   }) => void;
-  initialMessages: Message[];
-  articleId: string;
-  getContext: () => ArticleForm;
+  schema: z.ZodType<T>;
+  initialMessages?: ChatMessage[];
+  getContext?: () => any;
 }
 
-export default function ChatInterface({
-  onUpdate,
+export default function ChatInterface<T extends { chatResponse: string }>({
+  endpoint,
+  onFinish,
+  schema,
   getContext,
   initialMessages,
-  articleId,
-}: ChatInterfaceProps) {
+}: ChatInterfaceProps<T>) {
   const [input, setInput] = useState("");
-  const [messages, setMessages] =
-    useState<(Message & { inProgress?: boolean })[]>(initialMessages);
+  const [messages, setMessages] = useState<ChatMessage[]>(
+    initialMessages ?? []
+  );
 
   const { object, submit, isLoading } = useObject({
-    api: "/api/chat",
-    schema: chatResponseSchema,
-    onFinish: ({ object }) => {
+    api: endpoint,
+    schema,
+    onFinish: ({ object, error }) => {
       if (object?.chatResponse) {
-        const responseMessage = {
-          role: "assistant",
-          content: object.chatResponse,
-          articleId,
-        } as const;
         setMessages(
-          (prevMessages) => [...prevMessages, responseMessage] as Message[]
+          (prevMessages) =>
+            [
+              ...prevMessages,
+              {
+                role: "assistant",
+                content: object.chatResponse,
+              },
+            ] as ChatMessage[]
         );
-        addMessageToArticleAction(responseMessage);
       }
-      if (object?.didUpdateArticleContent || object?.didUpdateArticleMetadata) {
-        onUpdate(object);
-      }
+      onFinish({ object, error });
     },
   });
 
@@ -73,20 +78,18 @@ export default function ChatInterface({
       {
         role: "user",
         content: input,
-        articleId,
-      },
+      } as const,
     ];
 
-    setMessages(updatedMessages as Message[]);
+    setMessages(updatedMessages);
     submit({
-      articleId,
       messages: [
         ...updatedMessages,
-        {
+        getContext && {
           role: "system",
           content: JSON.stringify(getContext()),
         },
-      ],
+      ].filter(Boolean),
     });
     setInput("");
   };
@@ -104,7 +107,7 @@ export default function ChatInterface({
   useAutoResize(textareaRef);
 
   return (
-    <div className="flex flex-col h-full bg-background/95">
+    <div className="flex flex-col h-full">
       <div
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto p-4 flex flex-col gap-4"

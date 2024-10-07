@@ -29,25 +29,31 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const projectSchema = z.object({
+export const projectCreationFormSchema = z.object({
   name: z
     .string()
     .min(3, "Name must be at least 3 characters")
-    .max(100, "Name must be at most 100 characters"),
+    .max(100, "Name must be at most 100 characters")
+    .describe("The name of the project"),
   niche: z
     .string()
     .min(3, "Niche must be at least 3 characters")
-    .max(100, "Niche must be at most 100 characters"),
+    .max(100, "Niche must be at most 100 characters")
+    .describe("The niche of the project"),
   shortDescription: z
     .string()
     .min(3, "Short description must be at least 3 characters")
-    .max(155, "Short description must be at most 155 characters"),
+    .max(155, "Short description must be at most 155 characters")
+    .describe("The short description of the project"),
   fullContext: z
     .string()
-    .min(100, "Full context must be at least 100 characters"),
+    .min(250, "Full context must be at least 100 characters")
+    .describe(
+      "The full context of the project, this will be used as base information for future article creations"
+    ),
 });
 
-type ProjectFormValues = z.infer<typeof projectSchema>;
+type ProjectFormValues = z.infer<typeof projectCreationFormSchema>;
 
 interface ProjectCreateDialogProps {
   children: React.ReactNode;
@@ -56,7 +62,7 @@ interface ProjectCreateDialogProps {
 export function ProjectCreateDialog({ children }: ProjectCreateDialogProps) {
   const [open, setOpen] = useState(false);
   const form = useForm<ProjectFormValues>({
-    resolver: zodResolver(projectSchema),
+    resolver: zodResolver(projectCreationFormSchema),
     defaultValues: {
       name: "",
       niche: "",
