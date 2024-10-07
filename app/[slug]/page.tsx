@@ -35,9 +35,11 @@ export const dynamicParams = true; // or false, to 404 on unknown paths
 
 export async function generateStaticParams() {
   const articles = await getArticles();
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
+  return articles
+    .filter((article) => article.publishedAt)
+    .map((article) => ({
+      slug: article.slug,
+    }));
 }
 
 export default async function Article({
