@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -22,38 +21,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useAutoResize } from "@/hooks/auto-resize";
+import { chatProjectCreationResponseSchema } from "@/schemas/chat-response";
+import {
+  projectCreationFormSchema,
+  ProjectFormValues,
+} from "@/schemas/project";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
-
-export const projectCreationFormSchema = z.object({
-  name: z
-    .string()
-    .min(3, "Name must be at least 3 characters")
-    .max(100, "Name must be at most 100 characters")
-    .describe("The name of the project"),
-  niche: z
-    .string()
-    .min(3, "Niche must be at least 3 characters")
-    .max(100, "Niche must be at most 100 characters")
-    .describe("The niche of the project"),
-  shortDescription: z
-    .string()
-    .min(3, "Short description must be at least 3 characters")
-    .max(155, "Short description must be at most 155 characters")
-    .describe("The short description of the project"),
-  fullContext: z
-    .string()
-    .min(250, "Full context must be at least 100 characters")
-    .describe(
-      "The full context of the project, this will be used as base information for future article creations"
-    ),
-});
-
-type ProjectFormValues = z.infer<typeof projectCreationFormSchema>;
+import ChatInterface from "./chat-interface";
+import { Label } from "./ui/label";
 
 interface ProjectCreateDialogProps {
   children: React.ReactNode;
@@ -92,79 +72,138 @@ export function ProjectCreateDialog({ children }: ProjectCreateDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[780px]">
         <DialogHeader>
-          <DialogTitle>Create Project</DialogTitle>
+          <DialogTitle>Create a New Project</DialogTitle>
           <DialogDescription>
-            Enter the details for your new project.
+            Use our AI assistant to help you fill out project details or edit
+            them manually. The more information you provide, the better we can
+            tailor your project.
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Project name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+        <div className="grid grid-cols-2 gap-4 max-h-[80vh]">
+          <div className="col-span-1">
+            <Label className="mb-3 block">AI-Assisted Project Creation</Label>
+            <ChatInterface
+              className="h-[calc(80vh-56px)]"
+              initialMessages={[
+                {
+                  role: "assistant",
+                  content:
+                    "Hello, I'm here to help you create your project. The more information you provide, the better articles we can generate for you.",
+                },
+                {
+                  role: "assistant",
+                  content:
+                    "Tip: you can just copy paste the content of your website or dump any existing content you have here. This will help us create a more accurate and tailored project for you.",
+                },
+              ]}
+              getContext={() => form.getValues()}
+              endpoint="/api/chat/project"
+              onFinish={({ object }) => {
+                if (object?.project) {
+                  form.setValue("name", object.project.name ?? "");
+                  form.setValue("niche", object.project.niche ?? "");
+                  form.setValue(
+                    "shortDescription",
+                    object.project.shortDescription ?? ""
+                  );
+                  form.setValue(
+                    "fullContext",
+                    object.project.fullContext ?? ""
+                  );
+                }
+              }}
+              schema={chatProjectCreationResponseSchema}
+              noPadding
             />
-            <FormField
-              control={form.control}
-              name="niche"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Niche</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Project niche" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="shortDescription"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Short Description</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Short description" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="fullContext"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Full Context</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Full context"
-                      rows={10}
-                      {...field}
-                      ref={contextRef}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <Button type="submit" disabled={status === "executing"}>
-                {status === "executing" ? "Creating..." : "Create Project"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+          </div>
+          <div className="col-span-1 overflow-y-auto px-1 -mx-1">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Project Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter a unique and descriptive name for your project"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="niche"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Project Niche</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Specify the industry or category your project belongs to"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="shortDescription"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Short Description</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Provide a brief overview of your project (1-2 sentences)"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="fullContext"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Details</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Describe your project in detail, including goals, target audience, and key features"
+                          rows={10}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="submit"
+                  disabled={status === "executing"}
+                  className="w-full sticky bottom-0"
+                >
+                  {status === "executing" ? (
+                    <Loader2 className="animate-spin size-4" />
+                  ) : (
+                    "Create Project"
+                  )}
+                </Button>
+              </form>
+            </Form>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );

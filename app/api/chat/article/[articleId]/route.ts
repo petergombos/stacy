@@ -120,11 +120,11 @@ Once the article is ready, you should suggest a few tweets/FB posts that could b
 
 If the user asks anything unrelated to your primary function, you should politely decline and say that your speciality is writing articles.
 
-Project context is:
+This article is part of the following project:
 Name: ${article.project?.name}
 Description: ${article.project?.shortDescription}
 Niche: ${article.project?.niche}
-Project more info: ${article.project?.fullContext}
+Detailed information about the project: ${article.project?.fullContext}
 
 The post context is:
 ${content}

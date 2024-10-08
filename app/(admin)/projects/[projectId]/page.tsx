@@ -28,7 +28,7 @@ export default async function ProjectPage({
   return (
     <>
       <Header />
-      <main className="max-w-4xl mx-auto lg:px-8 px-4 py-6">
+      <main className="max-w-4xl mx-auto lg:px-8 px-4 py-6 space-y-4">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
