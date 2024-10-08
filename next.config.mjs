@@ -1,3 +1,5 @@
+import path from "path";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -12,21 +14,12 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config) => {
-    config.module.rules = [
-      ...config.module.rules,
-      {
-        test: /html-react-parser\/lib\/index\.js$/,
-        resolve: {
-          alias: {
-            "html-dom-parser": path.join(
-              path.dirname(require.resolve("html-dom-parser")),
-              "server/html-to-dom.js"
-            ),
-          },
-        },
-      },
-    ];
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.resolve.alias["html-dom-parser"] = path.resolve(
+        "./node_modules/html-dom-parser/lib/server/html-to-dom.js"
+      );
+    }
     return config;
   },
 };
