@@ -5,7 +5,6 @@ import { ArticleMeta } from "@/components/themes/minimal/article-meta";
 import { Footer } from "@/components/themes/minimal/footer";
 import { RecentArticles } from "@/components/themes/minimal/recent-articles";
 import { getArticleBySlug, getRecentArticles } from "@/lib/models/article";
-import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({
@@ -39,14 +38,11 @@ export async function generateMetadata({
 //     }));
 // }
 
-export const runtime = "edge";
-
 export default async function Article({
   params,
 }: {
   params: { slug: string };
 }) {
-  const host = headers().get("host");
   const article = await getArticleBySlug(params.slug);
   const content = article?.html.at(-1);
 
@@ -58,7 +54,6 @@ export default async function Article({
 
   return (
     <>
-      {host}
       <ArticleHero article={article} />
       <ArticleContainer>
         <ArticleMeta article={article} articleHTML={content.html} />

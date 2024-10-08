@@ -6,6 +6,8 @@ export const projects = sqliteTable("projects", {
   niche: text("niche").notNull(),
   shortDescription: text("short_description").notNull(),
   fullContext: text("full_context").notNull(),
+  slug: text("slug"),
+  domain: text("domain"),
 
   // Meta
   id: text("id").primaryKey(),
@@ -20,6 +22,7 @@ export const projects = sqliteTable("projects", {
 
 export const projectRelations = relations(projects, ({ many }) => ({
   articles: many(articles),
+  apiTokens: many(apiTokens),
 }));
 
 export type Project = typeof projects.$inferSelect;
@@ -125,3 +128,30 @@ export const messageRelations = relations(messages, ({ one }) => ({
 
 export type Message = typeof messages.$inferSelect;
 export type NewMessage = typeof messages.$inferInsert;
+
+export const apiTokens = sqliteTable("api_tokens", {
+  token: text("token").primaryKey(),
+  projectId: text("project_id")
+    .references(() => projects.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
+  isValid: integer("is_valid", { mode: "boolean" }).notNull().default(true),
+  createdAt: integer("created_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
+  updatedAt: integer("updated_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
+});
+
+export const apiTokenRelations = relations(apiTokens, ({ one }) => ({
+  project: one(projects, {
+    fields: [apiTokens.projectId],
+    references: [projects.id],
+  }),
+}));
+
+export type ApiToken = typeof apiTokens.$inferSelect;
+export type NewApiToken = typeof apiTokens.$inferInsert;

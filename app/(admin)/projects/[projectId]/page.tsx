@@ -1,6 +1,7 @@
 import { ArticleCard } from "@/components/article-card";
 import { ArticleCreateButton } from "@/components/article-create-button";
 import { Header } from "@/components/header";
+import { ProjectSettingsDropdown } from "@/components/project-settings-dropdown";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,6 +10,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getApiTokens } from "@/lib/models/api-token";
 import { getArticlesByProject } from "@/lib/models/article";
 import { getProject } from "@/lib/models/project";
 import { Tabs } from "@radix-ui/react-tabs";
@@ -19,12 +21,14 @@ export default async function ProjectPage({
 }: {
   params: { projectId: string };
 }) {
-  const project = await getProject(params.projectId);
+  const [project, tokens] = await Promise.all([
+    getProject(params.projectId),
+    getApiTokens(params.projectId),
+  ]);
   if (!project) {
     notFound();
   }
   const articles = await getArticlesByProject(params.projectId);
-
   return (
     <>
       <Header />
@@ -43,9 +47,12 @@ export default async function ProjectPage({
           </BreadcrumbList>
         </Breadcrumb>
         <div>
-          <h1 className="text-3xl font-bold text-foreground mb-6">
-            {project.name}
-          </h1>
+          <div className="flex gap-3 items-center justify-between mb-6">
+            <h1 className="text-3xl font-bold text-foreground">
+              {project.name}
+            </h1>
+            <ProjectSettingsDropdown projectId={project.id} tokens={tokens} />
+          </div>
           <Tabs defaultValue="all" className="w-full">
             <div className="flex flex-col-reverse sm:flex-row gap-3 justify-between items-start sm:items-center mb-4">
               <TabsList>
