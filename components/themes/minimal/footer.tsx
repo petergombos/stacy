@@ -47,6 +47,7 @@ export function Footer() {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Twitter"
               >
                 <Twitter className="w-6 h-6" />
               </a>
@@ -54,6 +55,7 @@ export function Footer() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Facebook"
               >
                 <Facebook className="w-6 h-6" />
               </a>
@@ -61,6 +63,7 @@ export function Footer() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Instagram"
               >
                 <Instagram className="w-6 h-6" />
               </a>
