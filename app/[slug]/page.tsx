@@ -9,6 +9,7 @@ import {
   getArticles,
   getRecentArticles,
 } from "@/lib/models/article";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({
@@ -47,6 +48,7 @@ export default async function Article({
 }: {
   params: { slug: string };
 }) {
+  const host = headers().get("host");
   const article = await getArticleBySlug(params.slug);
   const content = article?.html.at(-1);
 
@@ -58,6 +60,7 @@ export default async function Article({
 
   return (
     <>
+      {host}
       <ArticleHero article={article} />
       <ArticleContainer>
         <ArticleMeta article={article} articleHTML={content.html} />
