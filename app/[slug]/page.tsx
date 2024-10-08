@@ -46,11 +46,16 @@ export default async function Article({
   const article = await getArticleBySlug(params.slug);
   const content = article?.html.at(-1);
 
-  if (!article || !article.publishedAt || !content?.html) {
+  if (
+    !article ||
+    !article.publishedAt ||
+    !content?.html ||
+    !article.projectId
+  ) {
     notFound();
   }
 
-  const recentArticles = await getRecentArticles(article.id);
+  const recentArticles = await getRecentArticles(article.id, article.projectId);
 
   return (
     <>

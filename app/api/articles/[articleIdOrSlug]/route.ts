@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { articleId: string } }
+  { params }: { params: { articleIdOrSlug: string } }
 ) {
   const token = req.headers.get("Authorization")?.split(" ")[1];
   if (!token) {
@@ -17,11 +17,14 @@ export async function GET(
   }
 
   const article = await db.query.articles.findFirst({
-    where: (article, { eq, and }) =>
+    where: (article, { eq, and, or }) =>
       and(
         eq(article.projectId, validToken.projectId),
         eq(article.status, "published"),
-        eq(article.id, params.articleId)
+        or(
+          eq(article.id, params.articleIdOrSlug),
+          eq(article.slug, params.articleIdOrSlug)
+        )
       ),
     columns: {
       id: true,

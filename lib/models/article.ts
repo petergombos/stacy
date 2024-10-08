@@ -167,10 +167,12 @@ export const getArticleBySlug = async (slug: string) => {
 
 export const getRecentArticles = async (
   currentArticleId: string,
+  projectId: string,
   limit = 4
 ) => {
   const recentArticles = await db.query.articles.findMany({
-    where: (article) => ne(article.id, currentArticleId),
+    where: (article, { and, eq }) =>
+      and(ne(article.id, currentArticleId), eq(article.projectId, projectId)),
     orderBy: desc(articles.publishedAt),
     limit: limit,
   });
