@@ -4,7 +4,6 @@ import { Article } from "@/lib/db/schema";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
-import { ThemeSwitcher } from "./theme-switcher";
 
 interface HeroProps {
   article: Article;
@@ -42,7 +41,6 @@ export function ArticleHero({ article }: HeroProps) {
       >
         <h1 className="text-white text-center text-balance">{article.title}</h1>
       </motion.div>
-      <ThemeSwitcher variant="dark" />
     </motion.div>
   );
 }

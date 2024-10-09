@@ -9,8 +9,8 @@ interface RecentArticlesProps {
 
 export function RecentArticles({ articles, project }: RecentArticlesProps) {
   return (
-    <div className="bg-muted-foreground/5">
-      <section className="container max-w-screen-lg mx-auto px-5 sm:px-10 py-8 sm:py-16">
+    <div className="bg-muted-foreground/10">
+      <section className="container max-w-5xl mx-auto px-4 sm:px-8 py-8 sm:py-16">
         <h2 className="text-2xl font-bold mb-6">Recent Articles</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {articles.map((article) => (

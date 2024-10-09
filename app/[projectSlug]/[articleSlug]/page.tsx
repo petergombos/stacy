@@ -4,8 +4,10 @@ import { ArticleHero } from "@/components/themes/minimal/article-hero";
 import { ArticleMeta } from "@/components/themes/minimal/article-meta";
 import { Footer } from "@/components/themes/minimal/footer";
 import { RecentArticles } from "@/components/themes/minimal/recent-articles";
+import { ThemeSwitcher } from "@/components/themes/minimal/theme-switcher";
 import { getArticleBySlug, getRecentArticles } from "@/lib/models/article";
 import { getProjectBySlug } from "@/lib/models/project";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({
@@ -65,6 +67,17 @@ export default async function Article({
 
   return (
     <>
+      <header className="absolute inset-x-0 z-20">
+        <div className="flex justify-between items-center px-4 sm:px-8 py-3">
+          <Link
+            href={`/${project.slug}`}
+            className="text-xl sm:text-2xl font-extrabold text-white"
+          >
+            {project.name}
+          </Link>
+        </div>
+        <ThemeSwitcher variant="dark" />
+      </header>
       <ArticleHero article={article} />
       <ArticleContainer>
         <ArticleMeta article={article} articleHTML={content.html} />

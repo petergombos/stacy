@@ -8,8 +8,10 @@ import { useEffect, useState } from "react";
 
 export function ThemeSwitcher({
   variant = "light",
+  className,
 }: {
   variant?: "light" | "dark";
+  className?: string;
 }) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -48,10 +50,11 @@ export function ThemeSwitcher({
       {mounted && (
         <motion.button
           className={cn(
-            "absolute top-4 right-4 z-20 p-2 rounded-full backdrop-blur-sm transition-colors duration-200",
+            "absolute top-4 right-4 sm:right-8 z-20 p-2 rounded-full backdrop-blur-sm transition-colors duration-200",
             themeVariant.text,
             themeVariant.background,
-            themeVariant.hover
+            themeVariant.hover,
+            className
           )}
           onClick={cycleTheme}
           whileHover={{ scale: 1.05 }}
