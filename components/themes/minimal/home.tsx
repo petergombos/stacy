@@ -1,5 +1,6 @@
 import { Article, Project } from "@/lib/db/schema";
 import { HomeArticleListItem } from "./home-article-list-item";
+import { ThemeSwitcher } from "./theme-switcher";
 
 export const Home = ({
   project,
@@ -10,6 +11,7 @@ export const Home = ({
 }) => {
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <ThemeSwitcher />
       <div className="container mx-auto px-4 sm:px-8 pt-12 sm:pt-24 text-center">
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 sm:mb-6 tracking-tight">
           {project.name}
