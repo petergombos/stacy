@@ -34,17 +34,17 @@ export function HomeArticleListItem({
             <Image
               src={article.image || ""}
               alt={article.title || ""}
-              layout="fill"
-              objectFit="cover"
+              fill
+              className="object-cover"
             />
           </motion.div>
-          <div className="absolute inset-0 bg-black opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-50" />
+          <div className="absolute inset-0 bg-black opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
           <div className="relative z-10 p-6 flex flex-col justify-end h-full">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-4 text-balance sm:max-w-4xl">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 sm:mb-4 text-balance sm:max-w-4xl">
               {article.title}
             </h2>
-            <p className="text-sm sm:text-base md:text-lg text-white mb-2 sm:mb-4 line-clamp-3 lg:max-w-2xl xl:max-w-4xl">
+            <p className="text-sm sm:text-base md:text-lg text-white mb-2 sm:mb-4 line-clamp-3 lg:max-w-2xl">
               {article.description}
             </p>
             <div className="flex flex-wrap items-center text-white text-xs sm:text-sm space-x-4">

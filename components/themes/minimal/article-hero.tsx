@@ -53,7 +53,7 @@ export function ArticleHero({ article }: HeroProps) {
         <Image
           src={article.image}
           alt={article.title ?? "Featured Image"}
-          layout="fill"
+          fill
           priority
           className="object-cover"
         />

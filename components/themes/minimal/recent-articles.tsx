@@ -1,19 +1,24 @@
-import { Article } from "@/lib/db/schema";
+import { Article, Project } from "@/lib/db/schema";
 import Image from "next/image";
 import Link from "next/link";
 
 interface RecentArticlesProps {
   articles: Article[];
+  project: Project;
 }
 
-export function RecentArticles({ articles }: RecentArticlesProps) {
+export function RecentArticles({ articles, project }: RecentArticlesProps) {
   return (
     <div className="bg-muted-foreground/5">
       <section className="container max-w-screen-lg mx-auto px-5 sm:px-10 py-8 sm:py-16">
         <h2 className="text-2xl font-bold mb-6">Recent Articles</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {articles.map((article) => (
-            <Link key={article.id} href={`/${article.slug}`} className="group">
+            <Link
+              key={article.id}
+              href={`/${project.slug}/${article.slug}`}
+              className="group"
+            >
               <div className="bg-background border rounded-sm overflow-hidden shadow-sm transition-shadow duration-300 group-hover:shadow-md h-full">
                 <Image
                   src={article.image}
