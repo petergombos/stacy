@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getApiTokens } from "@/lib/models/api-token";
-import { getArticlesByProject } from "@/lib/models/article";
+import { getArticlesByProjectId } from "@/lib/models/article";
 import { getProject } from "@/lib/models/project";
 import { Tabs } from "@radix-ui/react-tabs";
 import { notFound } from "next/navigation";
@@ -28,7 +28,7 @@ export default async function ProjectPage({
   if (!project) {
     notFound();
   }
-  const articles = await getArticlesByProject(params.projectId);
+  const articles = await getArticlesByProjectId(params.projectId);
   return (
     <>
       <Header />
@@ -65,7 +65,11 @@ export default async function ProjectPage({
             <TabsContent value="all">
               <div className="space-y-6">
                 {articles.map((article) => (
-                  <ArticleCard key={article.id} article={article} />
+                  <ArticleCard
+                    key={article.id}
+                    article={article}
+                    project={project}
+                  />
                 ))}
               </div>
             </TabsContent>
@@ -74,7 +78,11 @@ export default async function ProjectPage({
                 {articles
                   .filter((a) => a.status === "published")
                   .map((article) => (
-                    <ArticleCard key={article.id} article={article} />
+                    <ArticleCard
+                      key={article.id}
+                      article={article}
+                      project={project}
+                    />
                   ))}
               </div>
             </TabsContent>
@@ -83,7 +91,11 @@ export default async function ProjectPage({
                 {articles
                   .filter((a) => a.status === "draft")
                   .map((article) => (
-                    <ArticleCard key={article.id} article={article} />
+                    <ArticleCard
+                      key={article.id}
+                      article={article}
+                      project={project}
+                    />
                   ))}
               </div>
             </TabsContent>

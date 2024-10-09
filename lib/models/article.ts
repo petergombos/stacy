@@ -142,7 +142,7 @@ export const updateArticleStatus = async (
     .update(articles)
     .set({
       status,
-      publishedAt: status === "published" ? new Date().getTime() : null,
+      publishedAt: status === "published" ? new Date() : null,
     })
     .where(eq(articles.id, articleId))
     .returning();
@@ -180,7 +180,7 @@ export const getRecentArticles = async (
   return recentArticles;
 };
 
-export const getArticlesByProject = async (projectId: string) => {
+export const getArticlesByProjectId = async (projectId: string) => {
   const items = await db.query.articles.findMany({
     where: eq(articles.projectId, projectId),
     orderBy: desc(articles.createdAt),

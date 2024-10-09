@@ -5,14 +5,15 @@ import { ArticleMeta } from "@/components/themes/minimal/article-meta";
 import { Footer } from "@/components/themes/minimal/footer";
 import { RecentArticles } from "@/components/themes/minimal/recent-articles";
 import { getArticleBySlug, getRecentArticles } from "@/lib/models/article";
+import { getProjectBySlug } from "@/lib/models/project";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: { articleSlug: string };
 }) {
-  const article = await getArticleBySlug(params.slug);
+  const article = await getArticleBySlug(params.articleSlug);
   return {
     title: article?.title,
     description: article?.description,
@@ -34,23 +35,28 @@ export async function generateMetadata({
 //   return articles
 //     .filter((article) => article.publishedAt)
 //     .map((article) => ({
-//       slug: article.slug,
+//       articleSlug: article.articleSlug,
 //     }));
 // }
 
 export default async function Article({
   params,
 }: {
-  params: { slug: string };
+  params: { articleSlug: string; projectSlug: string };
 }) {
-  const article = await getArticleBySlug(params.slug);
+  const [project, article] = await Promise.all([
+    getProjectBySlug(params.projectSlug),
+    getArticleBySlug(params.articleSlug),
+  ]);
+
   const content = article?.html.at(-1);
 
   if (
     !article ||
     !article.publishedAt ||
     !content?.html ||
-    !article.projectId
+    !article.projectId ||
+    !project
   ) {
     notFound();
   }

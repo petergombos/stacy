@@ -38,7 +38,7 @@ export const articles = sqliteTable("articles", {
     .notNull(),
   authorName: text("author_name"),
   image: text("image").default("").notNull(),
-  publishedAt: integer("published_at"),
+  publishedAt: integer("published_at", { mode: "timestamp" }),
 
   // Meta
   id: text("id").primaryKey(),

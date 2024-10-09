@@ -62,3 +62,10 @@ export const getProjectsWithArticleCount = async () => {
     articleCount: project.articles.length,
   }));
 };
+
+export const getProjectBySlug = async (slug: string) => {
+  const project = await db.query.projects.findFirst({
+    where: eq(projects.slug, slug),
+  });
+  return project;
+};

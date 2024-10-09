@@ -1,11 +1,17 @@
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Article } from "@/lib/db/schema";
+import { Article, Project } from "@/lib/db/schema";
 import { CalendarIcon, Edit, Eye, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export function ArticleCard({ article }: { article: Article }) {
+export function ArticleCard({
+  article,
+  project,
+}: {
+  article: Article;
+  project: Project;
+}) {
   return (
     <Card className="overflow-hidden transition-shadow duration-300 hover:shadow-lg">
       <div className="md:flex">
@@ -59,7 +65,7 @@ export function ArticleCard({ article }: { article: Article }) {
             <div className="flex mt-4 md:mt-0 gap-2">
               {article.slug && article.publishedAt && (
                 <Link
-                  href={`/${article.slug}`}
+                  href={`/${project.slug}/${article.slug}`}
                   className={buttonVariants({
                     variant: "outline",
                     size: "sm",
