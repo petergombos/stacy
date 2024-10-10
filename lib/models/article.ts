@@ -172,7 +172,11 @@ export const getRecentArticles = async (
 ) => {
   const recentArticles = await db.query.articles.findMany({
     where: (article, { and, eq }) =>
-      and(ne(article.id, currentArticleId), eq(article.projectId, projectId)),
+      and(
+        ne(article.id, currentArticleId),
+        eq(article.projectId, projectId),
+        eq(article.status, "published")
+      ),
     orderBy: desc(articles.publishedAt),
     limit: limit,
   });

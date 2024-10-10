@@ -50,10 +50,11 @@ export default async function HomePage({
   }
 
   const articles = await getArticlesByProjectId(project.id);
+  const publishedArticles = articles.filter((article) => article.publishedAt);
 
   return (
     <>
-      <Home project={project} articles={articles} />
+      <Home project={project} articles={publishedArticles} />
       <Footer />
     </>
   );
