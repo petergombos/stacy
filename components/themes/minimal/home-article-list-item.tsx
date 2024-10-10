@@ -11,17 +11,19 @@ import { useRef } from "react";
 export function HomeArticleListItem({
   article,
   project,
+  priority = false,
 }: {
   article: Article;
   project: Project;
+  priority?: boolean;
 }) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end start"],
+    offset: ["start end", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
 
   return (
     <div
@@ -29,13 +31,20 @@ export function HomeArticleListItem({
       className="group relative overflow-hidden shadow-2xl rounded-sm"
     >
       <Link href={`/${project.slug}/${article.slug}`} className="block">
-        <div className="relative min-h-[300px] aspect-square md:aspect-video">
-          <motion.div style={{ y }} className="absolute inset-0">
+        <div className="relative aspect-square md:aspect-video">
+          <motion.div
+            initial={{ y: "0%", opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.1 }}
+            style={{ y }}
+            className="absolute inset-0"
+          >
             <Image
               src={article.image || ""}
               alt={article.title || ""}
               fill
-              className="object-cover"
+              className="object-cover scale-110"
+              priority={priority}
             />
           </motion.div>
           <div className="absolute inset-0 bg-black opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-30" />

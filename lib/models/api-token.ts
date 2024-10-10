@@ -16,11 +16,9 @@ export const createApiToken = async (projectId: string) => {
 };
 
 export const getApiTokens = async (projectId: string) => {
-  console.log("getting tokens");
   const tokens = await db.query.apiTokens.findMany({
     where: eq(apiTokens.projectId, projectId),
   });
-  console.log(tokens);
   return tokens;
 };
 

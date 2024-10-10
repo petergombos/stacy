@@ -1,6 +1,5 @@
 import { Article, Project } from "@/lib/db/schema";
 import { HomeArticleListItem } from "./home-article-list-item";
-import { ThemeSwitcher } from "./theme-switcher";
 
 export const Home = ({
   project,
@@ -11,7 +10,6 @@ export const Home = ({
 }) => {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <ThemeSwitcher />
       <div className="container mx-auto px-4 sm:px-8 pt-12 sm:pt-24 text-center">
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 sm:mb-6 tracking-tight">
           {project.name}
@@ -22,11 +20,12 @@ export const Home = ({
       </div>
 
       <main className="container max-w-5xl mx-auto px-4 sm:px-8 py-8 sm:py-16 space-y-8 sm:space-y-16">
-        {articles.map((article) => (
+        {articles.map((article, index) => (
           <HomeArticleListItem
             key={article.id}
             article={article}
             project={project}
+            priority={index === 0}
           />
         ))}
       </main>

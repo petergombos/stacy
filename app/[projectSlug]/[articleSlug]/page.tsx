@@ -4,7 +4,6 @@ import { ArticleHero } from "@/components/themes/minimal/article-hero";
 import { ArticleMeta } from "@/components/themes/minimal/article-meta";
 import { Footer } from "@/components/themes/minimal/footer";
 import { RecentArticles } from "@/components/themes/minimal/recent-articles";
-import { ThemeSwitcher } from "@/components/themes/minimal/theme-switcher";
 import { getArticleBySlug, getRecentArticles } from "@/lib/models/article";
 import { getProjectBySlug } from "@/lib/models/project";
 import Link from "next/link";
@@ -76,7 +75,6 @@ export default async function Article({
             {project.name}
           </Link>
         </div>
-        <ThemeSwitcher variant="dark" />
       </header>
       <ArticleHero article={article} />
       <ArticleContainer>
