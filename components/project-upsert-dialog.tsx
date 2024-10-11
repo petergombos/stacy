@@ -130,10 +130,10 @@ export function ProjectUpsertDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-4 max-h-[80vh]">
-          <div className="col-span-1">
+          <div className="col-span-1 h-full">
             <Label className="mb-3 block">AI-Assisted Project Creation</Label>
             <ChatInterface
-              className="h-[calc(80vh-56px)]"
+              className="h-[calc(100%-26px)]"
               initialMessages={[
                 {
                   role: "assistant",
