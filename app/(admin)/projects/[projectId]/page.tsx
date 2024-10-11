@@ -51,7 +51,7 @@ export default async function ProjectPage({
             <h1 className="text-3xl font-bold text-foreground">
               {project.name}
             </h1>
-            <ProjectSettingsDropdown projectId={project.id} tokens={tokens} />
+            <ProjectSettingsDropdown project={project} tokens={tokens} />
           </div>
           <Tabs defaultValue="all" className="w-full">
             <div className="flex flex-col-reverse sm:flex-row gap-3 justify-between items-start sm:items-center mb-4">

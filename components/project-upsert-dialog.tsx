@@ -1,6 +1,9 @@
 "use client";
 
-import { createProjectAction } from "@/app/(admin)/actions/project";
+import {
+  createProjectAction,
+  updateProjectAction,
+} from "@/app/(admin)/actions/project";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,6 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useAutoResize } from "@/hooks/auto-resize";
+import { Project } from "@/lib/db/schema";
 import { chatProjectCreationResponseSchema } from "@/schemas/chat-response";
 import {
   projectCreationFormSchema,
@@ -35,50 +39,94 @@ import { toast } from "sonner";
 import ChatInterface from "./chat-interface";
 import { Label } from "./ui/label";
 
-interface ProjectCreateDialogProps {
-  children: React.ReactNode;
+interface ProjectUpsertDialogProps {
+  children?: React.ReactNode;
+  project?: Project;
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function ProjectCreateDialog({ children }: ProjectCreateDialogProps) {
-  const [open, setOpen] = useState(false);
+export function ProjectUpsertDialog({
+  children,
+  project,
+  isOpen: isOpenProp,
+  onOpenChange,
+}: ProjectUpsertDialogProps) {
+  const [isOpenState, setIsOpenState] = useState(false);
+
+  const isOpen = isOpenProp ?? isOpenState;
+
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectCreationFormSchema),
     defaultValues: {
-      name: "",
-      niche: "",
-      shortDescription: "",
-      fullContext: "",
+      name: project?.name || "",
+      niche: project?.niche || "",
+      shortDescription: project?.shortDescription || "",
+      fullContext: project?.fullContext || "",
     },
   });
 
-  const { execute, status } = useAction(createProjectAction, {
-    onSuccess: () => {
-      setOpen(false);
-      form.reset();
-      toast.success("Project created successfully");
-    },
-    onError: () => {
-      toast.error("Failed to create project");
-    },
-  });
+  const { execute: executeCreate, status: createStatus } = useAction(
+    createProjectAction,
+    {
+      onSuccess: () => {
+        setIsOpenState(false);
+        onOpenChange?.(false);
+        form.reset();
+        toast.success("Project created successfully");
+      },
+      onError: () => {
+        toast.error("Failed to create project");
+      },
+    }
+  );
+
+  const { execute: executeUpdate, status: updateStatus } = useAction(
+    updateProjectAction,
+    {
+      onSuccess: () => {
+        setIsOpenState(false);
+        onOpenChange?.(false);
+        toast.success("Project updated successfully");
+      },
+      onError: () => {
+        toast.error("Failed to update project");
+      },
+    }
+  );
 
   const onSubmit = (data: ProjectFormValues) => {
-    execute(data);
+    if (project) {
+      executeUpdate({ ...data, id: project.id });
+    } else {
+      executeCreate(data);
+    }
   };
 
   const contextRef = useRef<HTMLTextAreaElement>(null);
   useAutoResize(contextRef);
 
+  const isUpdating = !!project;
+  const status = isUpdating ? updateStatus : createStatus;
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        setIsOpenState(open);
+        onOpenChange?.(open);
+      }}
+    >
+      {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogContent className="sm:max-w-[780px]">
         <DialogHeader>
-          <DialogTitle>Create a New Project</DialogTitle>
+          <DialogTitle>
+            {isUpdating ? "Update Project" : "Create a New Project"}
+          </DialogTitle>
           <DialogDescription>
-            Use our AI assistant to help you fill out project details or edit
-            them manually. The more information you provide, the better we can
-            tailor your project.
+            {isUpdating
+              ? "Update your project details or use our AI assistant to help you refine the information."
+              : "Use our AI assistant to help you fill out project details or edit them manually. The more information you provide, the better we can tailor your project."}
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-4 max-h-[80vh]">
@@ -196,6 +244,8 @@ export function ProjectCreateDialog({ children }: ProjectCreateDialogProps) {
                 >
                   {status === "executing" ? (
                     <Loader2 className="animate-spin size-4" />
+                  ) : isUpdating ? (
+                    "Update Project"
                   ) : (
                     "Create Project"
                   )}

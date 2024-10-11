@@ -36,7 +36,7 @@ export function ArticleCreateButton({
       {children || (
         <>
           <PlusCircle className="size-4" />
-          Create Article
+          New Article
         </>
       )}
     </Button>

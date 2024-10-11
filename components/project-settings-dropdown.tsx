@@ -1,6 +1,7 @@
 "use client";
 
 import { ApiTokenDialog } from "@/components/api-token-dialog";
+import { ProjectUpsertDialog } from "@/components/project-upsert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,18 +10,20 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ApiToken } from "@/lib/db/schema";
+import { ApiToken, Project } from "@/lib/db/schema";
 import { EllipsisIcon } from "lucide-react";
 import { useState } from "react";
 
 export const ProjectSettingsDropdown = ({
-  projectId,
+  project,
   tokens,
 }: {
-  projectId: string;
+  project: Project;
   tokens: ApiToken[];
 }) => {
   const [isTokenDialogOpen, setIsTokenDialogOpen] = useState(false);
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
+
   return (
     <>
       <DropdownMenu>
@@ -31,6 +34,9 @@ export const ProjectSettingsDropdown = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Project Settings</DropdownMenuLabel>
+          <DropdownMenuItem onSelect={() => setIsDetailsDialogOpen(true)}>
+            Edit Project
+          </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
               setIsTokenDialogOpen(true);
@@ -39,13 +45,18 @@ export const ProjectSettingsDropdown = ({
             API Tokens
           </DropdownMenuItem>
         </DropdownMenuContent>
-        <ApiTokenDialog
-          projectId={projectId}
-          isOpen={isTokenDialogOpen}
-          onOpenChange={() => setIsTokenDialogOpen(false)}
-          tokens={tokens}
-        />
       </DropdownMenu>
+      <ProjectUpsertDialog
+        isOpen={isDetailsDialogOpen}
+        onOpenChange={() => setIsDetailsDialogOpen(false)}
+        project={project}
+      />
+      <ApiTokenDialog
+        projectId={project.id}
+        isOpen={isTokenDialogOpen}
+        onOpenChange={() => setIsTokenDialogOpen(false)}
+        tokens={tokens}
+      />
     </>
   );
 };
