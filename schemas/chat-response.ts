@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { projectCreationFormSchema } from "./project";
+import { projectUpsertFormSchema } from "./project";
 
 export const updatedChunkSchema = z.object({
   operation: z.enum(["replace", "insert_before", "insert_after", "delete"]),
@@ -58,7 +58,7 @@ export const chatProjectCreationResponseSchema = z.object({
   didFinishChatResponse: z
     .boolean()
     .describe("Whether the chat response is complete"),
-  project: projectCreationFormSchema.partial(),
+  project: projectUpsertFormSchema.partial(),
 });
 
 export type ChatProjectCreationResponse = z.infer<

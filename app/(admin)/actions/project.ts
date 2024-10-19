@@ -6,18 +6,12 @@ import {
   updateProject,
 } from "@/lib/models/project";
 import { authActionClient } from "@/lib/safe-action";
+import { projectUpsertFormSchema } from "@/schemas/project";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-const projectSchema = z.object({
-  name: z.string().min(3).max(100),
-  niche: z.string().min(3).max(100),
-  shortDescription: z.string().min(3).max(155),
-  fullContext: z.string().min(100),
-});
-
 export const createProjectAction = authActionClient
-  .schema(projectSchema)
+  .schema(projectUpsertFormSchema)
   .action(async ({ parsedInput, ctx: { userId } }) => {
     const result = await createProject({ ...parsedInput, userId });
     revalidatePath("/");
@@ -25,7 +19,7 @@ export const createProjectAction = authActionClient
   });
 
 export const updateProjectAction = authActionClient
-  .schema(projectSchema.extend({ id: z.string() }))
+  .schema(projectUpsertFormSchema.extend({ id: z.string() }))
   .action(async ({ parsedInput, ctx: { userId } }) => {
     const { id, ...projectData } = parsedInput;
     await requireProjectAccess(id, userId);

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const projectCreationFormSchema = z.object({
+export const projectUpsertFormSchema = z.object({
   name: z
     .string()
     .min(3, "Name must be at least 3 characters")
@@ -22,6 +22,10 @@ export const projectCreationFormSchema = z.object({
     .describe(
       "Describe your project in detail, including goals, target audience, and key features. This will be used as base information for future article creations."
     ),
+  slug: z
+    .string()
+    .min(3)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
 });
 
-export type ProjectFormValues = z.infer<typeof projectCreationFormSchema>;
+export type ProjectFormValues = z.infer<typeof projectUpsertFormSchema>;

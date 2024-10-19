@@ -26,10 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAutoResize } from "@/hooks/auto-resize";
 import { Project } from "@/lib/db/schema";
 import { chatProjectCreationResponseSchema } from "@/schemas/chat-response";
-import {
-  projectCreationFormSchema,
-  ProjectFormValues,
-} from "@/schemas/project";
+import { ProjectFormValues, projectUpsertFormSchema } from "@/schemas/project";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
@@ -59,12 +56,13 @@ export function ProjectUpsertDialog({
   const isOpen = isOpenProp ?? isOpenState;
 
   const form = useForm<ProjectFormValues>({
-    resolver: zodResolver(projectCreationFormSchema),
+    resolver: zodResolver(projectUpsertFormSchema),
     defaultValues: {
       name: project?.name || "",
       niche: project?.niche || "",
       shortDescription: project?.shortDescription || "",
       fullContext: project?.fullContext || "",
+      slug: project?.slug || "",
     },
   });
 
@@ -232,6 +230,22 @@ export function ProjectUpsertDialog({
                         <Textarea
                           placeholder="Describe your project in detail, including goals, target audience, and key features"
                           rows={10}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="slug"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Slug</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="The slug of the project"
                           {...field}
                         />
                       </FormControl>
