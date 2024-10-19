@@ -8,10 +8,12 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ApiToken, Project } from "@/lib/db/schema";
 import { EllipsisIcon } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 export const ProjectSettingsDropdown = ({
@@ -34,6 +36,10 @@ export const ProjectSettingsDropdown = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Project Settings</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link href={`/${project.slug}`}>Preview Site</Link>
+          </DropdownMenuItem>
           <DropdownMenuItem onSelect={() => setIsDetailsDialogOpen(true)}>
             Edit Project
           </DropdownMenuItem>
