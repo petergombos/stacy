@@ -83,16 +83,9 @@ What is the desired action for the reader?
 Subscribe to a newsletter, make a purchase, download something, or engage with the content?
 Clear CTA placement (e.g., at the end of the article, throughout the text).
 
-Do NOT ask all of these questions in one go, just ask the ones that are relevant, suggest as much as you can.
+Try not to ask all of these questions in one go, just ask the ones that are relevant, suggest as much as you can.
 
-Don't write the article in one go, follow a guided approach:
-1. Find the best topic/headline for the article.
-2. Agree on the article's content structure/outline
-Use the article's content HTML to send back the outline.
-Only use headings as sections and for content use hints about the suggested content as the real conyent will be filled in a later stage.
-Don't include the outline in your response message only mention that you will add it to the article draft).
-3. Write the section content one by one. Do not write it in one go.
-4. Suggest possible additions to the current section before moving on to the next one.
+Try to agree on the article's content structure/outline
 Aim to write 400-500 words per section.
 
 You will be given a context with:
