@@ -13,7 +13,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Article, ArticleHTML, Message, Project } from "@/lib/db/schema";
 import { articleFormSchema } from "@/schemas/article";
@@ -27,6 +27,7 @@ import { generateJSON } from "@tiptap/html";
 import { JSONContent, useEditor } from "@tiptap/react";
 import { Eye, EyeOff, Loader2, Save } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
+import Link from "next/link";
 import { useCallback, useRef } from "react";
 import { FormState, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -230,6 +231,20 @@ export default function BlogEditorClient({
           </BreadcrumbList>
         </Breadcrumb>
         <div className="flex items-center gap-4">
+          {article.slug && (
+            <Link
+              href={`/${article?.project?.slug}/${article.slug}`}
+              className={buttonVariants({
+                variant: "outline",
+                size: "sm",
+                className: "flex-1 md:flex-none",
+              })}
+              target="_blank"
+            >
+              <Eye className="w-4 h-4 mr-1" />
+              Preview
+            </Link>
+          )}
           <PublishToggleButton article={article} />
           <SaveButton formRef={formRef} formState={form.formState} />
         </div>

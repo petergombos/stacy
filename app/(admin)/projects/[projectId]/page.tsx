@@ -68,11 +68,7 @@ export default async function ProjectPage({
             <TabsContent value="all">
               <div className="space-y-6">
                 {articles.map((article) => (
-                  <ArticleCard
-                    key={article.id}
-                    article={article}
-                    project={project}
-                  />
+                  <ArticleCard key={article.id} article={article} />
                 ))}
               </div>
             </TabsContent>
@@ -81,11 +77,7 @@ export default async function ProjectPage({
                 {articles
                   .filter((a) => a.status === "published")
                   .map((article) => (
-                    <ArticleCard
-                      key={article.id}
-                      article={article}
-                      project={project}
-                    />
+                    <ArticleCard key={article.id} article={article} />
                   ))}
               </div>
             </TabsContent>
@@ -94,11 +86,7 @@ export default async function ProjectPage({
                 {articles
                   .filter((a) => a.status === "draft")
                   .map((article) => (
-                    <ArticleCard
-                      key={article.id}
-                      article={article}
-                      project={project}
-                    />
+                    <ArticleCard key={article.id} article={article} />
                   ))}
               </div>
             </TabsContent>
