@@ -10,9 +10,10 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { requireUser } from "@/lib/lucia/utils";
 import { getApiTokens } from "@/lib/models/api-token";
 import { getArticlesByProjectId } from "@/lib/models/article";
-import { getProject } from "@/lib/models/project";
+import { getProject, requireProjectAccess } from "@/lib/models/project";
 import { Tabs } from "@radix-ui/react-tabs";
 import { notFound } from "next/navigation";
 
@@ -21,6 +22,8 @@ export default async function ProjectPage({
 }: {
   params: { projectId: string };
 }) {
+  const { user } = await requireUser();
+  await requireProjectAccess(params.projectId, user.id);
   const [project, tokens] = await Promise.all([
     getProject(params.projectId),
     getApiTokens(params.projectId),

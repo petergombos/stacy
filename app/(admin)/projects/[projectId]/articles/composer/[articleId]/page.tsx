@@ -1,6 +1,7 @@
 import BlogEditorClient from "@/components/blog-editor-client";
 import { Header } from "@/components/header";
-import { getArticle } from "@/lib/models/article";
+import { requireUser } from "@/lib/lucia/utils";
+import { getArticle, requireArticleAccess } from "@/lib/models/article";
 import { notFound } from "next/navigation";
 
 export const revalidate = 0;
@@ -10,6 +11,8 @@ export default async function BlogEditorPage({
 }: {
   params: { articleId: string };
 }) {
+  const { user } = await requireUser();
+  await requireArticleAccess(params.articleId, user.id);
   const article = await getArticle(params.articleId);
 
   const latesContent = article?.html.at(-1);
