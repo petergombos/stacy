@@ -1,15 +1,11 @@
 "use client";
 
-import { updateArticleStatusAction } from "@/app/(admin)/actions/article";
-import { Button } from "@/components/ui/button";
 import { DialogTrigger } from "@/components/ui/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Article } from "@/lib/db/schema";
-import { ArticleForm } from "@/schemas/article";
 import { Editor } from "@tiptap/react";
 import {
   BetweenHorizonalEnd,
@@ -18,8 +14,6 @@ import {
   BetweenVerticalStart,
   Bold,
   Code,
-  Eye,
-  EyeOff,
   FileJson2,
   Heading,
   Heading2,
@@ -30,51 +24,23 @@ import {
   List,
   ListOrdered,
   ListX,
-  Loader2,
   Quote,
-  Save,
   SeparatorHorizontal,
   TableCellsMerge,
   Table as TableIcon,
   Trash2,
   Underline,
 } from "lucide-react";
-import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
-import { UseFormReturn } from "react-hook-form";
-import { toast } from "sonner";
 import { ImageSelect } from "./image-select";
 import { LinkDialog } from "./link-dialog";
 
 interface EditorToolbarProps {
   editor: Editor | null;
-  form: UseFormReturn<ArticleForm>;
-  article: Article;
 }
 
-export default function EditorToolbar({
-  editor,
-  form,
-  article,
-}: EditorToolbarProps) {
+export default function EditorToolbar({ editor }: EditorToolbarProps) {
   const [isLinkDialogOpen, setIsLinkDialogOpen] = useState(false);
-  const { execute: executeUpdateStatus, input } = useAction(
-    updateArticleStatusAction,
-    {
-      onError: () => {
-        toast.error("Error updating article status");
-      },
-      onSuccess: ({ data }) => {
-        toast.success(
-          data?.status === "published"
-            ? "Article published"
-            : "Article unpublished"
-        );
-      },
-    }
-  );
-
-  const currentStatus = input?.status ?? article.status;
 
   if (!editor) {
     return null;
@@ -219,11 +185,9 @@ export default function EditorToolbar({
     editor.chain().focus().setImage({ src: imageUrl }).run();
   };
 
-  const isSubmitting = form.formState.isSubmitting;
-
   return (
     <div className="sticky top-0 z-20">
-      <div className="flex justify-between gap-5 p-2 bg-neutral-100 dark:bg-neutral-800 border-b">
+      <div className="p-2 bg-neutral-100 dark:bg-neutral-800 border-b">
         <div className="flex flex-wrap gap-2">
           {tools.map((tool, index) => (
             <Tooltip key={index}>
@@ -259,38 +223,6 @@ export default function EditorToolbar({
               </Tooltip>
             </DialogTrigger>
           </ImageSelect>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              type="button"
-              onClick={() => {
-                executeUpdateStatus({
-                  status: currentStatus === "published" ? "draft" : "published",
-                  articleId: article.id,
-                });
-              }}
-              variant={
-                currentStatus === "published" ? "destructive" : "outline"
-              }
-            >
-              {currentStatus === "published" ? (
-                <EyeOff className="w-4 h-4 mr-2" />
-              ) : (
-                <Eye className="w-4 h-4 mr-2" />
-              )}
-              {currentStatus === "published" ? "Unpublish" : "Publish"}
-            </Button>
-          </div>
-          <Button size="sm" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4 mr-2" />
-            )}
-            Save
-          </Button>
         </div>
       </div>
       {editor.isActive("table") && (

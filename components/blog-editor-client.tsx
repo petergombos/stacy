@@ -4,9 +4,18 @@ import {
   addMessageToArticleAction,
   updateArticleHtmlAction,
   updateArticleMetadataAction,
+  updateArticleStatusAction,
 } from "@/app/(admin)/actions/article";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { Article, ArticleHTML, Message } from "@/lib/db/schema";
+import { Article, ArticleHTML, Message, Project } from "@/lib/db/schema";
 import { articleFormSchema } from "@/schemas/article";
 import {
   chatArticleResponseSchema,
@@ -16,8 +25,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { generateJSON } from "@tiptap/html";
 import { JSONContent, useEditor } from "@tiptap/react";
-import { useCallback } from "react";
-import { useForm } from "react-hook-form";
+import { Eye, EyeOff, Loader2, Save } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { useCallback, useRef } from "react";
+import { FormState, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import ArticleEditor, { extensions } from "./article-editor";
@@ -56,7 +67,7 @@ export default function BlogEditorClient({
 }: {
   initialContentHTML: ArticleHTML;
   initialMessages: Message[];
-  article: Article;
+  article: Article & { project: Project | null };
 }) {
   const form = useForm<z.infer<typeof articleFormSchema>>({
     resolver: zodResolver(articleFormSchema),
@@ -200,41 +211,137 @@ export default function BlogEditorClient({
     [editor, form]
   );
 
+  const formRef = useRef<HTMLFormElement>(null);
+
   return (
-    <div className="flex-1 flex h-[calc(100vh-24px)] md:h-[calc(100vh-64px)]">
-      <div className="w-1/3 border-r">
-        <ChatInterface
-          getContext={() => form.getValues()}
-          initialMessages={initialMessages}
-          onFinish={({ object }) => {
-            if (object?.chatResponse) {
-              const responseMessage = {
-                role: "assistant",
-                content: object.chatResponse,
-                articleId: article.id,
-              } as const;
-              addMessageToArticleAction(responseMessage);
-            }
-            if (
-              object?.didUpdateArticleContent ||
-              object?.didUpdateArticleMetadata
-            ) {
-              handleAIUpdate(object);
-            }
-          }}
-          schema={chatArticleResponseSchema}
-          endpoint={`/api/chat/article/${article.id}`}
-        />
+    <>
+      <div className="py-3 border-b flex justify-between items-center gap-5 px-4 sm:px-6 lg:px-8">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/projects">Projects</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/projects/${article.projectId}`}>
+                {article.project?.name}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <div className="flex items-center gap-4">
+          <PublishToggleButton article={article} />
+          <SaveButton formRef={formRef} formState={form.formState} />
+        </div>
       </div>
-      <div className="w-2/3 max-h-fit overflow-hidden">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="h-full">
-            {editor ? (
-              <ArticleEditor article={article} editor={editor} form={form} />
-            ) : null}
-          </form>
-        </Form>
+      <div className="flex-1 flex h-[calc(100vh-72px)] md:h-[calc(100vh-64px-61px)]">
+        <div className="w-1/3 border-r">
+          <ChatInterface
+            getContext={() => form.getValues()}
+            initialMessages={initialMessages}
+            onFinish={({ object }) => {
+              if (object?.chatResponse) {
+                const responseMessage = {
+                  role: "assistant",
+                  content: object.chatResponse,
+                  articleId: article.id,
+                } as const;
+                addMessageToArticleAction(responseMessage);
+              }
+              if (
+                object?.didUpdateArticleContent ||
+                object?.didUpdateArticleMetadata
+              ) {
+                handleAIUpdate(object);
+              }
+            }}
+            schema={chatArticleResponseSchema}
+            endpoint={`/api/chat/article/${article.id}`}
+          />
+        </div>
+        <div className="w-2/3 max-h-fit overflow-hidden">
+          <Form {...form}>
+            <form
+              ref={formRef}
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="h-full"
+            >
+              {editor ? <ArticleEditor editor={editor} form={form} /> : null}
+            </form>
+          </Form>
+        </div>
       </div>
-    </div>
+    </>
+  );
+}
+
+function PublishToggleButton({ article }: { article: Article }) {
+  const { execute: executeUpdateStatus, input } = useAction(
+    updateArticleStatusAction,
+    {
+      onError: () => {
+        toast.error("Error updating article status");
+      },
+      onSuccess: ({ data }) => {
+        toast.success(
+          data?.status === "published"
+            ? "Article published"
+            : "Article unpublished"
+        );
+      },
+    }
+  );
+
+  const currentStatus = input?.status ?? article.status;
+
+  return (
+    <Button
+      size="sm"
+      type="button"
+      onClick={() => {
+        executeUpdateStatus({
+          status: currentStatus === "published" ? "draft" : "published",
+          articleId: article.id,
+        });
+      }}
+      variant={currentStatus === "published" ? "destructive" : "outline"}
+    >
+      {currentStatus === "published" ? (
+        <EyeOff className="w-4 h-4 mr-2" />
+      ) : (
+        <Eye className="w-4 h-4 mr-2" />
+      )}
+      {currentStatus === "published" ? "Unpublish" : "Publish"}
+    </Button>
+  );
+}
+
+function SaveButton({
+  formRef,
+  formState,
+}: {
+  formRef: React.RefObject<HTMLFormElement>;
+  formState: FormState<z.infer<typeof articleFormSchema>>;
+}) {
+  const isSubmitting = formState.isSubmitting;
+
+  return (
+    <Button
+      size="sm"
+      type="button"
+      disabled={isSubmitting}
+      onClick={() =>
+        formRef.current?.dispatchEvent(
+          new Event("submit", { cancelable: true, bubbles: true })
+        )
+      }
+    >
+      {isSubmitting ? (
+        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+      ) : (
+        <Save className="w-4 h-4 mr-2" />
+      )}
+      Save
+    </Button>
   );
 }

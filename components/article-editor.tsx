@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useAutoResize } from "@/hooks/auto-resize";
-import { Article } from "@/lib/db/schema";
 import { ArticleForm } from "@/schemas/article";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -104,14 +103,9 @@ export const extensions = [
 interface ArticleEditorProps {
   editor: Editor;
   form: UseFormReturn<ArticleForm>;
-  article: Article;
 }
 
-export default function ArticleEditor({
-  editor,
-  form,
-  article,
-}: ArticleEditorProps) {
+export default function ArticleEditor({ editor, form }: ArticleEditorProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   useAutoResize(textareaRef);
 
@@ -125,7 +119,7 @@ export default function ArticleEditor({
 
   return (
     <div className="h-full flex flex-col overflow-y-scroll">
-      <EditorToolbar form={form} editor={editor} article={article} />
+      <EditorToolbar editor={editor} />
       <div className="max-w-[780px] mx-auto space-y-6 w-full px-6 py-8">
         <FormField
           control={form.control}
