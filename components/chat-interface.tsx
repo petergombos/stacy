@@ -117,7 +117,7 @@ export default function ChatInterface<T extends { chatResponse: string }>({
         ref={chatContainerRef}
         className={cn(
           "flex-1 overflow-y-scroll flex flex-col gap-4 p-4",
-          noPadding && "p-0"
+          noPadding && "p-0 pb-4"
         )}
       >
         {[

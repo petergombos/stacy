@@ -132,7 +132,7 @@ export function ProjectUpsertDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-4 max-h-[80vh]">
-          <div className="col-span-1 h-full">
+          <div className="col-span-1 h-full max-h-[80vh]">
             <Label className="mb-3 block">AI-Assisted Project Creation</Label>
             <ChatInterface
               className="h-[calc(100%-26px)]"
@@ -145,7 +145,7 @@ export function ProjectUpsertDialog({
                 {
                   role: "assistant",
                   content:
-                    "Tip: you can just copy paste the content of your website or dump any existing content you have here. This will help us create a more accurate and tailored project for you.",
+                    "Tip: you can just copy paste the text of your website or dump any existing content you have here. This will help us create a more accurate and tailored project for you.",
                 },
               ]}
               getContext={() => form.getValues()}
