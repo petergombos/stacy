@@ -44,6 +44,7 @@ interface ProjectUpsertDialogProps {
   project?: Project;
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  isOpenByDefault?: boolean;
 }
 
 export function ProjectUpsertDialog({
@@ -51,8 +52,9 @@ export function ProjectUpsertDialog({
   project,
   isOpen: isOpenProp,
   onOpenChange,
+  isOpenByDefault = false,
 }: ProjectUpsertDialogProps) {
-  const [isOpenState, setIsOpenState] = useState(false);
+  const [isOpenState, setIsOpenState] = useState(isOpenByDefault);
 
   const isOpen = isOpenProp ?? isOpenState;
 

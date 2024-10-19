@@ -1,7 +1,11 @@
 "use server";
 
-import { createProject, updateProject } from "@/lib/models/project";
-import { actionClient } from "@/lib/safe-action";
+import {
+  createProject,
+  requireProjectAccess,
+  updateProject,
+} from "@/lib/models/project";
+import { authActionClient } from "@/lib/safe-action";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -12,18 +16,19 @@ const projectSchema = z.object({
   fullContext: z.string().min(100),
 });
 
-export const createProjectAction = actionClient
+export const createProjectAction = authActionClient
   .schema(projectSchema)
-  .action(async ({ parsedInput }) => {
-    const result = await createProject(parsedInput);
+  .action(async ({ parsedInput, ctx: { userId } }) => {
+    const result = await createProject({ ...parsedInput, userId });
     revalidatePath("/");
     return result;
   });
 
-export const updateProjectAction = actionClient
+export const updateProjectAction = authActionClient
   .schema(projectSchema.extend({ id: z.string() }))
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx: { userId } }) => {
     const { id, ...projectData } = parsedInput;
+    await requireProjectAccess(id, userId);
     const result = await updateProject(id, projectData);
     revalidatePath("/");
     return result;

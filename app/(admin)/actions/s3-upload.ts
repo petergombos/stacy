@@ -1,7 +1,7 @@
 "use server";
 
 import { env } from "@/lib/env";
-import { actionClient } from "@/lib/safe-action";
+import { authActionClient } from "@/lib/safe-action";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { z } from "zod";
@@ -15,11 +15,11 @@ const s3Client = new S3Client({
   },
 });
 
-export const getSignedUrlAction = actionClient
+export const getSignedUrlAction = authActionClient
   .schema(z.object({ fileName: z.string(), fileType: z.string() }))
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx: { userId } }) => {
     const { fileName, fileType } = parsedInput;
-    const key = `uploads/${Date.now()}-${fileName}`;
+    const key = `uploads/${userId}/${Date.now()}-${fileName}`;
 
     const putObjectCommand = new PutObjectCommand({
       Bucket: env.R2_BUCKET_NAME,

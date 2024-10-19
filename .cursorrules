@@ -22,7 +22,6 @@ TypeScript Usage
 Syntax and Formatting
 
 - Use the "function" keyword for pure functions.
-- Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements.
 - Use declarative JSX.
 
 UI and Styling
@@ -32,10 +31,8 @@ UI and Styling
 
 Performance Optimization
 
-- Minimize 'use client', 'useEffect', and 'setState'; favor React Server Components (RSC).
 - Wrap client components in Suspense with fallback.
 - Use dynamic loading for non-critical components.
-- Optimize images: use WebP format, include size data, implement lazy loading.
 
 Key Conventions
 
@@ -47,3 +44,14 @@ Key Conventions
   - Avoid for data fetching or state management.
 
 Follow Next.js docs for Data Fetching, Rendering, and Routing.
+
+When adding a new feature you should:
+
+- Check if database schema needs to be updated if so update drizzle schema
+- Create a model for each entity in the database under /lib/models
+- Create server actions to access the model functions
+- Use safe-actions to wrap the server actions
+- Create a client component to access the server
+  - If form is needed use shadcn forms with zod validations
+  - If there is no data entry needed use safe-actions via hook
+- Thrive to make the UX/UI outstanding

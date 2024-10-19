@@ -1,11 +1,12 @@
 import { db } from "@/lib/db";
 import { NewProject, projects } from "@/lib/db/schema";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
 
-export const getProjects = async () => {
+export const getProjects = async ({ userId }: { userId?: string } = {}) => {
   const items = await db.query.projects.findMany({
     orderBy: desc(projects.createdAt),
+    where: userId ? eq(projects.userId, userId) : undefined,
   });
   return items;
 };
@@ -45,9 +46,14 @@ export const deleteProject = async (projectId: string) => {
   await db.delete(projects).where(eq(projects.id, projectId));
 };
 
-export const getProjectsWithArticleCount = async () => {
+export const getProjectsWithArticleCount = async ({
+  userId,
+}: {
+  userId?: string;
+} = {}) => {
   const projectsWithCount = await db.query.projects.findMany({
     orderBy: desc(projects.createdAt),
+    where: userId ? eq(projects.userId, userId) : undefined,
     with: {
       articles: {
         columns: {
@@ -68,4 +74,17 @@ export const getProjectBySlug = async (slug: string) => {
     where: eq(projects.slug, slug),
   });
   return project;
+};
+
+export const requireProjectAccess = async (
+  projectId: string,
+  userId: string
+) => {
+  const project = await db.query.projects.findFirst({
+    where: and(eq(projects.id, projectId), eq(projects.userId, userId)),
+  });
+
+  if (!project) {
+    throw new Error("Project not found");
+  }
 };

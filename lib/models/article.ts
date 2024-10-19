@@ -11,6 +11,7 @@ import { ArticleMetadata } from "@/schemas/article";
 import { welcomeAssistantMessage } from "@/static/messages";
 import { desc, eq, ne } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
+import { requireProjectAccess } from "./project";
 
 export const getArticle = async (articleId: string) => {
   const article = await db.query.articles.findFirst({
@@ -190,4 +191,40 @@ export const getArticlesByProjectId = async (projectId: string) => {
     orderBy: desc(articles.createdAt),
   });
   return items;
+};
+
+export const requireArticleAccess = async (
+  articleId: string,
+  userId: string
+) => {
+  const article = await db.query.articles.findFirst({
+    where: eq(articles.id, articleId),
+  });
+
+  if (!article) {
+    throw new Error("Article not found");
+  }
+
+  const projectId = article.projectId;
+
+  if (!projectId) {
+    throw new Error("Project not found");
+  }
+
+  return requireProjectAccess(projectId, userId);
+};
+
+export const requireArticleContentAccess = async (
+  articleHTMLId: string,
+  userId: string
+) => {
+  const articleContent = await db.query.articleHTML.findFirst({
+    where: eq(articleHTML.id, articleHTMLId),
+  });
+
+  if (!articleContent || !articleContent.articleId) {
+    throw new Error("Article content not found");
+  }
+
+  return requireArticleAccess(articleContent.articleId, userId);
 };

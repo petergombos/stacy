@@ -1,6 +1,40 @@
 import { relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
+export const users = sqliteTable("users", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  avatarUrl: text("avatar_url"),
+});
+
+export const usersRelations = relations(users, ({ one }) => ({
+  key: one(keys, {
+    fields: [users.id],
+    references: [keys.userId],
+  }),
+}));
+
+export const sessions = sqliteTable("sessions", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
+  expiresAt: integer("expires_at").notNull(),
+});
+
+export const keys = sqliteTable("keys", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
+  hashedPassword: text("hashed_password"),
+});
+
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
+
 export const projects = sqliteTable("projects", {
   name: text("name").notNull(),
   niche: text("niche").notNull(),
@@ -18,9 +52,17 @@ export const projects = sqliteTable("projects", {
     .default(sql`(CURRENT_TIMESTAMP)`)
     .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
+
+  // Relations
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, {
+      onDelete: "cascade",
+    }),
 });
 
-export const projectRelations = relations(projects, ({ many }) => ({
+export const projectRelations = relations(projects, ({ one, many }) => ({
+  user: one(users, { fields: [projects.userId], references: [users.id] }),
   articles: many(articles),
   apiTokens: many(apiTokens),
 }));

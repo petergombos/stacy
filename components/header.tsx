@@ -1,17 +1,14 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { validateRequest } from "@/lib/lucia/utils";
 import { cn } from "@/lib/utils";
-import { FileText, LogOut, Menu, Settings, User, Zap } from "lucide-react";
+import { FileText, Menu, Zap } from "lucide-react";
 import Link from "next/link";
+import { HeaderUserMenu } from "./header-user-menu";
 
-export function Header({ className }: { className?: string }) {
+export async function Header({ className }: { className?: string }) {
+  const { user } = await validateRequest();
+
   return (
     <header
       className={cn(
@@ -28,80 +25,90 @@ export function Header({ className }: { className?: string }) {
             <Zap className="w-8 h-8 text-yellow-400" />
             <span>Stacy</span>
           </Link>
-          <div className="flex items-center space-x-4">
-            <nav className="hidden md:flex space-x-8">
-              {/* <Link
-                href="/articles"
-                className="text-base font-medium hover:text-neutral-300 flex items-center"
-              >
-                <FileText className="w-5 h-5 mr-1" />
-                Articles
-              </Link>
-              <Link
-                href="/settings"
-                className="text-base font-medium hover:text-neutral-300 flex items-center"
-              >
-                <Settings className="w-5 h-5 mr-1" />
-                Settings
-              </Link> */}
-            </nav>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="relative h-8 w-8 rounded-full"
+          {user && (
+            <div className="flex items-center space-x-4">
+              <nav className="hidden md:flex space-x-8">
+                <Link
+                  href="/projects"
+                  className="text-base font-medium hover:text-neutral-300 flex items-center"
                 >
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage
-                      src="https://github.com/shadcn.png"
-                      alt="@shadcn"
-                    />
-                    <AvatarFallback>JD</AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
-                  <Menu className="h-6 w-6" />
-                  <span className="sr-only">Toggle menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right">
-                <nav className="flex flex-col space-y-4">
-                  <Link
-                    href="/projects"
-                    className="text-base font-medium hover:text-neutral-300 flex items-center"
-                  >
-                    <FileText className="w-5 h-5 mr-1" />
-                    Projects
-                  </Link>
-                  {/* <Link
-                    href="/settings"
-                    className="text-base font-medium hover:text-neutral-300 flex items-center"
-                  >
-                    <Settings className="w-5 h-5 mr-1" />
-                    Settings
-                  </Link> */}
-                </nav>
-              </SheetContent>
-            </Sheet>
-          </div>
+                  <FileText className="w-5 h-5 mr-1" />
+                  Projects
+                </Link>
+              </nav>
+              <HeaderUserMenu user={user} />
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="md:hidden">
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Toggle menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                  <nav className="flex flex-col space-y-4">
+                    <Link
+                      href="/projects"
+                      className="text-base font-medium hover:text-neutral-300 flex items-center"
+                    >
+                      <FileText className="w-5 h-5 mr-1" />
+                      Projects
+                    </Link>
+                  </nav>
+                </SheetContent>
+              </Sheet>
+            </div>
+          )}
+          {!user && (
+            <div>
+              <nav className="hidden md:flex gap-3">
+                <Link
+                  href="/sign-in"
+                  className={buttonVariants({ size: "sm", variant: "ghost" })}
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className={buttonVariants({
+                    size: "sm",
+                    className: "dark",
+                  })}
+                >
+                  Sign up
+                </Link>
+              </nav>
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="md:hidden">
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Toggle menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                  <nav className="flex flex-col space-y-4">
+                    <Link
+                      href="/sign-in"
+                      className={buttonVariants({
+                        size: "sm",
+                        variant: "ghost",
+                      })}
+                    >
+                      Sign in
+                    </Link>
+                    <Link
+                      href="/sign-up"
+                      className={buttonVariants({
+                        size: "sm",
+                        className: "dark",
+                      })}
+                    >
+                      Sign up
+                    </Link>
+                  </nav>
+                </SheetContent>
+              </Sheet>
+            </div>
+          )}
         </div>
       </div>
     </header>

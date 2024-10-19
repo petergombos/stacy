@@ -3,29 +3,33 @@
 import {
   addMessageToArticle,
   createArticle,
+  requireArticleAccess,
+  requireArticleContentAccess,
   updateArticleHtml,
   updateArticleMetadata,
   updateArticleStatus,
 } from "@/lib/models/article";
-import { actionClient } from "@/lib/safe-action";
+import { requireProjectAccess } from "@/lib/models/project";
+import { authActionClient } from "@/lib/safe-action";
 import { articleMetadataSchema } from "@/schemas/article";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-export const createArticleAction = actionClient
+export const createArticleAction = authActionClient
   .schema(
     z.object({
       projectId: z.string().min(1),
     })
   )
-  .action(async ({ parsedInput: { projectId } }) => {
+  .action(async ({ parsedInput: { projectId }, ctx: { userId } }) => {
+    await requireProjectAccess(projectId, userId);
     const article = await createArticle({ projectId });
     revalidatePath("/");
     redirect(`/projects/${projectId}/articles/composer/${article.id}`);
   });
 
-export const addMessageToArticleAction = actionClient
+export const addMessageToArticleAction = authActionClient
   .schema(
     z.object({
       articleId: z.string(),
@@ -33,15 +37,17 @@ export const addMessageToArticleAction = actionClient
       content: z.string(),
     })
   )
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx: { userId } }) => {
+    await requireArticleAccess(parsedInput.articleId, userId);
     const result = await addMessageToArticle(parsedInput);
     revalidatePath("/");
     return result;
   });
 
-export const updateArticleHtmlAction = actionClient
+export const updateArticleHtmlAction = authActionClient
   .schema(z.object({ articleHTMLId: z.string(), html: z.string() }))
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx: { userId } }) => {
+    await requireArticleContentAccess(parsedInput.articleHTMLId, userId);
     const result = await updateArticleHtml(
       parsedInput.articleHTMLId,
       parsedInput.html
@@ -50,14 +56,15 @@ export const updateArticleHtmlAction = actionClient
     return result;
   });
 
-export const updateArticleMetadataAction = actionClient
+export const updateArticleMetadataAction = authActionClient
   .schema(
     z.object({
       articleId: z.string().min(10),
       metadata: articleMetadataSchema,
     })
   )
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx: { userId } }) => {
+    await requireArticleAccess(parsedInput.articleId, userId);
     const result = await updateArticleMetadata(
       parsedInput.articleId,
       parsedInput.metadata
@@ -66,14 +73,15 @@ export const updateArticleMetadataAction = actionClient
     return result;
   });
 
-export const updateArticleStatusAction = actionClient
+export const updateArticleStatusAction = authActionClient
   .schema(
     z.object({
       articleId: z.string().min(10),
       status: z.enum(["draft", "published"]),
     })
   )
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx: { userId } }) => {
+    await requireArticleAccess(parsedInput.articleId, userId);
     const result = await updateArticleStatus(
       parsedInput.articleId,
       parsedInput.status
