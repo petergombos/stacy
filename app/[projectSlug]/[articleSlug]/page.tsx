@@ -52,13 +52,7 @@ export default async function Article({
 
   const content = article?.html.at(-1);
 
-  if (
-    !article ||
-    !article.publishedAt ||
-    !content?.html ||
-    !article.projectId ||
-    !project
-  ) {
+  if (!article || !content?.html || !article.projectId || !project) {
     notFound();
   }
 
